@@ -7,33 +7,48 @@
 QT += network opengl
 
 # OpenCV
-#INCLUDEPATH += C:\OpenCVTemp\cv\include
-#INCLUDEPATH += C:\OpenCVTemp\otherlibs\highgui
-#INCLUDEPATH += C:\OpenCVTemp\cxcore\include
-#INCLUDEPATH += C:\OpenCVTemp\cvaux\include
+win32 {
+    INCLUDEPATH += C:\OpenCVTemp\cv\include
+    INCLUDEPATH += C:\OpenCVTemp\otherlibs\highgui
+    INCLUDEPATH += C:\OpenCVTemp\cxcore\include
+    INCLUDEPATH += C:\OpenCVTemp\cvaux\include
+}
 
-INCLUDEPATH += /usr/include/opencv
-INCLUDEPATH += /usr/include/opencv
-INCLUDEPATH += /home/lab/Development/libmv/src
-INCLUDEPATH += /home/lab/Development/libmv/src/third_party/eigen
+linux {
+    INCLUDEPATH += /usr/include/opencv
+    INCLUDEPATH += /usr/include/opencv
+    INCLUDEPATH += /home/lab/Development/libmv/src
+    INCLUDEPATH += /home/lab/Development/libmv/src/third_party/eigen
+}
 
 # libmv
-#INCLUDEPATH += C:\libmv\src
-#INCLUDEPATH += C:\libmv\src\third_party\eigen
+win32 {
+    INCLUDEPATH += C:\libmv\src
+    INCLUDEPATH += C:\libmv\src\third_party\eigen
+}
 
 # OpenCV
-#LIBS += C:\OpenCVTemp\lib\cv.lib
-#LIBS += C:\OpenCVTemp\lib\highgui.lib
-#LIBS += C:\OpenCVTemp\lib\cxcore.lib
-#LIBS += C:\OpenCVTemp\lib\cvaux.lib
+win32 {
+    LIBS += C:\OpenCVTemp\lib\cv.lib
+    LIBS += C:\OpenCVTemp\lib\highgui.lib
+    LIBS += C:\OpenCVTemp\lib\cxcore.lib
+    LIBS += C:\OpenCVTemp\lib\cvaux.lib
+}
 
-LIBS += -lcv -lcxcore -lhighgui
+linux {
+    LIBS += -lcv -lcxcore -lhighgui
+}
 
 #libmv
-#LIBS += C:\libmv\lib\image.lib
-#LIBS += C:\libmv\lib\correspondence.lib
-#LIBS += C:\libmv\lib\numeric.lib
-LIBS += -lcorrespondence -limage -lglog -lgflags
+win32 {
+    LIBS += C:\libmv\lib\image.lib
+    LIBS += C:\libmv\lib\correspondence.lib
+    LIBS += C:\libmv\lib\numeric.lib
+}
+
+linux {
+    LIBS += -lcorrespondence -limage -lglog -lgflags
+}
 
 TARGET = TACTICAL
 TEMPLATE = app

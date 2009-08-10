@@ -324,6 +324,7 @@ void MainWindow::listFiles()
 void WriteOutputImage(const FloatImage &image,
                       CorrespondencesView<KLTPointFeature>::Iterator features,
                       const char *output_filename) {
+ /**
   FloatImage output_image(image.Height(), image.Width(), 3);
   for (int i = 0; i < image.Height(); ++i) {
     for (int j = 0; j < image.Width(); ++j) {
@@ -340,4 +341,5 @@ void WriteOutputImage(const FloatImage &image,
   }
 
   WritePnm(output_image, output_filename);
+  **/
 }
