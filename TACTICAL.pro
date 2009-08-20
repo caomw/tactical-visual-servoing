@@ -14,7 +14,7 @@ win32 {
     INCLUDEPATH += C:\OpenCVTemp\cvaux\include
 }
 
-linux {
+unix {
     INCLUDEPATH += /usr/include/opencv
     INCLUDEPATH += /usr/include/opencv
     INCLUDEPATH += /home/lab/Development/libmv/src
@@ -35,7 +35,7 @@ win32 {
     LIBS += C:\OpenCVTemp\lib\cvaux.lib
 }
 
-linux {
+unix {
     LIBS += -lcv -lcxcore -lhighgui
 }
 
@@ -46,8 +46,8 @@ win32 {
     LIBS += C:\libmv\lib\numeric.lib
 }
 
-linux {
-    LIBS += -lcorrespondence -limage -lglog -lgflags
+unix {
+    LIBS += -lcorrespondence -limage -lglog -lgflags -lgsl -lgslcblas
 }
 
 TARGET = TACTICAL
@@ -57,11 +57,23 @@ SOURCES += main.cpp\
         mainwindow.cpp\
         utilities\utilities.cpp\
         image_functions\Image_Functions.cpp\
+        tracking_algorithms/SIFT/imgfeatures.cpp \
+        tracking_algorithms/SIFT/kdtree.cpp \
+        tracking_algorithms/SIFT/minpq.cpp \
+        tracking_algorithms/SIFT/sift.cpp \
+        tracking_algorithms/SIFT/utils.cpp \
+        tracking_algorithms/SIFT/xform.cpp
  #       tracking_algorithms\correlation\TuringTracking.cpp
 
 HEADERS += mainwindow.h\
         utilities\utilities.h\
         image_functions\Image_Functions.h\
+        tracking_algorithms/SIFT/imgfeatures.h \
+        tracking_algorithms/SIFT/kdtree.h \
+        tracking_algorithms/SIFT/minpq.h \
+        tracking_algorithms/SIFT/sift.h \
+        tracking_algorithms/SIFT/utils.h \
+        tracking_algorithms/SIFT/xform.h
 #        tracking_algorithms\correlation\TuringTracking.h
 
 FORMS += mainwindow.ui

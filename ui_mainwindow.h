@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'mainwindow.ui'
 **
-** Created: Tue 28. Jul 15:05:25 2009
+** Created: Thu Aug 20 09:13:22 2009
 **      by: Qt User Interface Compiler version 4.5.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -237,7 +237,7 @@ public:
         pushButtonTrack->setGeometry(QRect(1150, 570, 80, 23));
         checkBox_2 = new QCheckBox(centralWidget);
         checkBox_2->setObjectName(QString::fromUtf8("checkBox_2"));
-        checkBox_2->setGeometry(QRect(950, 570, 121, 20));
+        checkBox_2->setGeometry(QRect(950, 570, 161, 20));
         horizontalScrollBar = new QScrollBar(centralWidget);
         horizontalScrollBar->setObjectName(QString::fromUtf8("horizontalScrollBar"));
         horizontalScrollBar->setGeometry(QRect(590, 540, 651, 16));
@@ -245,7 +245,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1246, 21));
+        menuBar->setGeometry(QRect(0, 0, 1246, 25));
         menu_File = new QMenu(menuBar);
         menu_File->setObjectName(QString::fromUtf8("menu_File"));
         menu_Help = new QMenu(menuBar);

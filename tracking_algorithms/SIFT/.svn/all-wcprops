@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/132/trunk/SIFT
+END
+kdtree.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/131/trunk/SIFT/kdtree.cpp
+END
+xform.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/131/trunk/SIFT/xform.h
+END
+utils.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/131/trunk/SIFT/utils.cpp
+END
+imgfeatures.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/131/trunk/SIFT/imgfeatures.h
+END
+kdtree.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/131/trunk/SIFT/kdtree.h
+END
+minpq.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/131/trunk/SIFT/minpq.cpp
+END
+utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/131/trunk/SIFT/utils.h
+END
+sift.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/131/trunk/SIFT/sift.cpp
+END
+minpq.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/131/trunk/SIFT/minpq.h
+END
+sift.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/131/trunk/SIFT/sift.h
+END
+imgfeatures.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/131/trunk/SIFT/imgfeatures.cpp
+END
+xform.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/131/trunk/SIFT/xform.cpp
+END

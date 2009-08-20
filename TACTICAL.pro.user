@@ -53,68 +53,45 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\Shawn\Application Data</value>
-    <value type="QString" >BLAS=C:\Program Files\University Of Tennessee\LAPACK 3.1.1</value>
-    <value type="QString" >BOOSTROOT=(insert here the root folder of the boost libraries)</value>
-    <value type="QString" >CGALROOT=C:\Program Files\CGAL-3.3.1</value>
-    <value type="QString" >CLASSPATH=.;.;C:\PROGRA~1\JMF21~1.1E\lib\sound.jar;C:\PROGRA~1\JMF21~1.1E\lib\jmf.jar;C:\PROGRA~1\JMF21~1.1E\lib;</value>
-    <value type="QString" >CLIENTNAME=Console</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=D820</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >DELTA_EXT=C:\Projects\delta3d\ext</value>
-    <value type="QString" >DXSDK_DIR=C:\Program Files\Microsoft DirectX 9.0 SDK (February 2005)\</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\Shawn</value>
-    <value type="QString" >INCLUDE=C:\Program Files\Intel\IPP\5.2\ia32\include;C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\include\</value>
-    <value type="QString" >INTEL_LICENSE_FILE=C:\Program Files\Common Files\Intel\Licenses</value>
-    <value type="QString" >IPP_ROOT=C:\Program Files\Intel\IPP\5.2\ia32</value>
-    <value type="QString" >LAPACK=C:\Program Files\University Of Tennessee\LAPACK 3.1.1</value>
-    <value type="QString" >LIB=C:\Program Files\Intel\IPP\5.2\ia32\lib;C:\Program Files\Intel\IPP\5.2\ia32\stublib;C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Lib\</value>
-    <value type="QString" >LOGONSERVER=\\D820</value>
-    <value type="QString" >MAK_RTIDIR=C:\MAK\makRti3.3.1</value>
-    <value type="QString" >NTA=C:\Program Files\nupic-1.6.1</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Program Files\ImageMagick-6.5.4-Q16;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Delta3D_REL-2.2.0\ext\bin;C:\Projects\dtAgeiaPhysX\bin;C:\Projects\delta3d\bin;C:\qt\4.4.3\bin;C:\Program Files\AGEIA Technologies\SDK\v2.7.3\Bin\win32;C:\Program Files\Common Files\Roxio Shared\9.0\DLLShared;C:\Program Files\Common Files\Roxio Shared\DLLShared;C:\Program Files\QuickTime\QTSystem;C:\Program Files\MATLAB\R2007b\bin\win32;C:\Program Files\MATLAB\R2007b\bin;C:\MATLAB7\bin\win32;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Intel\IPP\5.2\ia32\bin;C:\Program Files\FlowDesigner\bin;C:\WINDOWS\system32\wbem;C:\WINDOWS;C:\WINDOWS\system32;C:\Program Files\QuickTime\QTSystem\;C:\Program Files\TortoiseHg;C:\MAK\makRti3.3.1\bin;C:\Program Files\Python25\;C:\Program Files\Python25\Scripts;C:\Program Files\OpenCV\bin;C:\Documents and Settings\Shawn\My Documents\Development\SDL\SDL-1.2.13\lib;C:\Program Files\Java\jdk1.6.0_12\bin;C:\Program Files\CMake 2.6\bin;C:\Program Files\Python25;C:\Projects\opencv\bin\Debug;C:\Program Files\Python25\Scripts;C:\MinGW\bin;C:\Program Files\Git\bin;C:\Documents and Settings\Shawn\My Documents\Development\tesseract-2.03\bin.dbg\;C:\Projects\libmv5\third_party\pthreads-w32\Debug;</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.tcl</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 14 Stepping 8, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0e08</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >PYTHONPATH=C:\Program Files\nupic-1.6.1\lib\python2.5\site-packages</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >QTJAVA=C:\Program Files\Java\jre6\lib\ext\QTJava.zip</value>
-    <value type="QString" >RTI_RID_FILE=C:\MAK\makRti3.3.1\rid.mtl</value>
-    <value type="QString" >SCANALYZE_DIR=C:\Documents and Settings\Shawn\Desktop\scanalyze-1.0.3a.win32.bin\scanalyze-1.0.3</value>
-    <value type="QString" >SDKPATH=C:\Program Files\Microsoft SDKs\Windows\v6.0A</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SONICCENTRAL=C:\Program Files\Common Files\Sonic Shared\Sonic Central\</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\Shawn\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\Shawn\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=D820</value>
-    <value type="QString" >USERNAME=Shawn</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\Shawn</value>
-    <value type="QString" >VS71COMNTOOLS=C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=c:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >__COMPAT_LAYER=EnableNXShowUI </value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-WRDBgNdJxA,guid=592e846817447e7b36fbced94a8d2915</value>
+    <value type="QString" >DESKTOP_SESSION=default</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDMSESSION=default</value>
+    <value type="QString" >GDM_LANG=en_US.UTF-8</value>
+    <value type="QString" >GDM_XSERVER_LOCATION=local</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=Default</value>
+    <value type="QString" >GNOME_KEYRING_PID=5699</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-bCpLra/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-yKwOtO/S.gpg-agent:5811:1</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/lab/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >HOME=/home/lab</value>
+    <value type="QString" >LANG=en_US.UTF-8</value>
+    <value type="QString" >LD_LIBRARY_PATH=/home/lab/qtsdk-2009.03/lib/qtcreator:</value>
+    <value type="QString" >LOGNAME=lab</value>
+    <value type="QString" >PATH=/home/lab/qtsdk-2009.03/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PWD=/home/lab</value>
+    <value type="QString" >QTDIR=/home/lab/qtsdk-2009.03/qt</value>
+    <value type="QString" >SESSION_MANAGER=local/lab-laptop:/tmp/.ICE-unix/5700</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-bCpLra/ssh</value>
+    <value type="QString" >USER=lab</value>
+    <value type="QString" >USERNAME=lab</value>
+    <value type="QString" >WINDOWPATH=7</value>
+    <value type="QString" >XAUTHORITY=/home/lab/.Xauthority</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
+    <value type="QString" >XDG_SESSION_COOKIE=602b24422841ce9021077af54a72e6b4-1250765075.935662-623739047</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >C:/Documents and Settings/Shawn/Desktop/hg/TACTICAL.pro</value>
+    <value type="QString" >/home/lab/Development/TACTICAL/TACTICAL.pro</value>
     <value type="QString" >-spec</value>
-    <value type="QString" >win32-g++</value>
+    <value type="QString" >linux-g++</value>
     <value type="QString" >-r</value>
+    <value type="QString" >CONFIG+=debug</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.command" type="QString" >/home/lab/qtsdk-2009.03/qt/bin/qmake</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >C:/Documents and Settings/Shawn/Desktop/hg</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/lab/Development/TACTICAL</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
  </data>
@@ -123,65 +100,41 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\Shawn\Application Data</value>
-    <value type="QString" >BLAS=C:\Program Files\University Of Tennessee\LAPACK 3.1.1</value>
-    <value type="QString" >BOOSTROOT=(insert here the root folder of the boost libraries)</value>
-    <value type="QString" >CGALROOT=C:\Program Files\CGAL-3.3.1</value>
-    <value type="QString" >CLASSPATH=.;.;C:\PROGRA~1\JMF21~1.1E\lib\sound.jar;C:\PROGRA~1\JMF21~1.1E\lib\jmf.jar;C:\PROGRA~1\JMF21~1.1E\lib;</value>
-    <value type="QString" >CLIENTNAME=Console</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=D820</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >DELTA_EXT=C:\Projects\delta3d\ext</value>
-    <value type="QString" >DXSDK_DIR=C:\Program Files\Microsoft DirectX 9.0 SDK (February 2005)\</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\Shawn</value>
-    <value type="QString" >INCLUDE=C:\Program Files\Intel\IPP\5.2\ia32\include;C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\include\</value>
-    <value type="QString" >INTEL_LICENSE_FILE=C:\Program Files\Common Files\Intel\Licenses</value>
-    <value type="QString" >IPP_ROOT=C:\Program Files\Intel\IPP\5.2\ia32</value>
-    <value type="QString" >LAPACK=C:\Program Files\University Of Tennessee\LAPACK 3.1.1</value>
-    <value type="QString" >LIB=C:\Program Files\Intel\IPP\5.2\ia32\lib;C:\Program Files\Intel\IPP\5.2\ia32\stublib;C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Lib\</value>
-    <value type="QString" >LOGONSERVER=\\D820</value>
-    <value type="QString" >MAK_RTIDIR=C:\MAK\makRti3.3.1</value>
-    <value type="QString" >NTA=C:\Program Files\nupic-1.6.1</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Program Files\ImageMagick-6.5.4-Q16;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Delta3D_REL-2.2.0\ext\bin;C:\Projects\dtAgeiaPhysX\bin;C:\Projects\delta3d\bin;C:\qt\4.4.3\bin;C:\Program Files\AGEIA Technologies\SDK\v2.7.3\Bin\win32;C:\Program Files\Common Files\Roxio Shared\9.0\DLLShared;C:\Program Files\Common Files\Roxio Shared\DLLShared;C:\Program Files\QuickTime\QTSystem;C:\Program Files\MATLAB\R2007b\bin\win32;C:\Program Files\MATLAB\R2007b\bin;C:\MATLAB7\bin\win32;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Intel\IPP\5.2\ia32\bin;C:\Program Files\FlowDesigner\bin;C:\WINDOWS\system32\wbem;C:\WINDOWS;C:\WINDOWS\system32;C:\Program Files\QuickTime\QTSystem\;C:\Program Files\TortoiseHg;C:\MAK\makRti3.3.1\bin;C:\Program Files\Python25\;C:\Program Files\Python25\Scripts;C:\Program Files\OpenCV\bin;C:\Documents and Settings\Shawn\My Documents\Development\SDL\SDL-1.2.13\lib;C:\Program Files\Java\jdk1.6.0_12\bin;C:\Program Files\CMake 2.6\bin;C:\Program Files\Python25;C:\Projects\opencv\bin\Debug;C:\Program Files\Python25\Scripts;C:\MinGW\bin;C:\Program Files\Git\bin;C:\Documents and Settings\Shawn\My Documents\Development\tesseract-2.03\bin.dbg\;C:\Projects\libmv5\third_party\pthreads-w32\Debug;</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.tcl</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 14 Stepping 8, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0e08</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >PYTHONPATH=C:\Program Files\nupic-1.6.1\lib\python2.5\site-packages</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >QTJAVA=C:\Program Files\Java\jre6\lib\ext\QTJava.zip</value>
-    <value type="QString" >RTI_RID_FILE=C:\MAK\makRti3.3.1\rid.mtl</value>
-    <value type="QString" >SCANALYZE_DIR=C:\Documents and Settings\Shawn\Desktop\scanalyze-1.0.3a.win32.bin\scanalyze-1.0.3</value>
-    <value type="QString" >SDKPATH=C:\Program Files\Microsoft SDKs\Windows\v6.0A</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SONICCENTRAL=C:\Program Files\Common Files\Sonic Shared\Sonic Central\</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\Shawn\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\Shawn\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=D820</value>
-    <value type="QString" >USERNAME=Shawn</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\Shawn</value>
-    <value type="QString" >VS71COMNTOOLS=C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Tools\</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=c:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >__COMPAT_LAYER=EnableNXShowUI </value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-WRDBgNdJxA,guid=592e846817447e7b36fbced94a8d2915</value>
+    <value type="QString" >DESKTOP_SESSION=default</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDMSESSION=default</value>
+    <value type="QString" >GDM_LANG=en_US.UTF-8</value>
+    <value type="QString" >GDM_XSERVER_LOCATION=local</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=Default</value>
+    <value type="QString" >GNOME_KEYRING_PID=5699</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-bCpLra/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-yKwOtO/S.gpg-agent:5811:1</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/lab/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >HOME=/home/lab</value>
+    <value type="QString" >LANG=en_US.UTF-8</value>
+    <value type="QString" >LD_LIBRARY_PATH=/home/lab/qtsdk-2009.03/lib/qtcreator:</value>
+    <value type="QString" >LOGNAME=lab</value>
+    <value type="QString" >PATH=/home/lab/qtsdk-2009.03/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PWD=/home/lab</value>
+    <value type="QString" >QTDIR=/home/lab/qtsdk-2009.03/qt</value>
+    <value type="QString" >SESSION_MANAGER=local/lab-laptop:/tmp/.ICE-unix/5700</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-bCpLra/ssh</value>
+    <value type="QString" >USER=lab</value>
+    <value type="QString" >USERNAME=lab</value>
+    <value type="QString" >WINDOWPATH=7</value>
+    <value type="QString" >XAUTHORITY=/home/lab/.Xauthority</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
+    <value type="QString" >XDG_SESSION_COOKIE=602b24422841ce9021077af54a72e6b4-1250765075.935662-623739047</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >-w</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >C:/Documents and Settings/Shawn/Desktop/hg</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/lab/Development/TACTICAL</value>
   </valuemap>
  </data>
  <data>
