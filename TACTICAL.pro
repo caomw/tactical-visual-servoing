@@ -12,6 +12,7 @@ win32 {
     INCLUDEPATH += C:\OpenCVTemp\otherlibs\highgui
     INCLUDEPATH += C:\OpenCVTemp\cxcore\include
     INCLUDEPATH += C:\OpenCVTemp\cvaux\include
+
 }
 
 unix {
@@ -25,6 +26,11 @@ unix {
 win32 {
     INCLUDEPATH += C:\libmv\src
     INCLUDEPATH += C:\libmv\src\third_party\eigen
+}
+
+# gsl
+win32 {
+    INCLUDEPATH += C:\gsl-1.8-lib\include
 }
 
 # OpenCV
@@ -49,6 +55,18 @@ win32 {
 unix {
     LIBS += -lcorrespondence -limage -lglog -lgflags -lgsl -lgslcblas
 }
+
+
+# gsl
+win32 {
+    LIBS += C:\gsl-1.8-lib\lib\libgsl.a
+    LIBS += C:\gsl-1.8-lib\lib\libgslcblas.a
+}
+
+unix {
+    LIBS += -lgsl -lgslcblas
+}
+
 
 TARGET = TACTICAL
 TEMPLATE = app
