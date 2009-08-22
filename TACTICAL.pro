@@ -4,6 +4,10 @@
 #
 #-------------------------------------------------
 
+# this codebase is a mess right now.....
+#  be sure to copy libturingtracking.a to /usr/local/lib
+
+
 QT += network opengl
 
 # OpenCV
@@ -26,6 +30,11 @@ unix {
 win32 {
     INCLUDEPATH += C:\libmv\src
     INCLUDEPATH += C:\libmv\src\third_party\eigen
+}
+
+# correlation tracking
+unix {
+    INCLUDEPATH += tracking_algorithms/Correlation/TuringTracking
 }
 
 # gsl
@@ -56,6 +65,10 @@ unix {
     LIBS += -lcorrespondence -limage -lglog -lgflags -lgsl -lgslcblas
 }
 
+# correlation tracking
+unix {
+    LIBS += -lturingtracking
+}
 
 # gsl
 win32 {
@@ -67,6 +80,10 @@ unix {
     LIBS += -lgsl -lgslcblas
 }
 
+# sdl
+unix {
+    LIBS += -lSDL -lSDL_image
+}
 
 TARGET = TACTICAL
 TEMPLATE = app
