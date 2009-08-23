@@ -39,15 +39,15 @@ void ImageFunctions::aviInitialize(string fileName)
 
         captureAVI = cvCaptureFromFile(fileName.c_str());
 
-        // get the number of frames
-        captureAVIFrames = (int)cvGetCaptureProperty(captureAVI, CV_CAP_PROP_FRAME_COUNT);
-
-        captureAVIInitialized = true;
-
         // grab the first frame so we can set the height and width
         IplImage *frame = cvQueryFrame(captureAVI);
         width  = frame->width;
         height = frame->height;
+
+        // get the number of frames
+        captureAVIFrames = (int)cvGetCaptureProperty(captureAVI, CV_CAP_PROP_FRAME_COUNT);
+
+        captureAVIInitialized = true;
     }
 
 } // end aviInitialize
@@ -62,6 +62,8 @@ void ImageFunctions::aviInitialize(string fileName)
 IplImage *ImageFunctions::aviGrabFrame(int frameNumber)
 {
     cvSetCaptureProperty(captureAVI, CV_CAP_PROP_POS_FRAMES, frameNumber);
+
+    cout << "from aviGrabFrame :: frameNumber = " << frameNumber << " of " << captureAVIFrames << "\n";
 
     IplImage *temp = cvQueryFrame(captureAVI);
 

@@ -18,6 +18,7 @@
 #include "tracking_algorithms/Correlation/TuringTracking/TuringTracking.h"
 
 #include "ImageProcessing.h"
+#include "image_functions/Image_Functions.h"
 
 // this is a hack until I can get sdl events recognized from within qt
 #define USEQT_0_USESDL_1 1
@@ -41,8 +42,10 @@ string commandsList;
 
 string path = "/home/lab/Development/NavigationData/WoodPile/";
 string baseFileName = "captured";
-int start = 503;
+int start = 0;
 int stop = 730;
+
+string aviFileName = "/home/lab/Development/NavigationData/WoodPile/out_WoodPile.avi";
 
 SDL_Rect rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom;
 int xClick=0, yClick=0;
@@ -53,6 +56,8 @@ bool trackingActivated = false;
 
 // instantiate the tracking library
 turingTracking *tracking = new turingTracking("480", "640");
+
+ImageFunctions *imageFunctions = new ImageFunctions();
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -105,24 +110,30 @@ int main(int argc, char *argv[])
         bool continueTest = true;
         int frameNumber = start;
 
+        imageFunctions->aviInitialize(aviFileName);
+
         // main loop
         while (continueTest == true) {
 
-            string fileName = path + baseFileName + itos(frameNumber) + ".bmp";
+            IplImage *temp = imageFunctions->aviGrabFrame(frameNumber);
+
+            cout << "Current frame number = " << frameNumber << "\n";
+
+           // string fileName = path + baseFileName + itos(frameNumber) + ".bmp";
 
             // just test loading a frame
-            IplImage *temp;
-            temp = cvLoadImage(fileName.c_str());
-            cout << "Loaded image..." << fileName << "(" << temp->height << "," << temp->width << ")\n";
+       //     IplImage *temp;
+       //     temp = cvLoadImage(fileName.c_str());
+       //     cout << "Loaded image..." << fileName << "(" << temp->height << "," << temp->width << ")\n";
 
             //IplImage *temp2;
-            CvSize size;
-            size.height = temp->height;
-            size.width  = temp->width;
-            IplImage *temp2 = cvCreateImage(size, 8, 3);
-            cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
+      //      CvSize size;
+      //      size.height = temp->height;
+      //      size.width  = temp->width;
+      //      IplImage *temp2 = cvCreateImage(size, 8, 3);
+      //      cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
 
-            SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp2->imageData, temp->width, temp->height, 24, temp->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
+            SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp->imageData, temp->width, temp->height, 24, temp->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
 
             Uint32 colorRed    = SDL_MapRGB(image->format, 255, 0, 0);
             Uint32 colorGreen  = SDL_MapRGB(image->format, 0, 255, 0);
@@ -188,7 +199,7 @@ int main(int argc, char *argv[])
             // find good features
             } else {
 
-                int numberGoodFeatures = tracking->findGoodFeatures(temp2);
+                int numberGoodFeatures = tracking->findGoodFeatures(temp);
 
                 // draw the good features
                 int k=0;
@@ -247,7 +258,7 @@ int main(int argc, char *argv[])
 
             // free the OpenCV image we created
             cvReleaseImage(&temp);
-            cvReleaseImage(&temp2);
+        //    cvReleaseImage(&temp2);
 
             bool status = handleSDLEvents();
             if (status == true) {
@@ -260,7 +271,7 @@ int main(int argc, char *argv[])
             }
 
             // look for termination conditions
-            if (frameNumber > stop) {
+            if (frameNumber > imageFunctions->captureAVIFrames) {
                 continueTest = false;
             }
 

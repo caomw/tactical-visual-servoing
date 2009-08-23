@@ -99,7 +99,6 @@ SOURCES += main.cpp\
         tracking_algorithms/SIFT/sift.cpp \
         tracking_algorithms/SIFT/utils.cpp \
         tracking_algorithms/SIFT/xform.cpp
- #       tracking_algorithms\correlation\TuringTracking.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
@@ -111,6 +110,5 @@ HEADERS += mainwindow.h\
         tracking_algorithms/SIFT/sift.h \
         tracking_algorithms/SIFT/utils.h \
         tracking_algorithms/SIFT/xform.h
-#        tracking_algorithms\correlation\TuringTracking.h
 
 FORMS += mainwindow.ui
