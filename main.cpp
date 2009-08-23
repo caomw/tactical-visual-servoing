@@ -185,7 +185,24 @@ int main(int argc, char *argv[])
                 printf("The tracked point is at (%d, %d)\n", tracking->rLast[0], tracking->cLast[0]);
                 printf("correlationError = %f, degeneracy = %f, shapeChange = %f\n", tracking->correlationError, tracking->degeneracy, tracking->shapeChange);
 
-            } // end if tracking active
+            // find good features
+            } else {
+
+                int numberGoodFeatures = tracking->findGoodFeatures(temp2);
+
+                // draw the good features
+                int k=0;
+                for (int i=0; i<numberGoodFeatures; i++) {
+                    tracking->points[1][k++] = tracking->points[1][i];
+                    rectangleCenter.w = 4;
+                    rectangleCenter.h = 4;
+                    CvPoint pt = cvPointFrom32f(tracking->points[1][i]);
+                    rectangleCenter.x = pt.x;
+                    rectangleCenter.y = pt.y;
+                    SDL_FillRect(image, &rectangleCenter, colorWhite);
+                }
+
+            }
 
             // generate a texture object handle
             glGenTextures(1, &texture);
@@ -254,16 +271,13 @@ int main(int argc, char *argv[])
                 trackingActivated = false;
         }
 
-        }
+    } // end if Qt or SDL
 
-        // exit nicely
-        SDL_Quit();
-        exit(0);
-
-//    }
+    // exit nicely
+    SDL_Quit();
+    exit(0);
 
 } // end main
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
