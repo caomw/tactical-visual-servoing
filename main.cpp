@@ -14,6 +14,11 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+// tracking
+#include "tracking_algorithms/Correlation/TuringTracking/TuringTracking.h"
+
+#include "ImageProcessing.h"
+
 // this is a hack until I can get sdl events recognized from within qt
 #define USEQT_0_USESDL_1 1
 
@@ -39,6 +44,21 @@ string baseFileName = "captured";
 int start = 503;
 int stop = 730;
 
+SDL_Rect rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom;
+int xClick=0, yClick=0;
+
+// SDL events
+bool trackEvent = false;
+bool trackingActivated = false;
+
+// instantiate the tracking library
+turingTracking *tracking = new turingTracking("480", "640");
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// main
+//
+///////////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char *argv[])
 {
@@ -54,12 +74,10 @@ int main(int argc, char *argv[])
     // SDL
     } else {
 
-        // initialize SDL
         if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER) == -1)) {
             cout << "Could not initialize SDL: " << SDL_GetError() << endl;
             return 1;
         }
-
 
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -82,17 +100,20 @@ int main(int argc, char *argv[])
         glLoadIdentity();
         glOrtho(0.0f, 640, 480, 0.0f, -1.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        glLoadIdentity();        
+
+        bool continueTest = true;
+        int frameNumber = start;
 
         // main loop
-        for (int i=start; i<stop; i++) {
+        while (continueTest == true) {
 
-            string fileName = path + baseFileName + itos(i) + ".bmp";
+            string fileName = path + baseFileName + itos(frameNumber) + ".bmp";
 
             // just test loading a frame
             IplImage *temp;
             temp = cvLoadImage(fileName.c_str());
-            cout << "Loaded image..." << temp->height << "," << temp->width << "\n";
+            cout << "Loaded image..." << fileName << "(" << temp->height << "," << temp->width << ")\n";
 
             //IplImage *temp2;
             CvSize size;
@@ -102,6 +123,69 @@ int main(int argc, char *argv[])
             cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
 
             SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp2->imageData, temp->width, temp->height, 24, temp->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
+
+            Uint32 colorRed    = SDL_MapRGB(image->format, 255, 0, 0);
+            Uint32 colorGreen  = SDL_MapRGB(image->format, 0, 255, 0);
+            Uint32 colorWhite  = SDL_MapRGB(image->format, 255, 255, 255);
+            Uint32 colorOrange = SDL_MapRGB(image->format, 255, 91, 0);
+
+            SDL_LockSurface(image);
+
+            ///////////////////////////////////////////////////////////////////////
+            //
+            // tracking algorithm
+            //
+            ///////////////////////////////////////////////////////////////////////
+
+            if (trackingActivated == true) {
+
+                // get the size of the image
+                int rows = image->h;
+                int cols = image->w;
+
+                // convert the image to a 2D matrix
+                int **image2D = SDLImageTo2DArrayOnePlane2(image, rows, cols, 2);
+
+                tracking->constellationTrackWrapper(image2D, xClick, yClick);
+
+                // center point is red
+                rectangleCenter.w = 4;
+                rectangleCenter.h = 4;
+                rectangleCenter.x = tracking->cLast[0] - 2;
+                rectangleCenter.y = tracking->rLast[0] - 2;
+                SDL_FillRect(image, &rectangleCenter, colorRed);
+
+                // the other constellation points are green
+                rectangleLeft.w = 4;
+                rectangleLeft.h = 4;
+                rectangleLeft.x = tracking->cLast[1] - 2;
+                rectangleLeft.y = tracking->rLast[1] - 2;
+                SDL_FillRect(image, &rectangleLeft, colorGreen);
+
+                rectangleRight.w = 4;
+                rectangleRight.h = 4;
+                rectangleRight.x = tracking->cLast[2] - 2;
+                rectangleRight.y = tracking->rLast[2] - 2;
+                SDL_FillRect(image, &rectangleRight, colorGreen);
+
+                rectangleTop.w = 4;
+                rectangleTop.h = 4;
+                rectangleTop.x = tracking->cLast[3] - 2;
+                rectangleTop.y = tracking->rLast[3] - 2;
+                SDL_FillRect(image, &rectangleTop, colorGreen);
+
+                rectangleBottom.w = 4;
+                rectangleBottom.h = 4;
+                rectangleBottom.x = tracking->cLast[4] - 2;
+                rectangleBottom.y = tracking->rLast[4] - 2;
+                SDL_FillRect(image, &rectangleBottom, colorGreen);
+
+                SDL_UnlockSurface(image);
+
+                printf("The tracked point is at (%d, %d)\n", tracking->rLast[0], tracking->cLast[0]);
+                printf("correlationError = %f, degeneracy = %f, shapeChange = %f\n", tracking->correlationError, tracking->degeneracy, tracking->shapeChange);
+
+            } // end if tracking active
 
             // generate a texture object handle
             glGenTextures(1, &texture);
@@ -150,12 +234,33 @@ int main(int argc, char *argv[])
 
             bool status = handleSDLEvents();
             if (status == true) {
-                break;
+                continueTest = false;
+            }
+
+            // increment our frame number if we get a mouse event
+            if (trackEvent == true) {
+                frameNumber++;
+            }
+
+            // look for termination conditions
+            if (frameNumber > stop) {
+                continueTest = false;
             }
 
         }
 
-    }
+        // if the tracking algorithm has been terminated, let the local variable know
+        if (tracking->trackingActivated == false) {
+                trackingActivated = false;
+        }
+
+        }
+
+        // exit nicely
+        SDL_Quit();
+        exit(0);
+
+//    }
 
 } // end main
 
@@ -187,10 +292,10 @@ bool handleSDLEvents()
                 return true;
                 break;
             case SDLK_q:
-  //              trackingActivated = false;
+                trackingActivated = false;
   //              foundClosestFeature = false;
-  //              tracking->trackingActivated = false;
-  //              tracking->reset();
+                tracking->trackingActivated = false;
+                tracking->reset();
                 break;
             case SDLK_f:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_FULLSCREEN);
@@ -235,15 +340,17 @@ bool handleSDLEvents()
             printf("Mouse button pressed. ");
             printf("Button %i at (%i, %i)\n", event.button.button, event.button.x, event.button.y);
 
+            trackEvent = true;
+
             // we received a new point to track
- //           if (trackingActivated == true) {
- //               tracking->reset();
- //           }
+            if (trackingActivated == true) {
+                tracking->reset();
+            }
 
- //           trackingActivated = true;
+            trackingActivated = true;
 
- //           xClick = event.button.x;
- //           yClick = event.button.y;
+            xClick = event.button.x;
+            yClick = event.button.y;
 
             break;
         }

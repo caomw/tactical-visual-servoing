@@ -90,6 +90,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp\
+        ImageProcessing.cpp \
         utilities\utilities.cpp\
         image_functions\Image_Functions.cpp\
         tracking_algorithms/SIFT/imgfeatures.cpp \
@@ -101,6 +102,7 @@ SOURCES += main.cpp\
  #       tracking_algorithms\correlation\TuringTracking.cpp
 
 HEADERS += mainwindow.h\
+        ImageProcessing.h \
         utilities\utilities.h\
         image_functions\Image_Functions.h\
         tracking_algorithms/SIFT/imgfeatures.h \
