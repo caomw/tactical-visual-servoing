@@ -57,6 +57,7 @@ bool trackingActivated = false;
 // instantiate the tracking library
 turingTracking *tracking = new turingTracking("480", "640");
 
+// instantiate the image functions class
 ImageFunctions *imageFunctions = new ImageFunctions();
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,7 +150,7 @@ int main(int argc, char *argv[])
             ///////////////////////////////////////////////////////////////////////
 
             if (trackingActivated == true) {
-
+/**
                 // get the size of the image
                 int rows = image->h;
                 int cols = image->w;
@@ -212,7 +213,7 @@ int main(int argc, char *argv[])
                     rectangleCenter.y = pt.y;
                     SDL_FillRect(image, &rectangleCenter, colorWhite);
                 }
-
+**/
             }
 
             // generate a texture object handle
@@ -268,7 +269,10 @@ int main(int argc, char *argv[])
             // increment our frame number if we get a mouse event
             if (trackEvent == true) {
                 frameNumber++;
+                printf("incrementing the frame number :: %d...\n", frameNumber);
             }
+
+            printf("There are %d frames in the current AVI\n", imageFunctions->captureAVIFrames);
 
             // look for termination conditions
             if (frameNumber > imageFunctions->captureAVIFrames) {
@@ -368,9 +372,9 @@ bool handleSDLEvents()
             trackEvent = true;
 
             // we received a new point to track
-            if (trackingActivated == true) {
-                tracking->reset();
-            }
+//            if (tracking->trackingActivated == true) {
+//                tracking->reset();
+//            }
 
             trackingActivated = true;
 
