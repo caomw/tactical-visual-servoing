@@ -42,6 +42,11 @@ win32 {
     INCLUDEPATH += C:\gsl-1.8-lib\include
 }
 
+# sdl
+win32 {
+    INCLUDEPATH += C:\SDL-1.2.13\include
+}
+
 # OpenCV
 win32 {
     LIBS += C:\OpenCVTemp\lib\cv.lib
@@ -84,6 +89,11 @@ unix {
 unix {
     LIBS += -lSDL -lSDL_image
 }
+win32 {
+    LIBS += C:\SDL-1.2.13\lib\SDL.lib
+    LIBS += C:\SDL-1.2.13\lib\SDL_image.lib
+}
+
 
 TARGET = TACTICAL
 TEMPLATE = app

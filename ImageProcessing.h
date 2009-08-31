@@ -1,11 +1,14 @@
 
 #ifdef WIN32
 #include <windows.h>
+#include "SDL.h"
+#include "SDL_image.h"
 #endif
 
+#ifdef unix
 #include "SDL/SDL.h"
-//#include "SDL/SDL_net.h"
 #include "SDL/SDL_image.h"
+#endif
 
 #include "cv.h"
 

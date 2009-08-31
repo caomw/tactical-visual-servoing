@@ -4,8 +4,15 @@
 #include <sstream>
 #include <vector>
 
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#ifdef unix
+    #include "SDL/SDL.h"
+    #include "SDL/SDL_image.h"
+#endif
+
+#ifdef win32
+    #include "SDL.h"
+    #include "SDL_image.h"
+#endif
 
 #include <QtGui/QApplication>
 #include "mainwindow.h"
@@ -22,6 +29,8 @@
 
 // this is a hack until I can get sdl events recognized from within qt
 #define USEQT_0_USESDL_1 1
+
+#undef main
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -55,7 +64,7 @@ bool trackEvent = false;
 bool trackingActivated = false;
 
 // instantiate the tracking library
-turingTracking *tracking = new turingTracking("480", "640");
+//turingTracking *tracking = new turingTracking("480", "640");
 
 // instantiate the image functions class
 ImageFunctions *imageFunctions = new ImageFunctions();
@@ -282,9 +291,9 @@ int main(int argc, char *argv[])
         }
 
         // if the tracking algorithm has been terminated, let the local variable know
-        if (tracking->trackingActivated == false) {
-                trackingActivated = false;
-        }
+        //if (tracking->trackingActivated == false) {
+        //        trackingActivated = false;
+        //}
 
     } // end if Qt or SDL
 
@@ -323,8 +332,8 @@ bool handleSDLEvents()
             case SDLK_q:
                 trackingActivated = false;
   //              foundClosestFeature = false;
-                tracking->trackingActivated = false;
-                tracking->reset();
+                //tracking->trackingActivated = false;
+                //tracking->reset();
                 break;
             case SDLK_f:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_FULLSCREEN);
