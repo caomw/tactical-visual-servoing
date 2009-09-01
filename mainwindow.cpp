@@ -3,9 +3,20 @@
 
 using namespace libmv;
 
-void WriteOutputImage(const FloatImage &image,
-                      CorrespondencesView<KLTPointFeature>::Iterator features,
-                      const char *output_filename);
+///////////////////////////////////////////////////////////////////////////////
+//
+// function prototypes
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// MainWindow constructor
+//
+///////////////////////////////////////////////////////////////////////////////
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -14,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     createActions();
 
-    timer.start(50);
+    //timer.start(50);
 
     // instantiations
     utilities = new Utilities();
@@ -28,6 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->statusBar->showMessage("NO DATASET LOADED");
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// MainWindow destructor
+//
+///////////////////////////////////////////////////////////////////////////////
+
 MainWindow::~MainWindow()
 {
     // clean up memory
@@ -37,16 +55,55 @@ MainWindow::~MainWindow()
     //delete turingTracking;
 }
 
-void MainWindow::trace(QString str){
+///////////////////////////////////////////////////////////////////////////////
+//
+// trace
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::trace(QString str)
+{
     ui->plainTextEditTrace->appendPlainText(str);
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// on_pushButtonTrack_clicked
+//
+///////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::on_pushButtonTrack_clicked()
 {
+    // display for debug purposes
+    for (int i=0; i<files.size(); i++) {
 
+        QString temp = files.value(i);
 
+        string t2 = temp.toStdString();
 
-/** klt stuff
+        string name = t + '/' + t2;
+
+        printf("loading...%s\n", name.c_str());
+
+        IplImage *tmp = cvLoadImage(name.c_str());
+
+        printf("%d, %d...\n", tmp->height, tmp->width);
+
+        // update the display
+        uchar *cv = (uchar*)(tmp->imageData);
+
+        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+
+        // TODO :: this needs some work yet because i cannot refresh the screen properly with the new image coming in
+        scene->clear();
+        scene->addPixmap(QPixmap::fromImage(img));
+        scene->update();
+
+        cvReleaseImage(&tmp);
+    }
+
+    /** klt stuff
     vector<string> files;
     string path = "/home/lab/Desktop/WoodPile/";
     string base = "captured";
@@ -97,7 +154,7 @@ void MainWindow::on_pushButtonTrack_clicked()
             (files[i]+".out.ppm").c_str());
         }
         **/
-
+/**
 
     string msg = "Current tab index = " + utilities->itos(ui->tabWidget->currentIndex());
     trace(msg.c_str());
@@ -107,7 +164,7 @@ void MainWindow::on_pushButtonTrack_clicked()
 
         // grab the current values set and set those in the tracking algorithms
 
-    /**
+
     QAction *action_Open_Sequence;
     QAction *action_About;
     QWidget *centralWidget;
@@ -158,7 +215,7 @@ void MainWindow::on_pushButtonTrack_clicked()
     QMenu *menu_Help;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
-    **/
+
 
         ///////////////////////////////////////////////////////////////////////
         // GOOD FEATURES
@@ -215,13 +272,27 @@ void MainWindow::on_pushButtonTrack_clicked()
         // END GOOD FEATURES
         ///////////////////////////////////////////////////////////////////////
     }
+**/
 
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// timerEvent
+//
+///////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::timerEvent(QTimerEvent *)
 {
     trace("timer event");
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// updateImageNumber
+//
+///////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::updateImageNumber(int value)
 {
@@ -252,6 +323,12 @@ void MainWindow::updateImageNumber(int value)
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// createActions
+//
+///////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::createActions()
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
@@ -264,16 +341,33 @@ void MainWindow::createActions()
 
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// mousePressEvent
+//
+///////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     trace("mouse pressed");
 
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// openImageDirectory
+//
+///////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::openImageDirectory()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select the first image or a movie file"));
+    //QString fileName = QFileDialog::getOpenName(this, tr("Select the first image or a movie file"));
+    QString fileName = QFileDialog::getExistingDirectory(this, tr("Select the directory containing bitmap images"));
     trace(fileName);
+
+    listFiles(fileName);
+    
+/**    
 
     // try opening the avi
     imageFunctions->aviInitialize(fileName.toStdString());
@@ -303,27 +397,49 @@ void MainWindow::openImageDirectory()
         scene->addPixmap(QPixmap::fromImage(img));
         scene->update();
     }
+ **/   
 
 }
 
-void MainWindow::listFiles()
+///////////////////////////////////////////////////////////////////////////////
+//
+// listFiles
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::listFiles(QString directoryName)
 {
-    QDir directory = QDir("C:\\Data_Collection\\21\\bmps\\");
+    QDir directory = QDir(directoryName);
     QString fileName = "*.bmp";
-    QStringList files;
-    if (fileName.isEmpty())
+
+    t = directoryName.toStdString();
+    datasetPath = t.c_str();
+
+    //datasetPath = directoryName;
+    printf("datasetPath = %s\n", t.c_str());
+
+    if (fileName.isEmpty()) {
         fileName = "*";
+    }
+
+    // this will contain the list of images
     files = directory.entryList(QStringList(fileName), QDir::Files | QDir::NoSymLinks);
 
+    // display for debug purposes
     for (int i=0; i<files.size(); i++) {
         QString temp = files.value(i);
         trace(temp);
     }
 }
 
-void WriteOutputImage(const FloatImage &image,
-                      CorrespondencesView<KLTPointFeature>::Iterator features,
-                      const char *output_filename) {
+///////////////////////////////////////////////////////////////////////////////
+//
+// WriteOutputImage :: code taken from libmv
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
+{
  /**
   FloatImage output_image(image.Height(), image.Width(), 3);
   for (int i = 0; i < image.Height(); ++i) {

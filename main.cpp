@@ -7,6 +7,7 @@
 #ifdef unix
     #include "SDL/SDL.h"
     #include "SDL/SDL_image.h"
+    #include <dirent.h>
 #endif
 
 #ifdef win32
@@ -40,6 +41,7 @@
 
 bool handleSDLEvents();
 string itos (int i);
+void listDirectoryContents (string directory);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -49,7 +51,7 @@ string itos (int i);
 
 string commandsList;
 
-string path = "/home/lab/Development/NavigationData/WoodPile/";
+string path = "/home/lab/Development/PackBot/images/highbay/";
 string baseFileName = "captured";
 int start = 0;
 int stop = 730;
@@ -68,6 +70,8 @@ bool trackingActivated = false;
 
 // instantiate the image functions class
 ImageFunctions *imageFunctions = new ImageFunctions();
+
+vector <string> sortedFiles;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -106,6 +110,9 @@ int main(int argc, char *argv[])
         // set the title bar
         SDL_WM_SetCaption("TACTICAL", NULL);
 
+        //string p2 = "/home/lab/Development/PackBot/images/highbay/";
+        listDirectoryContents(path);
+
         // init OpenGL
         glEnable(GL_TEXTURE_2D);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -125,7 +132,11 @@ int main(int argc, char *argv[])
         // main loop
         while (continueTest == true) {
 
-            IplImage *temp = imageFunctions->aviGrabFrame(frameNumber);
+            //IplImage *temp = imageFunctions->aviGrabFrame(frameNumber);
+
+            string t = path + '/' + sortedFiles.at(frameNumber);
+            printf("trying to load %s\n", t.c_str());
+            IplImage *temp = cvLoadImage(t.c_str());
 
             cout << "Current frame number = " << frameNumber << "\n";
 
@@ -284,7 +295,8 @@ int main(int argc, char *argv[])
             printf("There are %d frames in the current AVI\n", imageFunctions->captureAVIFrames);
 
             // look for termination conditions
-            if (frameNumber > imageFunctions->captureAVIFrames) {
+            //if (frameNumber > imageFunctions->captureAVIFrames) {
+            if (frameNumber > sortedFiles.size()-1) {
                 continueTest = false;
             }
 
@@ -414,3 +426,49 @@ string itos (int i)
     return s.str();
 
 } // end itos
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// listDirectoryContents
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void listDirectoryContents (string directory)
+{
+    vector <string> files;
+    size_t found;
+    string searchArg = ".bmp";
+
+    struct dirent *de=NULL;
+    DIR *d=NULL;
+
+    d=opendir(directory.c_str());
+    if (d == NULL) {
+        perror("Couldn't open directory");
+    }
+
+    // loop while not NULL
+    while(de = readdir(d)) {
+        files.push_back(de->d_name);
+        printf("%s\n",de->d_name);
+    }
+
+    // sort the vector
+    sort(files.rbegin(), files.rend());
+
+    for (int i=files.size()-1; i>=0; i--) {
+
+        string tmp = files.at(i);
+        // search for a valid bmp file
+        found = tmp.find(searchArg);
+
+        if (found != string::npos) {
+            string temp = files.at(i);
+            printf("%s\n", temp.c_str());
+            sortedFiles.push_back(temp);
+        }
+    }
+
+    closedir(d);
+}

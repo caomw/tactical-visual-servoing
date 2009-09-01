@@ -55,12 +55,15 @@ public:
 private:
     Ui::MainWindow *ui;
     void createActions();
-    void listFiles();
+    void listFiles(QString);
     string itos(int i);
     QGraphicsScene *scene;
 
     bool datasetLoaded;
     QString datasetName;
+    QString datasetPath;
+    string t;
+    QStringList files;
     int datasetWidth;
     int datasetHeight;
 
