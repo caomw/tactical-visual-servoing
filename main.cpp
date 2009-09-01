@@ -28,10 +28,25 @@
 #include "ImageProcessing.h"
 #include "image_functions/Image_Functions.h"
 
+// move these too, this is just a test for libmv
+#include <algorithm>
+#include <vector>
+#include "libmv/image/image.h"
+#include "libmv/image/image_io.h"
+#include "libmv/image/image_pyramid.h"
+#include "libmv/image/image_sequence_io.h"
+#include "libmv/image/cached_image_sequence.h"
+#include "libmv/image/pyramid_sequence.h"
+#include "libmv/correspondence/correspondence.h"
+#include "libmv/correspondence/feature.h"
+#include "libmv/correspondence/klt.h"
+
 // this is a hack until I can get sdl events recognized from within qt
 #define USEQT_0_USESDL_1 1
 
 #undef main
+
+using namespace libmv;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -42,6 +57,8 @@
 bool handleSDLEvents();
 string itos (int i);
 void listDirectoryContents (string directory);
+void libmvRunKLT ();
+void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -110,7 +127,7 @@ int main(int argc, char *argv[])
         // set the title bar
         SDL_WM_SetCaption("TACTICAL", NULL);
 
-        //string p2 = "/home/lab/Development/PackBot/images/highbay/";
+        // get the contents of our directory
         listDirectoryContents(path);
 
         // init OpenGL
@@ -127,34 +144,22 @@ int main(int argc, char *argv[])
         bool continueTest = true;
         int frameNumber = start;
 
-        imageFunctions->aviInitialize(aviFileName);
+        //imageFunctions->aviInitialize(aviFileName);
 
         // main loop
         while (continueTest == true) {
 
-            //IplImage *temp = imageFunctions->aviGrabFrame(frameNumber);
-
             string t = path + '/' + sortedFiles.at(frameNumber);
-            printf("trying to load %s\n", t.c_str());
+            //printf("trying to load %s\n", t.c_str());
             IplImage *temp = cvLoadImage(t.c_str());
 
-            cout << "Current frame number = " << frameNumber << "\n";
+            // swap the red and blue channels
+            IplImage *temp2 = cvCreateImage(cvSize(temp->width, temp->height), 8, 3);
+            cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
 
-           // string fileName = path + baseFileName + itos(frameNumber) + ".bmp";
+            //cout << "Current frame number = " << frameNumber << "\n";
 
-            // just test loading a frame
-       //     IplImage *temp;
-       //     temp = cvLoadImage(fileName.c_str());
-       //     cout << "Loaded image..." << fileName << "(" << temp->height << "," << temp->width << ")\n";
-
-            //IplImage *temp2;
-      //      CvSize size;
-      //      size.height = temp->height;
-      //      size.width  = temp->width;
-      //      IplImage *temp2 = cvCreateImage(size, 8, 3);
-      //      cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
-
-            SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp->imageData, temp->width, temp->height, 24, temp->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
+            SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp2->imageData, temp2->width, temp->height, 24, temp2->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
 
             Uint32 colorRed    = SDL_MapRGB(image->format, 255, 0, 0);
             Uint32 colorGreen  = SDL_MapRGB(image->format, 0, 255, 0);
@@ -277,9 +282,9 @@ int main(int argc, char *argv[])
             // delete the texture
             glDeleteTextures(1, &texture);
 
-            // free the OpenCV image we created
+            // free the OpenCV images we created
             cvReleaseImage(&temp);
-        //    cvReleaseImage(&temp2);
+            cvReleaseImage(&temp2);
 
             bool status = handleSDLEvents();
             if (status == true) {
@@ -292,7 +297,7 @@ int main(int argc, char *argv[])
                 printf("incrementing the frame number :: %d...\n", frameNumber);
             }
 
-            printf("There are %d frames in the current AVI\n", imageFunctions->captureAVIFrames);
+            //printf("There are %d frames in the current AVI\n", imageFunctions->captureAVIFrames);
 
             // look for termination conditions
             //if (frameNumber > imageFunctions->captureAVIFrames) {
@@ -361,6 +366,9 @@ bool handleSDLEvents()
                 break;
             case SDLK_r:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL);
+                break;
+            case SDLK_l:
+                libmvRunKLT();
                 break;
             case SDLK_s:
  //               if (enableSIFT == true) {
@@ -448,7 +456,7 @@ void listDirectoryContents (string directory)
         perror("Couldn't open directory");
     }
 
-    // loop while not NULL
+    // loop while there are files
     while(de = readdir(d)) {
         files.push_back(de->d_name);
         printf("%s\n",de->d_name);
@@ -471,4 +479,69 @@ void listDirectoryContents (string directory)
     }
 
     closedir(d);
-}
+
+} // end listDirectoryContents
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// libmvRunKLT
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void libmvRunKLT ()
+{
+    // klt stuff
+    vector<string> files;
+    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
+    string base = "captured";
+    for (int i=503; i<530; i++) {
+        string fileName = path + base + itos(i) + ".pgm";
+        files.push_back(fileName);
+        printf("loading %s\n", fileName.c_str());
+    }
+
+    ImageCache cache;
+    ImageSequence *source = ImageSequenceFromFiles(files, &cache);
+    PyramidSequence *pyramid_sequence = MakePyramidSequence(source, 5, 1.5);
+
+    KLTContext klt;
+    Correspondences correspondences;
+
+    // TODO(keir): Really have to get a scoped_ptr<> implementation!
+    // Consider taking the one from boost but editing out the cruft.
+    ImagePyramid *pyramid = pyramid_sequence->Pyramid(0);
+    KLTContext::FeatureList features;
+    klt.DetectGoodFeatures(pyramid->Level(0), &features);
+    int i = 0;
+    for (KLTContext::FeatureList::iterator it = features.begin();
+        it != features.end(); ++it, ++i) {
+        correspondences.Insert(0, i, *it);
+    }
+
+    CorrespondencesView<KLTPointFeature> klt_correspondences(&correspondences);
+    WriteOutputImage(pyramid_sequence->Pyramid(0)->Level(0), klt_correspondences.ScanFeaturesForImage(0),(files[0]+".out.ppm").c_str());
+
+    // TODO(keir): Use correspondences here!
+    for (size_t i = 1; i < files.size(); ++i) {
+        printf("Tracking %2zd features in %s\n", features.size(), files[i].c_str());
+
+        CorrespondencesView<KLTPointFeature>::Iterator it =
+        klt_correspondences.ScanFeaturesForImage(i-1);
+        for (; !it.Done(); it.Next()) {
+        KLTPointFeature *next_position = new KLTPointFeature;
+        if (klt.TrackFeature(pyramid_sequence->Pyramid(i-1), *it.feature(), pyramid_sequence->Pyramid(i), next_position)) {
+            correspondences.Insert(i, it.track(), next_position);
+        } else {
+            delete next_position;
+        }
+    }
+
+
+
+     WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i), (files[i]+".out.ppm").c_str());
+     string temp = files[i] + ".out.ppm";
+     printf("%s\n", temp.c_str());
+        }
+
+}  // end libmvRunKLT
+

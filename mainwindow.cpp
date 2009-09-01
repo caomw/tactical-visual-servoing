@@ -103,58 +103,7 @@ void MainWindow::on_pushButtonTrack_clicked()
         cvReleaseImage(&tmp);
     }
 
-    /** klt stuff
-    vector<string> files;
-    string path = "/home/lab/Desktop/WoodPile/";
-    string base = "captured";
-    for (int i=503; i<730; i++) {
-        string fileName = path + base + utilities->itos(i) + ".pgm";
-        files.push_back(fileName);
-        trace(fileName.c_str());
-    }
-
-    ImageCache cache;
-    ImageSequence *source = ImageSequenceFromFiles(files, &cache);
-    PyramidSequence *pyramid_sequence = MakePyramidSequence(source, 5, 1.5);
-
-    KLTContext klt;
-    Correspondences correspondences;
-
-    // TODO(keir): Really have to get a scoped_ptr<> implementation!
-    // Consider taking the one from boost but editing out the cruft.
-    ImagePyramid *pyramid = pyramid_sequence->Pyramid(0);
-    KLTContext::FeatureList features;
-    klt.DetectGoodFeatures(pyramid->Level(0), &features);
-    int i = 0;
-    for (KLTContext::FeatureList::iterator it = features.begin();
-        it != features.end(); ++it, ++i) {
-        correspondences.Insert(0, i, *it);
-    }
-
-    CorrespondencesView<KLTPointFeature> klt_correspondences(&correspondences);
-    WriteOutputImage(pyramid_sequence->Pyramid(0)->Level(0), klt_correspondences.ScanFeaturesForImage(0),(files[0]+".out.ppm").c_str());
-
-    // TODO(keir): Use correspondences here!
-    for (size_t i = 1; i < files.size(); ++i) {
-        printf("Tracking %2zd features in %s\n", features.size(), files[i].c_str());
-
-        CorrespondencesView<KLTPointFeature>::Iterator it =
-        klt_correspondences.ScanFeaturesForImage(i-1);
-        for (; !it.Done(); it.Next()) {
-        KLTPointFeature *next_position = new KLTPointFeature;
-        if (klt.TrackFeature(pyramid_sequence->Pyramid(i-1), *it.feature(), pyramid_sequence->Pyramid(i), next_position)) {
-            correspondences.Insert(i, it.track(), next_position);
-        } else {
-            delete next_position;
-        }
-    }
-
-    //
-        WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i),
-            (files[i]+".out.ppm").c_str());
-        }
-        **/
-/**
+    /**
 
     string msg = "Current tab index = " + utilities->itos(ui->tabWidget->currentIndex());
     trace(msg.c_str());
