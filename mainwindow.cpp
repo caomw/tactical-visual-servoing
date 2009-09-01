@@ -9,7 +9,6 @@ using namespace libmv;
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -381,30 +380,3 @@ void MainWindow::listFiles(QString directoryName)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// WriteOutputImage :: code taken from libmv
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
-{
- /**
-  FloatImage output_image(image.Height(), image.Width(), 3);
-  for (int i = 0; i < image.Height(); ++i) {
-    for (int j = 0; j < image.Width(); ++j) {
-      output_image(i,j,0) = image(i,j);
-      output_image(i,j,1) = image(i,j);
-      output_image(i,j,2) = image(i,j);
-    }
-  }
-
-  Vec3 green;
-  green << 0, 1, 0;
-  for (; !features.Done(); features.Next()) {
-    DrawFeature(*features.feature(), green, &output_image);
-  }
-
-  WritePnm(output_image, output_filename);
-  **/
-}

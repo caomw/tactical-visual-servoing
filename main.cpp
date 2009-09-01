@@ -25,6 +25,9 @@
 // tracking
 #include "tracking_algorithms/Correlation/TuringTracking/TuringTracking.h"
 
+// optical flow
+#include "tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h"
+
 #include "ImageProcessing.h"
 #include "image_functions/Image_Functions.h"
 
@@ -59,6 +62,7 @@ string itos (int i);
 void listDirectoryContents (string directory);
 void libmvRunKLT ();
 void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
+void runOpticalFlowHornSchunck();
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -367,6 +371,9 @@ bool handleSDLEvents()
             case SDLK_r:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL);
                 break;
+            case SDLK_h:
+                runOpticalFlowHornSchunck();
+                break;
             case SDLK_l:
                 libmvRunKLT();
                 break;
@@ -513,35 +520,95 @@ void libmvRunKLT ()
     KLTContext::FeatureList features;
     klt.DetectGoodFeatures(pyramid->Level(0), &features);
     int i = 0;
-    for (KLTContext::FeatureList::iterator it = features.begin();
-        it != features.end(); ++it, ++i) {
+    for (KLTContext::FeatureList::iterator it = features.begin(); it != features.end(); ++it, ++i) {
         correspondences.Insert(0, i, *it);
     }
 
     CorrespondencesView<KLTPointFeature> klt_correspondences(&correspondences);
-    WriteOutputImage(pyramid_sequence->Pyramid(0)->Level(0), klt_correspondences.ScanFeaturesForImage(0),(files[0]+".out.ppm").c_str());
+
+    WriteOutputImage(pyramid_sequence->Pyramid(0)->Level(0), klt_correspondences.ScanFeaturesForImage(0), (files[0]+".out.ppm").c_str());
 
     // TODO(keir): Use correspondences here!
     for (size_t i = 1; i < files.size(); ++i) {
+
         printf("Tracking %2zd features in %s\n", features.size(), files[i].c_str());
 
-        CorrespondencesView<KLTPointFeature>::Iterator it =
-        klt_correspondences.ScanFeaturesForImage(i-1);
+        CorrespondencesView<KLTPointFeature>::Iterator it = klt_correspondences.ScanFeaturesForImage(i-1);
         for (; !it.Done(); it.Next()) {
-        KLTPointFeature *next_position = new KLTPointFeature;
-        if (klt.TrackFeature(pyramid_sequence->Pyramid(i-1), *it.feature(), pyramid_sequence->Pyramid(i), next_position)) {
-            correspondences.Insert(i, it.track(), next_position);
-        } else {
-            delete next_position;
+            KLTPointFeature *next_position = new KLTPointFeature;
+            if (klt.TrackFeature(pyramid_sequence->Pyramid(i-1), *it.feature(), pyramid_sequence->Pyramid(i), next_position)) {
+                correspondences.Insert(i, it.track(), next_position);
+            } else {
+                delete next_position;
+            }
         }
+
+       WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i), (files[i]+".out.ppm").c_str());
+
     }
-
-
-
-     WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i), (files[i]+".out.ppm").c_str());
-     string temp = files[i] + ".out.ppm";
-     printf("%s\n", temp.c_str());
-        }
 
 }  // end libmvRunKLT
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// WriteOutputImage :: code taken from libmv
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
+{
+    FloatImage output_image(image.Height(), image.Width(), 3);
+
+    for (int i = 0; i < image.Height(); ++i) {
+        for (int j = 0; j < image.Width(); ++j) {
+            output_image(i,j,0) = image(i,j);
+            output_image(i,j,1) = image(i,j);
+            output_image(i,j,2) = image(i,j);
+        }
+    }
+
+    Vec3 green;
+    green << 0, 1, 0;
+    for (; !features.Done(); features.Next()) {
+        DrawFeature(*features.feature(), green, &output_image);
+    }
+
+    WritePnm(output_image, output_filename);
+
+} // end WriteOutputImage
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runOpticalFlowHornSchunck
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runOpticalFlowHornSchunck ()
+{
+    initHornSchunck();
+
+    for (int i=0; i<sortedFiles.size()-1; i++) {
+        string tempA = path + sortedFiles.at(i);
+        string tempB = path + sortedFiles.at(i+1);
+
+        printf("trying to load %s and %s\n", tempA.c_str(), tempB.c_str());
+
+        IplImage *imgA = cvLoadImage(tempA.c_str());
+        IplImage *imgB = cvLoadImage(tempB.c_str());
+
+        IplImage *imgA_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+        IplImage *imgB_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+
+        cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
+        cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
+
+        cvReleaseImage(&imgA);
+        cvReleaseImage(&imgB);
+
+        runHornSchunck(imgA_1, imgB_1);
+    }
+
+    endHornSchunck();
+}

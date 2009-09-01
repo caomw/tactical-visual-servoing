@@ -108,7 +108,8 @@ SOURCES += main.cpp\
         tracking_algorithms/SIFT/minpq.cpp \
         tracking_algorithms/SIFT/sift.cpp \
         tracking_algorithms/SIFT/utils.cpp \
-        tracking_algorithms/SIFT/xform.cpp
+        tracking_algorithms/SIFT/xform.cpp \
+        tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
