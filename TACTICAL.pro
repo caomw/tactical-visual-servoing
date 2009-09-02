@@ -129,7 +129,9 @@ SOURCES += main.cpp\
         tracking_algorithms/Optical_Flow/klt++/pyramid.cpp \
         tracking_algorithms/Optical_Flow/klt++/selectGoodFeatures.cpp \
         tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
-        tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp
+        tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp \
+        # farneback's polynomial expansion
+        tracking_algorithms/Optical_Flow/Farneback/optical_flow_farneback.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \

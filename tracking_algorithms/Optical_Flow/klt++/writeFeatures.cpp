@@ -436,28 +436,28 @@ void KLTWriteFeatureTable(KLT_FeatureTable ft, char *fname, char *fmt)
 		fclose(fp);
 	}
 
-	// sth: hack to write the features detected in the first frame
-	FILE *fo;
-	fo = fopen("c:\\features.txt", "w+");
-	for (j = 0 ; j < ft->nFeatures ; j++)  {	
-		for (i = 0 ; i < 1 ; i++)
-			fprintf(fo, "%lf, %lf\n", ft->feature[j][i]->y, ft->feature[j][i]->x);
-	}
+//	// sth: hack to write the features detected in the first frame
+//	FILE *fo;
+//	fo = fopen("c:\\features.txt", "w+");
+//	for (j = 0 ; j < ft->nFeatures ; j++)  {
+//		for (i = 0 ; i < 1 ; i++)
+//			fprintf(fo, "%lf, %lf\n", ft->feature[j][i]->y, ft->feature[j][i]->x);
+//	}
 
 	// loop through and get the mean number of frames until failure
-	int dropout = 0;
-	for (j = 0 ; j < ft->nFeatures ; j++)  {		
-		for (i = 0 ; i < ft->nFrames ; i++) {
-			if (ft->feature[j][i]->y == -1 && ft->feature[j][i]->x == -1) {
-				dropout += i;
-				break;
-			}
-		}
-	}
+//	int dropout = 0;
+//	for (j = 0 ; j < ft->nFeatures ; j++)  {
+//		for (i = 0 ; i < ft->nFrames ; i++) {
+//			if (ft->feature[j][i]->y == -1 && ft->feature[j][i]->x == -1) {
+//				dropout += i;
+//				break;
+//			}
+//		}
+//	}
 
-	fprintf(fo, "The mean frame dropout was %lf\n", dropout/ft->nFrames);	
+//	fprintf(fo, "The mean frame dropout was %lf\n", dropout/ft->nFrames);
 
-	fclose(fo);
+//	fclose(fo);
 
 }
 

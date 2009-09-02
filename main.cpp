@@ -1,4 +1,50 @@
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2009 Shawn T. Hunt
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+//
+//
+// Source file: main.cpp
+// Author: Shawn Hunt (shawn.t.hunt@gmail.com)
+//
+// This code has been developed to support my thesis on goal-based
+//  visual servoing.  It is being made publicly available in the hopes
+//  that it is of benefit to others.  If any errors have been found or
+//  if you find it useful, please drop me a note.
+//
+// This is a total hack right now.  The end goal is to have this support
+//  an image sequence or a movie file.  I am having issues with OpenCV
+//  working under Linux that is limiting this right now.  I have it limited
+//  to only look for bitmaps in the specified directory but that can be
+//  easily changed.
+//
+// Due to the limited amount of storage available at Google code, the datasets
+//  that I have been working with will be published at
+//  http://tigrs.eng.wayne.edu
+//
+///////////////////////////////////////////////////////////////////////////////
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -56,7 +102,7 @@
 
 #undef main
 
-//using namespace libmv;
+using namespace libmv;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -66,13 +112,14 @@
 
 bool handleSDLEvents();
 
-string itos (int i);
+string itos(int);
 
-void listDirectoryContents (string directory);
-void libmvRunKLT ();
-//void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
+void listDirectoryContents(string);
+void libmvRunKLT();
+void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
 void runOpticalFlowHornSchunck();
 void runOpticalFlowBirchfieldKLT();
+void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -82,12 +129,10 @@ void runOpticalFlowBirchfieldKLT();
 
 string commandsList;
 
-string path = "/home/lab/Development/PackBot/images/highbay/";
+string path = "/home/lab/Development/NavigationData/";
 string baseFileName = "captured";
 int start = 0;
 int stop = 730;
-
-string aviFileName = "/home/lab/Development/NavigationData/WoodPile/out_WoodPile.avi";
 
 SDL_Rect rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom;
 int xClick=0, yClick=0;
@@ -96,13 +141,14 @@ int xClick=0, yClick=0;
 bool trackEvent = false;
 bool trackingActivated = false;
 
-// instantiate the tracking library
-//turingTracking *tracking = new turingTracking("480", "640");
-
 // instantiate the image functions class
 ImageFunctions *imageFunctions = new ImageFunctions();
 
+// global vector to hold all file names
 vector <string> sortedFiles;
+
+// OpenGL texture
+GLuint texture;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -112,23 +158,6 @@ vector <string> sortedFiles;
 
 int main(int argc, char *argv[])
 {
-    int choice=0;
-
-    cout << "\n\n\n";
-    cout << "TACTICAL\n";
-    cout << "--------\n\n";
-    cout << "Algorithms:\n\n";
-    cout << "Optical Flow:\n";
-    cout << "\t1. Horn-Schnuck (Dense)\n";
-    cout << "\t2. Birchfield's KLT Tracker (Sparse)\n\n";
-    cout << "Correlation:\n";
-    cout << "\txx. Turing's Multi-Resolution Progressive Alignment Tracker\n";
-    cout << "\n===> ";
-
-    cin >> choice;
-
-    GLuint texture;
-
     // OpenGL
     if (USEQT_0_USESDL_1 == 0) {
         QApplication a(argc, argv);
@@ -156,9 +185,6 @@ int main(int argc, char *argv[])
         // set the title bar
         SDL_WM_SetCaption("TACTICAL", NULL);
 
-        // get the contents of our directory
-        listDirectoryContents(path);
-
         // init OpenGL
         glEnable(GL_TEXTURE_2D);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -170,105 +196,527 @@ int main(int argc, char *argv[])
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();        
 
-        bool continueTest = true;
-        int frameNumber = start;
+    }
 
-        //imageFunctions->aviInitialize(aviFileName);
+    string dirIn;
+    cout << "What is the image directory path (/home/lab/Development/NavigationData/...)? ";
+    cin >> dirIn;
 
-        // main loop
-        while (continueTest == true) {
+    // append the directory to the main image path
+    path = path + dirIn;
+    printf("Path is set to: %s\n", path.c_str());
 
-            string t = path + '/' + sortedFiles.at(frameNumber);
-            //printf("trying to load %s\n", t.c_str());
-            IplImage *temp = cvLoadImage(t.c_str());
+    // get the contents of our directory
+    listDirectoryContents(path);
 
-            // swap the red and blue channels
-            IplImage *temp2 = cvCreateImage(cvSize(temp->width, temp->height), 8, 3);
-            cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
+    bool running = true;
+    while (running) {
 
-            //cout << "Current frame number = " << frameNumber << "\n";
+        int choice=0;
 
-            SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp2->imageData, temp2->width, temp->height, 24, temp2->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
+        cout << "\n\n\n";
 
-            Uint32 colorRed    = SDL_MapRGB(image->format, 255, 0, 0);
-            Uint32 colorGreen  = SDL_MapRGB(image->format, 0, 255, 0);
-            Uint32 colorWhite  = SDL_MapRGB(image->format, 255, 255, 255);
-            Uint32 colorOrange = SDL_MapRGB(image->format, 255, 91, 0);
+        cout << "TACTICAL\n";
+        cout << "--------\n\n";
 
-            SDL_LockSurface(image);
+        cout << "Algorithms:\n\n";
 
-            ///////////////////////////////////////////////////////////////////////
-            //
-            // tracking algorithm
-            //
-            ///////////////////////////////////////////////////////////////////////
+        cout << "Optical Flow:\n";
+        cout << "1. Horn-Schnuck (Dense)\n";
+        cout << "2. Farneback's Polynomial Expansion (Dense)\n";
+        cout << "3. Birchfield's KLT Tracker (Sparse)\n";
+        cout << "4. OpenCV's KLT Tracker (Sparse)\n\n";
 
-            if (trackingActivated == true) {
-/**
-                // get the size of the image
-                int rows = image->h;
-                int cols = image->w;
+        cout << "Blob Tracking:\n";
+        cout << "5. SIFT (Hess's Implementation)\n";
 
-                // convert the image to a 2D matrix
-                int **image2D = SDLImageTo2DArrayOnePlane2(image, rows, cols, 2);
+        cout << "Correlation:\n";
+        cout << "6. Turing's Multi-Resolution Progressive Alignment Tracker\n\n";
 
-                tracking->constellationTrackWrapper(image2D, xClick, yClick);
+        cout << "9. End program\n";
+        cout << "\n===> ";
+        cin >> choice;
 
-                // center point is red
-                rectangleCenter.w = 4;
-                rectangleCenter.h = 4;
-                rectangleCenter.x = tracking->cLast[0] - 2;
-                rectangleCenter.y = tracking->rLast[0] - 2;
-                SDL_FillRect(image, &rectangleCenter, colorRed);
+        if (choice == 1) {
+        } else if (choice == 3) {
+            runOpticalFlowBirchfieldKLT();
+        } else if (choice == 5) {
+            runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
+        } else if (choice == 9) {
+            running = false;
+        }
 
-                // the other constellation points are green
-                rectangleLeft.w = 4;
-                rectangleLeft.h = 4;
-                rectangleLeft.x = tracking->cLast[1] - 2;
-                rectangleLeft.y = tracking->rLast[1] - 2;
-                SDL_FillRect(image, &rectangleLeft, colorGreen);
+    }
 
-                rectangleRight.w = 4;
-                rectangleRight.h = 4;
-                rectangleRight.x = tracking->cLast[2] - 2;
-                rectangleRight.y = tracking->rLast[2] - 2;
-                SDL_FillRect(image, &rectangleRight, colorGreen);
+    // exit nicely
+    SDL_Quit();
+    exit(0);
 
-                rectangleTop.w = 4;
-                rectangleTop.h = 4;
-                rectangleTop.x = tracking->cLast[3] - 2;
-                rectangleTop.y = tracking->rLast[3] - 2;
-                SDL_FillRect(image, &rectangleTop, colorGreen);
+} // end main
 
-                rectangleBottom.w = 4;
-                rectangleBottom.h = 4;
-                rectangleBottom.x = tracking->cLast[4] - 2;
-                rectangleBottom.y = tracking->rLast[4] - 2;
-                SDL_FillRect(image, &rectangleBottom, colorGreen);
 
-                SDL_UnlockSurface(image);
+///////////////////////////////////////////////////////////////////////////////
+//
+// handleSDLEvents
+//
+///////////////////////////////////////////////////////////////////////////////
 
-                printf("The tracked point is at (%d, %d)\n", tracking->rLast[0], tracking->cLast[0]);
-                printf("correlationError = %f, degeneracy = %f, shapeChange = %f\n", tracking->correlationError, tracking->degeneracy, tracking->shapeChange);
+bool handleSDLEvents()
+{
+    commandsList.clear();
+    SDL_Event event;
 
-            // find good features
-            } else {
+    // keyboard events
+    while (SDL_PollEvent(&event)) {
 
-                int numberGoodFeatures = tracking->findGoodFeatures(temp);
+        switch (event.type) {
 
-                // draw the good features
-                int k=0;
-                for (int i=0; i<numberGoodFeatures; i++) {
-                    tracking->points[1][k++] = tracking->points[1][i];
-                    rectangleCenter.w = 4;
-                    rectangleCenter.h = 4;
-                    CvPoint pt = cvPointFrom32f(tracking->points[1][i]);
-                    rectangleCenter.x = pt.x;
-                    rectangleCenter.y = pt.y;
-                    SDL_FillRect(image, &rectangleCenter, colorWhite);
-                }
-**/
+        case SDL_KEYDOWN:
+
+            switch (event.key.keysym.sym) {
+
+            case SDLK_ESCAPE:
+                SDL_Quit();
+                exit(0);
+                return true;
+                break;
+            case SDLK_q:
+                trackingActivated = false;
+  //              foundClosestFeature = false;
+                //tracking->trackingActivated = false;
+                //tracking->reset();
+                break;
+            case SDLK_f:
+                SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_FULLSCREEN);
+                break;
+            case SDLK_p:
+ //               if (enableFiltering == true) {
+ //                   enableFiltering = false;
+ //               } else if (enableFiltering == false) {
+ //                   // make sure to reset the lk
+ //                   tracking->lkResetOpticalFlow();
+ //                   enableFiltering = true;
+ //               }
+                break;
+            case SDLK_r:
+                SDL_SetVideoMode(640, 480, 0, SDL_OPENGL);
+                break;
+            case SDLK_s:
+ //               if (enableSIFT == true) {
+ //                   enableSIFT = false;
+ //               } else if (enableSIFT == false) {
+ //                   enableSIFT = true;
+ //               }
+                break;
+            case SDLK_d:
+ //               if (coordinatesActivated == false) {
+ //                   coordinatesActivated = true;
+   //             } else if (coordinatesActivated == true) {
+   //                 coordinatesActivated = false;
+   //             }
+                break;
+            default:
+                break;
             }
+            break;
+
+        case SDL_QUIT:
+            return true;
+            break;
+
+        case SDL_MOUSEBUTTONDOWN:
+
+            printf("Mouse button pressed. ");
+            printf("Button %i at (%i, %i)\n", event.button.button, event.button.x, event.button.y);
+
+            trackEvent = true;
+
+            // we received a new point to track
+//            if (tracking->trackingActivated == true) {
+//                tracking->reset();
+//            }
+
+            trackingActivated = true;
+
+            xClick = event.button.x;
+            yClick = event.button.y;
+
+            break;
+        }
+    }
+
+    return false;
+
+} // end handleSDLEvents
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  itos
+//
+///////////////////////////////////////////////////////////////////////////////
+
+string itos (int i)
+{
+    stringstream s;
+    s << i;
+    return s.str();
+
+} // end itos
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// listDirectoryContents
+//
+// This currently only looks for bitmaps...
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void listDirectoryContents (string directory)
+{
+    vector <string> files;
+    size_t found;
+    string searchArg = ".bmp";
+
+    struct dirent *de=NULL;
+    DIR *d=NULL;
+
+    d=opendir(directory.c_str());
+    if (d == NULL) {
+        perror("Couldn't open directory");
+    }
+
+    // loop while there are files
+    while(de = readdir(d)) {
+        files.push_back(de->d_name);
+        printf("%s\n",de->d_name);
+    }
+
+    // sort the vector
+    sort(files.rbegin(), files.rend());
+
+    for (int i=files.size()-1; i>=0; i--) {
+
+        string tmp = files.at(i);
+        // search for a valid bmp file
+        found = tmp.find(searchArg);
+
+        if (found != string::npos) {
+            string temp = files.at(i);
+            printf("%s\n", temp.c_str());
+            sortedFiles.push_back(temp);
+        }
+    }
+
+    closedir(d);
+
+} // end listDirectoryContents
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// libmvRunKLT
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void libmvRunKLT ()
+{
+    // klt stuff
+    vector<string> files;
+    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
+    string base = "captured";
+    for (int i=503; i<530; i++) {
+        string fileName = path + base + itos(i) + ".pgm";
+        files.push_back(fileName);
+        printf("loading %s\n", fileName.c_str());
+    }
+
+    ImageCache cache;
+    ImageSequence *source = ImageSequenceFromFiles(files, &cache);
+    PyramidSequence *pyramid_sequence = MakePyramidSequence(source, 5, 1.5);
+
+    KLTContext klt;
+    Correspondences correspondences;
+
+    // TODO(keir): Really have to get a scoped_ptr<> implementation!
+    // Consider taking the one from boost but editing out the cruft.
+    ImagePyramid *pyramid = pyramid_sequence->Pyramid(0);
+    KLTContext::FeatureList features;
+    klt.DetectGoodFeatures(pyramid->Level(0), &features);
+    int i = 0;
+    for (KLTContext::FeatureList::iterator it = features.begin(); it != features.end(); ++it, ++i) {
+        correspondences.Insert(0, i, *it);
+    }
+
+    CorrespondencesView<KLTPointFeature> klt_correspondences(&correspondences);
+
+    WriteOutputImage(pyramid_sequence->Pyramid(0)->Level(0), klt_correspondences.ScanFeaturesForImage(0), (files[0]+".out.ppm").c_str());
+
+    // TODO(keir): Use correspondences here!
+    for (size_t i = 1; i < files.size(); ++i) {
+
+        printf("Tracking %2zd features in %s\n", features.size(), files[i].c_str());
+
+        CorrespondencesView<KLTPointFeature>::Iterator it = klt_correspondences.ScanFeaturesForImage(i-1);
+        for (; !it.Done(); it.Next()) {
+            KLTPointFeature *next_position = new KLTPointFeature;
+            if (klt.TrackFeature(pyramid_sequence->Pyramid(i-1), *it.feature(), pyramid_sequence->Pyramid(i), next_position)) {
+                correspondences.Insert(i, it.track(), next_position);
+            } else {
+                delete next_position;
+            }
+        }
+
+       WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i), (files[i]+".out.ppm").c_str());
+
+    }
+
+}  // end libmvRunKLT
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// WriteOutputImage :: code taken from libmv's track.cc
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
+{
+    FloatImage output_image(image.Height(), image.Width(), 3);
+
+    for (int i = 0; i < image.Height(); ++i) {
+        for (int j = 0; j < image.Width(); ++j) {
+            output_image(i,j,0) = image(i,j);
+            output_image(i,j,1) = image(i,j);
+            output_image(i,j,2) = image(i,j);
+        }
+    }
+
+    Vec3 green;
+    green << 0, 1, 0;
+    for (; !features.Done(); features.Next()) {
+        DrawFeature(*features.feature(), green, &output_image);
+    }
+
+    WritePnm(output_image, output_filename);
+
+} // end WriteOutputImage
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runOpticalFlowHornSchunck
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runOpticalFlowHornSchunck ()
+{
+    initHornSchunck();
+
+    for (int i=0; i<sortedFiles.size()-1; i++) {
+        string tempA = path + sortedFiles.at(i);
+        string tempB = path + sortedFiles.at(i+1);
+
+        printf("trying to load %s and %s\n", tempA.c_str(), tempB.c_str());
+
+        IplImage *imgA = cvLoadImage(tempA.c_str());
+        IplImage *imgB = cvLoadImage(tempB.c_str());
+
+        IplImage *imgA_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+        IplImage *imgB_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+
+        cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
+        cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
+
+        cvReleaseImage(&imgA);
+        cvReleaseImage(&imgB);
+
+        runHornSchunck(imgA_1, imgB_1);
+    }
+
+    endHornSchunck();
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runOpticalFlowBirchfieldKLT
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runOpticalFlowBirchfieldKLT ()
+{
+    #define REPLACE
+
+    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
+    string base = "captured";
+    string imgFileName;
+    string flFileName;
+    string ftFileName;
+
+    unsigned char *img1, *img2;
+    char fnamein[100], fnameout[100];
+
+    KLT_TrackingContext tc;
+    KLT_FeatureList fl;
+    KLT_FeatureTable ft;
+
+    int nFeatures = 150, nFrames = 50;
+    int ncols, nrows;
+    int i=0;
+    int frameCounter = 1;
+    int start=503, stop=552;
+
+    tc = KLTCreateTrackingContext();
+    fl = KLTCreateFeatureList(nFeatures);
+    ft = KLTCreateFeatureTable(nFrames, nFeatures);
+    tc->sequentialMode = TRUE;
+    tc->writeInternalImages = FALSE;
+    tc->affineConsistencyCheck = 2;  // set this to 2 to turn on affine consistency check, -1 turns it off
+
+    // load in the first image of our set
+    imgFileName = path + base + itos(start) + ".pgm";
+    img1 = pgmReadFile((char *)imgFileName.c_str(), NULL, &ncols, &nrows);
+    img2 = (unsigned char *) malloc(ncols*nrows*sizeof(unsigned char));
+
+    KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+    KLTStoreFeatureList(fl, ft, 0);
+
+    flFileName = path + "/features/feat" + itos(frameCounter) + ".ppm";
+    KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, (char *)flFileName.c_str());
+
+    frameCounter++;
+    start++;
+
+    for (i=start; i<stop; i++)  {
+
+        imgFileName = path + base + itos(i) + ".pgm";
+        cout << "Reading :: " << imgFileName << "\n";
+        pgmReadFile((char *)imgFileName.c_str(), img2, &ncols, &nrows);
+        KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
+
+        #ifdef REPLACE
+        KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl);
+        #endif
+
+        KLTStoreFeatureList(fl, ft, frameCounter);
+        flFileName = path + "/features/feat" + itos(frameCounter) + ".ppm";
+        KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, (char *)flFileName.c_str());
+
+        frameCounter++;
+    }
+
+    ftFileName = path + "/features/feat.ft";
+    KLTWriteFeatureTable(ft, (char *)ftFileName.c_str(), NULL);
+
+    ftFileName = path + "/features/feat.txt";
+    KLTWriteFeatureTable(ft, (char *)ftFileName.c_str(), "%5.1f");
+
+    KLTFreeFeatureTable(ft);
+    KLTFreeFeatureList(fl);
+    KLTFreeTrackingContext(tc);
+    free(img1);
+    free(img2);
+
+} // end runOpticalFlowBirchfieldKLT
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runCorrelationTuringMultiResolutionProgressiveAlignmentSearch
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
+{
+    // declare the tracking library
+    turingTracking *tracking;
+
+    bool trackingInstantiated = false;
+    bool continueTest = true;
+    int frameNumber = start;
+
+    // main loop
+    while (continueTest == true) {
+
+        string t = path + '/' + sortedFiles.at(frameNumber);
+
+        IplImage *temp = cvLoadImage(t.c_str());
+
+        if (trackingInstantiated == false) {
+            string h = itos(temp->height);
+            string w = itos(temp->width);
+            tracking = new turingTracking(h.c_str(), w.c_str());
+            trackingInstantiated == true;
+         }
+
+        // swap the red and blue channels
+        IplImage *temp2 = cvCreateImage(cvSize(temp->width, temp->height), 8, 3);
+        cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
+
+        SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp2->imageData, temp2->width, temp->height, 24, temp2->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
+
+        Uint32 colorRed    = SDL_MapRGB(image->format, 255, 0, 0);
+        Uint32 colorGreen  = SDL_MapRGB(image->format, 0, 255, 0);
+        Uint32 colorWhite  = SDL_MapRGB(image->format, 255, 255, 255);
+        Uint32 colorOrange = SDL_MapRGB(image->format, 255, 91, 0);
+
+        SDL_LockSurface(image);
+
+        ///////////////////////////////////////////////////////////////////////
+        //
+        // tracking algorithm
+        //
+        ///////////////////////////////////////////////////////////////////////
+
+        if (trackingActivated == true) {
+
+            // get the size of the image
+            int rows = image->h;
+            int cols = image->w;
+
+            // convert the image to a 2D matrix
+            int **image2D = SDLImageTo2DArrayOnePlane2(image, rows, cols, 2);
+
+            tracking->constellationTrackWrapper(image2D, xClick, yClick);
+
+            // center point is red
+            rectangleCenter.w = 4;
+            rectangleCenter.h = 4;
+            rectangleCenter.x = tracking->cLast[0] - 2;
+            rectangleCenter.y = tracking->rLast[0] - 2;
+            SDL_FillRect(image, &rectangleCenter, colorRed);
+
+            // the other constellation points are green
+            rectangleLeft.w = 4;
+            rectangleLeft.h = 4;
+            rectangleLeft.x = tracking->cLast[1] - 2;
+            rectangleLeft.y = tracking->rLast[1] - 2;
+            SDL_FillRect(image, &rectangleLeft, colorGreen);
+
+            rectangleRight.w = 4;
+            rectangleRight.h = 4;
+            rectangleRight.x = tracking->cLast[2] - 2;
+            rectangleRight.y = tracking->rLast[2] - 2;
+            SDL_FillRect(image, &rectangleRight, colorGreen);
+
+            rectangleTop.w = 4;
+            rectangleTop.h = 4;
+            rectangleTop.x = tracking->cLast[3] - 2;
+            rectangleTop.y = tracking->rLast[3] - 2;
+            SDL_FillRect(image, &rectangleTop, colorGreen);
+
+            rectangleBottom.w = 4;
+            rectangleBottom.h = 4;
+            rectangleBottom.x = tracking->cLast[4] - 2;
+            rectangleBottom.y = tracking->rLast[4] - 2;
+            SDL_FillRect(image, &rectangleBottom, colorGreen);
+
+            SDL_UnlockSurface(image);
+
+            printf("The tracked point is at (%d, %d)\n", tracking->rLast[0], tracking->cLast[0]);
+            printf("correlationError = %f, degeneracy = %f, shapeChange = %f\n", tracking->correlationError, tracking->degeneracy, tracking->shapeChange);
 
             // generate a texture object handle
             glGenTextures(1, &texture);
@@ -326,10 +774,7 @@ int main(int argc, char *argv[])
                 printf("incrementing the frame number :: %d...\n", frameNumber);
             }
 
-            //printf("There are %d frames in the current AVI\n", imageFunctions->captureAVIFrames);
-
             // look for termination conditions
-            //if (frameNumber > imageFunctions->captureAVIFrames) {
             if (frameNumber > sortedFiles.size()-1) {
                 continueTest = false;
             }
@@ -337,387 +782,13 @@ int main(int argc, char *argv[])
         }
 
         // if the tracking algorithm has been terminated, let the local variable know
-        //if (tracking->trackingActivated == false) {
-        //        trackingActivated = false;
-        //}
-
-    } // end if Qt or SDL
-
-    // exit nicely
-    SDL_Quit();
-    exit(0);
-
-} // end main
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// handleSDLEvents
-//
-///////////////////////////////////////////////////////////////////////////////
-
-bool handleSDLEvents()
-{
-    commandsList.clear();
-    SDL_Event event;
-
-    // keyboard events
-    while (SDL_PollEvent(&event)) {
-
-        switch (event.type) {
-
-        case SDL_KEYDOWN:
-
-            switch (event.key.keysym.sym) {
-
-            case SDLK_ESCAPE:
-                SDL_Quit();
-                exit(0);
-                return true;
-                break;
-            case SDLK_q:
-                trackingActivated = false;
-  //              foundClosestFeature = false;
-                //tracking->trackingActivated = false;
-                //tracking->reset();
-                break;
-            case SDLK_f:
-                SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_FULLSCREEN);
-                break;
-            case SDLK_p:
- //               if (enableFiltering == true) {
- //                   enableFiltering = false;
- //               } else if (enableFiltering == false) {
- //                   // make sure to reset the lk
- //                   tracking->lkResetOpticalFlow();
- //                   enableFiltering = true;
- //               }
-                break;
-            case SDLK_r:
-                SDL_SetVideoMode(640, 480, 0, SDL_OPENGL);
-                break;
-            case SDLK_h:
-                runOpticalFlowHornSchunck();
-                break;
-            case SDLK_l:
-                libmvRunKLT();
-                break;
-            case SDLK_k:
-                runOpticalFlowBirchfieldKLT();
-                break;
-            case SDLK_s:
- //               if (enableSIFT == true) {
- //                   enableSIFT = false;
- //               } else if (enableSIFT == false) {
- //                   enableSIFT = true;
- //               }
-                break;
-            case SDLK_d:
- //               if (coordinatesActivated == false) {
- //                   coordinatesActivated = true;
-   //             } else if (coordinatesActivated == true) {
-   //                 coordinatesActivated = false;
-   //             }
-                break;
-            default:
-                break;
-            }
-            break;
-
-        case SDL_QUIT:
-            return true;
-            break;
-
-        case SDL_MOUSEBUTTONDOWN:
-
-            printf("Mouse button pressed. ");
-            printf("Button %i at (%i, %i)\n", event.button.button, event.button.x, event.button.y);
-
-            trackEvent = true;
-
-            // we received a new point to track
-//            if (tracking->trackingActivated == true) {
-//                tracking->reset();
-//            }
-
-            trackingActivated = true;
-
-            xClick = event.button.x;
-            yClick = event.button.y;
-
-            break;
+        if (tracking->trackingActivated == false) {
+            trackingActivated = false;
         }
 
+    } // end while
 
-    }
+    // clear up memory
+    delete tracking;
 
-    return false;
-
-} // end handleSDLEvents
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//  itos
-//
-///////////////////////////////////////////////////////////////////////////////
-
-string itos (int i)
-{
-    stringstream s;
-    s << i;
-    return s.str();
-
-} // end itos
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// listDirectoryContents
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void listDirectoryContents (string directory)
-{
-    vector <string> files;
-    size_t found;
-    string searchArg = ".bmp";
-
-    struct dirent *de=NULL;
-    DIR *d=NULL;
-
-    d=opendir(directory.c_str());
-    if (d == NULL) {
-        perror("Couldn't open directory");
-    }
-
-    // loop while there are files
-    while(de = readdir(d)) {
-        files.push_back(de->d_name);
-        printf("%s\n",de->d_name);
-    }
-
-    // sort the vector
-    sort(files.rbegin(), files.rend());
-
-    for (int i=files.size()-1; i>=0; i--) {
-
-        string tmp = files.at(i);
-        // search for a valid bmp file
-        found = tmp.find(searchArg);
-
-        if (found != string::npos) {
-            string temp = files.at(i);
-            printf("%s\n", temp.c_str());
-            sortedFiles.push_back(temp);
-        }
-    }
-
-    closedir(d);
-
-} // end listDirectoryContents
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// libmvRunKLT
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void libmvRunKLT ()
-{
-/**
-    // klt stuff
-    vector<string> files;
-    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
-    string base = "captured";
-    for (int i=503; i<530; i++) {
-        string fileName = path + base + itos(i) + ".pgm";
-        files.push_back(fileName);
-        printf("loading %s\n", fileName.c_str());
-    }
-
-    ImageCache cache;
-    ImageSequence *source = ImageSequenceFromFiles(files, &cache);
-    PyramidSequence *pyramid_sequence = MakePyramidSequence(source, 5, 1.5);
-
-    KLTContext klt;
-    Correspondences correspondences;
-
-    // TODO(keir): Really have to get a scoped_ptr<> implementation!
-    // Consider taking the one from boost but editing out the cruft.
-    ImagePyramid *pyramid = pyramid_sequence->Pyramid(0);
-    KLTContext::FeatureList features;
-    klt.DetectGoodFeatures(pyramid->Level(0), &features);
-    int i = 0;
-    for (KLTContext::FeatureList::iterator it = features.begin(); it != features.end(); ++it, ++i) {
-        correspondences.Insert(0, i, *it);
-    }
-
-    CorrespondencesView<KLTPointFeature> klt_correspondences(&correspondences);
-
-    WriteOutputImage(pyramid_sequence->Pyramid(0)->Level(0), klt_correspondences.ScanFeaturesForImage(0), (files[0]+".out.ppm").c_str());
-
-    // TODO(keir): Use correspondences here!
-    for (size_t i = 1; i < files.size(); ++i) {
-
-        printf("Tracking %2zd features in %s\n", features.size(), files[i].c_str());
-
-        CorrespondencesView<KLTPointFeature>::Iterator it = klt_correspondences.ScanFeaturesForImage(i-1);
-        for (; !it.Done(); it.Next()) {
-            KLTPointFeature *next_position = new KLTPointFeature;
-            if (klt.TrackFeature(pyramid_sequence->Pyramid(i-1), *it.feature(), pyramid_sequence->Pyramid(i), next_position)) {
-                correspondences.Insert(i, it.track(), next_position);
-            } else {
-                delete next_position;
-            }
-        }
-
-       WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i), (files[i]+".out.ppm").c_str());
-
-    }
-**/
-}  // end libmvRunKLT
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// WriteOutputImage :: code taken from libmv
-//
-///////////////////////////////////////////////////////////////////////////////
-/**
-void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
-{
-    FloatImage output_image(image.Height(), image.Width(), 3);
-
-    for (int i = 0; i < image.Height(); ++i) {
-        for (int j = 0; j < image.Width(); ++j) {
-            output_image(i,j,0) = image(i,j);
-            output_image(i,j,1) = image(i,j);
-            output_image(i,j,2) = image(i,j);
-        }
-    }
-
-    Vec3 green;
-    green << 0, 1, 0;
-    for (; !features.Done(); features.Next()) {
-        DrawFeature(*features.feature(), green, &output_image);
-    }
-
-    WritePnm(output_image, output_filename);
-
-} // end WriteOutputImage
-**/
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// runOpticalFlowHornSchunck
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void runOpticalFlowHornSchunck ()
-{
-    initHornSchunck();
-
-    for (int i=0; i<sortedFiles.size()-1; i++) {
-        string tempA = path + sortedFiles.at(i);
-        string tempB = path + sortedFiles.at(i+1);
-
-        printf("trying to load %s and %s\n", tempA.c_str(), tempB.c_str());
-
-        IplImage *imgA = cvLoadImage(tempA.c_str());
-        IplImage *imgB = cvLoadImage(tempB.c_str());
-
-        IplImage *imgA_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
-        IplImage *imgB_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
-
-        cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
-        cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
-
-        cvReleaseImage(&imgA);
-        cvReleaseImage(&imgB);
-
-        runHornSchunck(imgA_1, imgB_1);
-    }
-
-    endHornSchunck();
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// runOpticalFlowBirchfieldKLT
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void runOpticalFlowBirchfieldKLT ()
-{
-    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
-    string base = "captured";
-    string imgFileName;
-    string flFileName;
-    string ftFileName;
-
-    unsigned char *img1, *img2;
-    char fnamein[100], fnameout[100];
-
-    KLT_TrackingContext tc;
-    KLT_FeatureList fl;
-    KLT_FeatureTable ft;
-
-    int nFeatures = 150, nFrames = 50;
-    int ncols, nrows;
-    int i=0;
-    int frameCounter = 1;
-    int start=503, stop=552;
-
-    tc = KLTCreateTrackingContext();
-    fl = KLTCreateFeatureList(nFeatures);
-    ft = KLTCreateFeatureTable(nFrames, nFeatures);
-    tc->sequentialMode = TRUE;
-    tc->writeInternalImages = FALSE;
-    tc->affineConsistencyCheck = 2;  /* set this to 2 to turn on affine consistency check, -1 turns it off */
-
-    // load in the first image of our set
-    imgFileName = path + base + itos(start) + ".pgm";
-    img1 = pgmReadFile((char *)imgFileName.c_str(), NULL, &ncols, &nrows);
-    img2 = (unsigned char *) malloc(ncols*nrows*sizeof(unsigned char));
-
-    KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
-    KLTStoreFeatureList(fl, ft, 0);
-
-    flFileName = path + "features\\feat" + itos(frameCounter) + ".ppm";
-    KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, (char *)flFileName.c_str());
-
-    frameCounter++;
-    start++;
-
-    for (i=start; i<stop; i++)  {
-
-        imgFileName = path + base + itos(i) + ".pgm";
-        cout << "Reading :: " << imgFileName << "\n";
-        pgmReadFile((char *)imgFileName.c_str(), img2, &ncols, &nrows);
-        KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
-
-        #ifdef REPLACE
-        KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl);
-        #endif
-
-        KLTStoreFeatureList(fl, ft, frameCounter);
-        flFileName = path + "features\\feat" + itos(frameCounter) + ".ppm";
-        KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, (char *)flFileName.c_str());
-
-        frameCounter++;
-    }
-
-    ftFileName = path + "features/feat.ft";
-    KLTWriteFeatureTable(ft, (char *)ftFileName.c_str(), NULL);
-
-    ftFileName = path + "features/feat.txt";
-    KLTWriteFeatureTable(ft, (char *)ftFileName.c_str(), "%5.1f");
-
-    KLTFreeFeatureTable(ft);
-    KLTFreeFeatureList(fl);
-    KLTFreeTrackingContext(tc);
-    free(img1);
-    free(img2);
-}
+} // end runCorrelationTuringMultiResolutionProgressiveAlignmentSearch
