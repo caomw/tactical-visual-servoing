@@ -1,4 +1,7 @@
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -25,8 +28,12 @@
 // tracking
 #include "tracking_algorithms/Correlation/TuringTracking/TuringTracking.h"
 
-// optical flow
+// optical flow :: horn schunck
 #include "tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h"
+
+// optical flow :: klt++
+#include "tracking_algorithms/Optical_Flow/klt++/klt.h"
+#include "tracking_algorithms/Optical_Flow/klt++/pnmio.h"
 
 #include "ImageProcessing.h"
 #include "image_functions/Image_Functions.h"
@@ -49,7 +56,7 @@
 
 #undef main
 
-using namespace libmv;
+//using namespace libmv;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -58,11 +65,14 @@ using namespace libmv;
 ///////////////////////////////////////////////////////////////////////////////
 
 bool handleSDLEvents();
+
 string itos (int i);
+
 void listDirectoryContents (string directory);
 void libmvRunKLT ();
-void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
+//void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 void runOpticalFlowHornSchunck();
+void runOpticalFlowBirchfieldKLT();
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -102,6 +112,21 @@ vector <string> sortedFiles;
 
 int main(int argc, char *argv[])
 {
+    int choice=0;
+
+    cout << "\n\n\n";
+    cout << "TACTICAL\n";
+    cout << "--------\n\n";
+    cout << "Algorithms:\n\n";
+    cout << "Optical Flow:\n";
+    cout << "\t1. Horn-Schnuck (Dense)\n";
+    cout << "\t2. Birchfield's KLT Tracker (Sparse)\n\n";
+    cout << "Correlation:\n";
+    cout << "\txx. Turing's Multi-Resolution Progressive Alignment Tracker\n";
+    cout << "\n===> ";
+
+    cin >> choice;
+
     GLuint texture;
 
     // OpenGL
@@ -377,6 +402,9 @@ bool handleSDLEvents()
             case SDLK_l:
                 libmvRunKLT();
                 break;
+            case SDLK_k:
+                runOpticalFlowBirchfieldKLT();
+                break;
             case SDLK_s:
  //               if (enableSIFT == true) {
  //                   enableSIFT = false;
@@ -497,6 +525,7 @@ void listDirectoryContents (string directory)
 
 void libmvRunKLT ()
 {
+/**
     // klt stuff
     vector<string> files;
     string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
@@ -546,7 +575,7 @@ void libmvRunKLT ()
        WriteOutputImage(pyramid_sequence->Pyramid(i)->Level(0), klt_correspondences.ScanFeaturesForImage(i), (files[i]+".out.ppm").c_str());
 
     }
-
+**/
 }  // end libmvRunKLT
 
 
@@ -555,7 +584,7 @@ void libmvRunKLT ()
 // WriteOutputImage :: code taken from libmv
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
 void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
 {
     FloatImage output_image(image.Height(), image.Width(), 3);
@@ -577,7 +606,7 @@ void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeatu
     WritePnm(output_image, output_filename);
 
 } // end WriteOutputImage
-
+**/
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -611,4 +640,84 @@ void runOpticalFlowHornSchunck ()
     }
 
     endHornSchunck();
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runOpticalFlowBirchfieldKLT
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runOpticalFlowBirchfieldKLT ()
+{
+    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
+    string base = "captured";
+    string imgFileName;
+    string flFileName;
+    string ftFileName;
+
+    unsigned char *img1, *img2;
+    char fnamein[100], fnameout[100];
+
+    KLT_TrackingContext tc;
+    KLT_FeatureList fl;
+    KLT_FeatureTable ft;
+
+    int nFeatures = 150, nFrames = 50;
+    int ncols, nrows;
+    int i=0;
+    int frameCounter = 1;
+    int start=503, stop=552;
+
+    tc = KLTCreateTrackingContext();
+    fl = KLTCreateFeatureList(nFeatures);
+    ft = KLTCreateFeatureTable(nFrames, nFeatures);
+    tc->sequentialMode = TRUE;
+    tc->writeInternalImages = FALSE;
+    tc->affineConsistencyCheck = 2;  /* set this to 2 to turn on affine consistency check, -1 turns it off */
+
+    // load in the first image of our set
+    imgFileName = path + base + itos(start) + ".pgm";
+    img1 = pgmReadFile((char *)imgFileName.c_str(), NULL, &ncols, &nrows);
+    img2 = (unsigned char *) malloc(ncols*nrows*sizeof(unsigned char));
+
+    KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+    KLTStoreFeatureList(fl, ft, 0);
+
+    flFileName = path + "features\\feat" + itos(frameCounter) + ".ppm";
+    KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, (char *)flFileName.c_str());
+
+    frameCounter++;
+    start++;
+
+    for (i=start; i<stop; i++)  {
+
+        imgFileName = path + base + itos(i) + ".pgm";
+        cout << "Reading :: " << imgFileName << "\n";
+        pgmReadFile((char *)imgFileName.c_str(), img2, &ncols, &nrows);
+        KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
+
+        #ifdef REPLACE
+        KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl);
+        #endif
+
+        KLTStoreFeatureList(fl, ft, frameCounter);
+        flFileName = path + "features\\feat" + itos(frameCounter) + ".ppm";
+        KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, (char *)flFileName.c_str());
+
+        frameCounter++;
+    }
+
+    ftFileName = path + "features/feat.ft";
+    KLTWriteFeatureTable(ft, (char *)ftFileName.c_str(), NULL);
+
+    ftFileName = path + "features/feat.txt";
+    KLTWriteFeatureTable(ft, (char *)ftFileName.c_str(), "%5.1f");
+
+    KLTFreeFeatureTable(ft);
+    KLTFreeFeatureList(fl);
+    KLTFreeTrackingContext(tc);
+    free(img1);
+    free(img2);
 }

@@ -94,6 +94,16 @@ win32 {
     LIBS += C:\SDL-1.2.13\lib\SDL_image.lib
 }
 
+# math
+unix {
+    LIBS += -lm
+}
+
+# birchfield klt (I am not sure why I have to copy libklt.a to /usr/lib, it was hung up on finding KLTStoreFeatureList
+unix {
+    LIBS += -lklt
+}
+
 TARGET = TACTICAL
 TEMPLATE = app
 
@@ -118,8 +128,6 @@ SOURCES += main.cpp\
         tracking_algorithms/Optical_Flow/klt++/pnmio.cpp \
         tracking_algorithms/Optical_Flow/klt++/pyramid.cpp \
         tracking_algorithms/Optical_Flow/klt++/selectGoodFeatures.cpp \
-  #      tracking_algorithms/Optical_Flow/klt++/series.cpp \
-  #      tracking_algorithms/Optical_Flow/klt++/series2.cpp \
         tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
         tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp
 
@@ -134,10 +142,14 @@ HEADERS += mainwindow.h\
         tracking_algorithms/SIFT/utils.h \
         tracking_algorithms/SIFT/xform.h \
         # horn schunck optical flow
-        tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h
-
-       # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
- ##       tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.cpp
-
+        tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h \
+        # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
+        tracking_algorithms/Optical_Flow/klt++/klt.h \
+        tracking_algorithms/Optical_Flow/klt++/klt_util.h \
+        tracking_algorithms/Optical_Flow/klt++/base.h \
+        tracking_algorithms/Optical_Flow/klt++/convolve.h \
+        tracking_algorithms/Optical_Flow/klt++/error.h \
+        tracking_algorithms/Optical_Flow/klt++/pnmio.h \
+        tracking_algorithms/Optical_Flow/klt++/pyramid.h
 
 FORMS += mainwindow.ui
