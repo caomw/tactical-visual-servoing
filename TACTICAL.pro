@@ -112,12 +112,13 @@ SOURCES += main.cpp\
         ImageProcessing.cpp \
         utilities\utilities.cpp\
         image_functions\Image_Functions.cpp\
-        tracking_algorithms/SIFT/imgfeatures.cpp \
-        tracking_algorithms/SIFT/kdtree.cpp \
-        tracking_algorithms/SIFT/minpq.cpp \
-        tracking_algorithms/SIFT/sift.cpp \
-        tracking_algorithms/SIFT/utils.cpp \
-        tracking_algorithms/SIFT/xform.cpp \
+        # sift (hess)
+        tracking_algorithms/Blob/SIFT/imgfeatures.cpp \
+        tracking_algorithms/Blob/SIFT/kdtree.cpp \
+        tracking_algorithms/Blob/SIFT/minpq.cpp \
+        tracking_algorithms/Blob/SIFT/sift.cpp \
+        tracking_algorithms/Blob/SIFT/utils.cpp \
+        tracking_algorithms/Blob/SIFT/xform.cpp \
         # horn schunck optical flow
         tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.cpp \
        # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
@@ -131,18 +132,19 @@ SOURCES += main.cpp\
         tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
         tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp \
         # farneback's polynomial expansion
-        tracking_algorithms/Optical_Flow/Farneback/optical_flow_farneback.cpp
+        tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
         utilities\utilities.h\
         image_functions\Image_Functions.h\
-        tracking_algorithms/SIFT/imgfeatures.h \
-        tracking_algorithms/SIFT/kdtree.h \
-        tracking_algorithms/SIFT/minpq.h \
-        tracking_algorithms/SIFT/sift.h \
-        tracking_algorithms/SIFT/utils.h \
-        tracking_algorithms/SIFT/xform.h \
+        # sift (hess)
+        tracking_algorithms/Blob/SIFT/imgfeatures.h \
+        tracking_algorithms/Blob/SIFT/kdtree.h \
+        tracking_algorithms/Blob/SIFT/minpq.h \
+        tracking_algorithms/Blob/SIFT/sift.h \
+        tracking_algorithms/Blob/SIFT/utils.h \
+        tracking_algorithms/Blob/SIFT/xform.h \
         # horn schunck optical flow
         tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h \
         # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
@@ -152,6 +154,8 @@ HEADERS += mainwindow.h\
         tracking_algorithms/Optical_Flow/klt++/convolve.h \
         tracking_algorithms/Optical_Flow/klt++/error.h \
         tracking_algorithms/Optical_Flow/klt++/pnmio.h \
-        tracking_algorithms/Optical_Flow/klt++/pyramid.h
+        tracking_algorithms/Optical_Flow/klt++/pyramid.h \
+        # farneback's polynomial expansion
+        tracking_algorithms/Optical_Flow/Farneback/Farneback.h
 
 FORMS += mainwindow.ui

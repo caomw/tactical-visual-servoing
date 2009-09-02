@@ -77,9 +77,20 @@
 // optical flow :: horn schunck
 #include "tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h"
 
+// optical flow :: farneback
+#include "tracking_algorithms/Optical_Flow/Farneback/Farneback.h"
+
 // optical flow :: klt++
 #include "tracking_algorithms/Optical_Flow/klt++/klt.h"
 #include "tracking_algorithms/Optical_Flow/klt++/pnmio.h"
+
+// blob :: sift
+// SIFT
+#include "tracking_algorithms/Blob/SIFT/sift.h"
+#include "tracking_algorithms/Blob/SIFT/imgfeatures.h"
+#include "tracking_algorithms/Blob/SIFT/kdtree.h"
+#include "tracking_algorithms/Blob/SIFT/utils.h"
+#include "tracking_algorithms/Blob/SIFT/xform.h"
 
 #include "ImageProcessing.h"
 #include "image_functions/Image_Functions.h"
@@ -100,6 +111,12 @@
 // this is a hack until I can get sdl events recognized from within qt
 #define USEQT_0_USESDL_1 1
 
+// sift defines
+#define KDTREE_BBF_MAX_NN_CHKS 200
+#define NN_SQ_DIST_RATIO_THR 0.49
+#define SIFT_MIN_RANSAC_FEATURES 4
+#define COLOR_SWATCH_SZIE 16
+
 #undef main
 
 using namespace libmv;
@@ -116,9 +133,11 @@ string itos(int);
 
 void listDirectoryContents(string);
 void libmvRunKLT();
+void runBlobSIFT();
 void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
-void runOpticalFlowHornSchunck();
 void runOpticalFlowBirchfieldKLT();
+void runOpticalFlowFarneback ();
+void runOpticalFlowHornSchunck();
 void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,7 +247,7 @@ int main(int argc, char *argv[])
         cout << "4. OpenCV's KLT Tracker (Sparse)\n\n";
 
         cout << "Blob Tracking:\n";
-        cout << "5. SIFT (Hess's Implementation)\n";
+        cout << "5. SIFT (Hess's Implementation)\n\n";
 
         cout << "Correlation:\n";
         cout << "6. Turing's Multi-Resolution Progressive Alignment Tracker\n\n";
@@ -238,9 +257,16 @@ int main(int argc, char *argv[])
         cin >> choice;
 
         if (choice == 1) {
+            runOpticalFlowHornSchunck();
+        } else if (choice == 2) {
+            runOpticalFlowFarneback();
         } else if (choice == 3) {
             runOpticalFlowBirchfieldKLT();
+        } else if (choice == 4) {
+            //
         } else if (choice == 5) {
+            runBlobSIFT();
+        } else if (choice == 6) {
             runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
         } else if (choice == 9) {
             running = false;
@@ -388,7 +414,7 @@ void listDirectoryContents (string directory)
     }
 
     // loop while there are files
-    while(de = readdir(d)) {
+    while (de = readdir(d)) {
         files.push_back(de->d_name);
         printf("%s\n",de->d_name);
     }
@@ -537,6 +563,43 @@ void runOpticalFlowHornSchunck ()
 
     endHornSchunck();
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runOpticalFlowFarneback
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runOpticalFlowFarneback ()
+{
+    initFarneback();
+
+    for (int i=0; i<sortedFiles.size()-1; i++) {
+        string tempA = path + sortedFiles.at(i);
+        string tempB = path + sortedFiles.at(i+1);
+
+        printf("trying to load %s and %s\n", tempA.c_str(), tempB.c_str());
+
+        IplImage *imgA = cvLoadImage(tempA.c_str());
+        IplImage *imgB = cvLoadImage(tempB.c_str());
+
+//        IplImage *imgA_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+//        IplImage *imgB_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+
+//        cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
+//        cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
+
+//        cvReleaseImage(&imgA);
+//        cvReleaseImage(&imgB);
+
+        runHornSchunck(imgA, imgB);
+    }
+
+    endFarneback();
+
+} // end runOpticalFlowFarneback
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -792,3 +855,129 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
     delete tracking;
 
 } // end runCorrelationTuringMultiResolutionProgressiveAlignmentSearch
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runBlobSIFT
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runBlobSIFT ()
+{
+    cvNamedWindow("Matches", 1);
+    cvNamedWindow("Transformed", 1);
+
+    struct feature *feat1, *feat2, *feat;
+    struct feature **nbrs;
+    struct kd_node *kdRoot;
+    CvPoint pt1, pt2;
+    double d0, d1;
+    int n1, n2, k, m=0;
+    int siftCount = 0;
+
+    // loop through all of the image
+    for (int i=0; i<sortedFiles.size()-1; i++) {
+
+        IplImage *stacked;
+
+        string tempA = path + '/' + sortedFiles.at(i);
+        string tempB = path + '/' + sortedFiles.at(i+1);
+
+        printf("Trying to load :: %s & %s\n", tempA.c_str(), tempB.c_str());
+
+        IplImage *imgA  = cvLoadImage(tempA.c_str());
+        IplImage *imgB  = cvLoadImage(tempB.c_str());
+
+        printf("Loaded images\n");
+
+        stacked = stack_imgs(imgA, imgB);
+
+        n1 = sift_features(imgA, &feat1);
+        n2 = sift_features(imgB, &feat2);
+        kdRoot = kdtree_build(feat2, n2);
+
+        int j=0;
+        for (j=0; j<n1; j++) {
+            feat = feat1 + j;
+            k = kdtree_bbf_knn(kdRoot, feat, 2, &nbrs, KDTREE_BBF_MAX_NN_CHKS);
+
+            if (k == 2) {
+                d0 = descr_dist_sq(feat, nbrs[0]);
+                d1 = descr_dist_sq(feat, nbrs[1]);
+
+                if (d0 < d1 * NN_SQ_DIST_RATIO_THR) {
+
+                    pt1 = cvPoint(cvRound(feat->x), cvRound(feat->y));
+                    pt2 = cvPoint(cvRound(nbrs[0]->x), cvRound(nbrs[0]->y));
+                    pt2.y += imgA->height;
+                    cvLine(stacked, pt1, pt2, CV_RGB(255, 0, 255), 1, 8, 0);
+                    m++;
+                    feat1[j].fwd_match = nbrs[0];
+                }
+            }
+
+            free(nbrs);
+        }
+
+        cout << "Found " << m << " total matches\n";
+
+        cvShowImage("Matches", stacked);
+        cvWaitKey(10);
+
+        // save the image
+//        if (archive == true) {
+//            string fileName = path + "_matches" + itos(frameNumberSIFT) + ".bmp";
+//            cvSaveImage(fileName.c_str(), stacked);
+//        }
+
+        printf("Now, doing RANSAC...j=%d\n", j);
+
+        // now, do RANSAC
+        feat1[j].fwd_match = nbrs[0];
+        {
+            CvMat *H;
+            printf("n1 = %d\n", n1);
+            H = ransac_xform(feat1, n1, FEATURE_FWD_MATCH, lsq_homog, 4, 0.01, homog_xfer_err, 3.0, NULL, NULL);
+            printf("Transformation found...\n");
+
+            if (H) {
+
+                for (int ti=0; ti<3; ti++) {
+                    for (int tj=0; tj<3; tj++) {
+                        cout << cvmGet(H, ti, tj) << " ";
+                    }
+                    cout << "\n";
+                }
+
+                IplImage *transformed;
+                transformed = cvCreateImage(cvGetSize(imgA), 8, 3);
+                cvWarpPerspective(imgA, transformed, H, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+
+                cvShowImage("Transformed", transformed);
+                cvWaitKey(10);
+
+                // save the image
+//                if (archive == true) {
+//                    string fileName = path + "_transformed" + itos(frameNumberSIFT) + ".bmp";
+//                    cvSaveImage(fileName.c_str(), transformed);
+//                }
+
+                cvReleaseImage(&transformed);
+                cvReleaseMat(&H);
+
+            }
+
+        } // end RANSAC
+
+        // free allocated memory
+        cvReleaseImage(&stacked);
+        cvReleaseImage(&imgA);
+        cvReleaseImage(&imgB);
+        kdtree_release(kdRoot);
+        free(feat1);
+        free(feat2);
+        siftCount = 0;
+    }
+
+ } // end runBlobSIFT

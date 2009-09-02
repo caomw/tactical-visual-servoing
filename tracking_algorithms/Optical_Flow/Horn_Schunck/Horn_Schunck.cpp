@@ -28,9 +28,9 @@ void initHornSchunck ()
 void endHornSchunck ()
 {
     // destroy windows
-    cvDestroyWindow( "OpticalFlow0" );
-    cvDestroyWindow( "OpticalFlow1" );
-    cvDestroyWindow( "Flow Results" );
+    cvDestroyWindow("OpticalFlow0");
+    cvDestroyWindow("OpticalFlow1");
+    cvDestroyWindow("Flow Results");
 
 }
 
