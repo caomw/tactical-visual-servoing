@@ -104,6 +104,7 @@ unix {
     LIBS += -lklt
 }
 
+
 TARGET = TACTICAL
 TEMPLATE = app
 
@@ -134,7 +135,13 @@ SOURCES += main.cpp\
         # farneback's polynomial expansion
         tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp \
         # opencv's lk implementation
-        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.cpp
+        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.cpp \
+        # OpenSURF
+        tracking_algorithms/Blob/OpenSURF/utils_surf.cpp \
+        tracking_algorithms/Blob/OpenSURF/integral.cpp \
+        tracking_algorithms/Blob/OpenSURF/fasthessian.cpp \
+        tracking_algorithms/Blob/OpenSURF/surf.cpp \
+        tracking_algorithms/Blob/OpenSURF/ipoint.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
@@ -160,6 +167,15 @@ HEADERS += mainwindow.h\
         # farneback's polynomial expansion
         tracking_algorithms/Optical_Flow/Farneback/Farneback.h \
         # opencv's lk implementation
-        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h
+        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h \
+        # OpenSURF
+        tracking_algorithms/Blob/OpenSURF/surflib.h \
+        tracking_algorithms/Blob/OpenSURF/utils_surf.h \
+        tracking_algorithms/Blob/OpenSURF/integral.h \
+        tracking_algorithms/Blob/OpenSURF/fasthessian.h \
+        tracking_algorithms/Blob/OpenSURF/surf.h \
+        tracking_algorithms/Blob/OpenSURF/ipoint.h \
+        tracking_algorithms/Blob/OpenSURF/kmeans.h \
+
 
 FORMS += mainwindow.ui
