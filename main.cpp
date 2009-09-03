@@ -88,12 +88,19 @@
 #include "tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h"
 
 // blob :: sift
-// SIFT
 #include "tracking_algorithms/Blob/SIFT/sift.h"
 #include "tracking_algorithms/Blob/SIFT/imgfeatures.h"
 #include "tracking_algorithms/Blob/SIFT/kdtree.h"
 #include "tracking_algorithms/Blob/SIFT/utils.h"
 #include "tracking_algorithms/Blob/SIFT/xform.h"
+
+// blob :: surf
+#include "tracking_algorithms/Blob/OpenSURF/surflib.h"
+#include "tracking_algorithms/Blob/OpenSURF/integral.h"
+#include "tracking_algorithms/Blob/OpenSURF/fasthessian.h"
+#include "tracking_algorithms/Blob/OpenSURF/surf.h"
+#include "tracking_algorithms/Blob/OpenSURF/ipoint.h"
+#include "tracking_algorithms/Blob/OpenSURF/utils_surf.h"
 
 #include "ImageProcessing.h"
 #include "image_functions/Image_Functions.h"
@@ -101,6 +108,7 @@
 // move these too, this is just a test for libmv
 #include <algorithm>
 #include <vector>
+
 #include "libmv/image/image.h"
 #include "libmv/image/image_io.h"
 #include "libmv/image/image_pyramid.h"
@@ -137,6 +145,7 @@ string itos(int);
 void listDirectoryContents(string);
 void libmvRunKLT();
 void runBlobSIFT();
+void runBlobSURF();
 void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
 void runOpticalFlowBirchfieldKLT();
 void runOpticalFlowFarneback ();
@@ -272,7 +281,7 @@ int main(int argc, char *argv[])
         } else if (choice == 5) {
             runBlobSIFT();
         } else if (choice == 6) {
-            //
+            runBlobSURF();
         } else if (choice == 7) {
             runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
         } else if (choice == 9) {
@@ -1093,3 +1102,54 @@ void runBlobSIFT ()
     }
 
  } // end runBlobSIFT
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// runBlobSURF
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runBlobSURF ()
+{
+    // declare Ipoints and other stuff
+    IpVec ipts, old_ipts, motion;
+    IpPairVec matches;
+
+    cvNamedWindow("OpenSURF");
+
+    // loop through all of the image
+    for (int i=0; i<sortedFiles.size()-1; i++) {
+
+        string tempA = path + '/' + sortedFiles.at(i);
+
+        printf("Trying to load :: %s\n", tempA.c_str());
+
+        IplImage *imgA  = cvLoadImage(tempA.c_str());
+
+        // Detect and describe interest points in the image
+        old_ipts = ipts;
+        surfDetDes(imgA, ipts, true, 3, 4, 2, 0.0004f);
+
+        // Fill match vector
+        getMatches(ipts,old_ipts,matches);
+        for (unsigned int i = 0; i < matches.size(); ++i) {
+            const float & dx = matches[i].first.dx;
+            const float & dy = matches[i].first.dy;
+            float speed = sqrt(dx*dx+dy*dy);
+            if (speed > 5 && speed < 30) {
+                drawIpoint(imgA, matches[i].first, 3);
+            }
+        }
+
+        // Display the result
+        cvShowImage("OpenSURF", imgA);
+
+        // If ESC key pressed exit loop
+        if( (cvWaitKey(10) & 255) == 27 ) break;
+
+    }
+
+    cvDestroyWindow("OpenSURF");
+
+} // end runBlobSURF

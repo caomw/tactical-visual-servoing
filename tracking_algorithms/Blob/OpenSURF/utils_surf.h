@@ -8,8 +8,8 @@
 *                                                          *
 ************************************************************/
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef UTILS_SURF_H
+#define UTILS_SURF_H
 
 #include "cv.h"
 #include "tracking_algorithms/Blob/OpenSURF/ipoint.h"
