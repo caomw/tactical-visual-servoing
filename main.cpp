@@ -140,6 +140,8 @@ using namespace libmv;
 
 bool handleSDLEvents();
 
+int initializeSDL();
+
 string itos(int);
 
 void listDirectoryContents(string);
@@ -162,9 +164,6 @@ void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeatu
 string commandsList;
 
 string path = "/home/lab/Development/NavigationData/";
-string baseFileName = "captured";
-int start = 0;
-int stop = 730;
 
 SDL_Rect rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom;
 int xClick=0, yClick=0;
@@ -196,38 +195,6 @@ int main(int argc, char *argv[])
         MainWindow w;
         w.show();
         return a.exec();
-
-    // SDL
-    } else {
-
-        if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER) == -1)) {
-            cout << "Could not initialize SDL: " << SDL_GetError() << endl;
-            return 1;
-        }
-
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-        // create a 640x480 OpenGL screen
-        if (SDL_SetVideoMode(640, 480, 0, SDL_OPENGL) == NULL) {
-            cout << "Unable to create OpenGL screen: " << SDL_GetError() << "\n";
-            SDL_Quit();
-            exit(2);
-        }
-
-        // set the title bar
-        SDL_WM_SetCaption("TACTICAL", NULL);
-
-        // init OpenGL
-        glEnable(GL_TEXTURE_2D);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glViewport(0, 0, 640, 480);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0.0f, 640, 480, 0.0f, -1.0f, 1.0f);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();        
-
     }
 
     string dirIn;
@@ -331,31 +298,8 @@ bool handleSDLEvents()
             case SDLK_f:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_FULLSCREEN);
                 break;
-            case SDLK_p:
- //               if (enableFiltering == true) {
- //                   enableFiltering = false;
- //               } else if (enableFiltering == false) {
- //                   // make sure to reset the lk
- //                   tracking->lkResetOpticalFlow();
- //                   enableFiltering = true;
- //               }
-                break;
             case SDLK_r:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL);
-                break;
-            case SDLK_s:
- //               if (enableSIFT == true) {
- //                   enableSIFT = false;
- //               } else if (enableSIFT == false) {
- //                   enableSIFT = true;
- //               }
-                break;
-            case SDLK_d:
- //               if (coordinatesActivated == false) {
- //                   coordinatesActivated = true;
-   //             } else if (coordinatesActivated == true) {
-   //                 coordinatesActivated = false;
-   //             }
                 break;
             default:
                 break;
@@ -1153,3 +1097,42 @@ void runBlobSURF ()
     cvDestroyWindow("OpenSURF");
 
 } // end runBlobSURF
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// initializeSDL
+//
+///////////////////////////////////////////////////////////////////////////////
+
+int initializeSDL()
+{
+    if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER) == -1)) {
+        cout << "Could not initialize SDL: " << SDL_GetError() << endl;
+        return 1;
+    }
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+    // create a 640x480 OpenGL screen
+    if (SDL_SetVideoMode(640, 480, 0, SDL_OPENGL) == NULL) {
+        cout << "Unable to create OpenGL screen: " << SDL_GetError() << "\n";
+        SDL_Quit();
+        exit(2);
+    }
+
+    // set the title bar
+    SDL_WM_SetCaption("TACTICAL", NULL);
+
+    // init OpenGL
+    glEnable(GL_TEXTURE_2D);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glViewport(0, 0, 640, 480);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0f, 640, 480, 0.0f, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+} // end initializeSDL
