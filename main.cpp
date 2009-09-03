@@ -84,6 +84,9 @@
 #include "tracking_algorithms/Optical_Flow/klt++/klt.h"
 #include "tracking_algorithms/Optical_Flow/klt++/pnmio.h"
 
+// optical flow :: opencv's lk tracker
+#include "tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h"
+
 // blob :: sift
 // SIFT
 #include "tracking_algorithms/Blob/SIFT/sift.h"
@@ -138,6 +141,7 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
 void runOpticalFlowBirchfieldKLT();
 void runOpticalFlowFarneback ();
 void runOpticalFlowHornSchunck();
+void runOpticalFlowLKOpenCV();
 void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,10 +251,11 @@ int main(int argc, char *argv[])
         cout << "4. OpenCV's KLT Tracker (Sparse)\n\n";
 
         cout << "Blob Tracking:\n";
-        cout << "5. SIFT (Hess's Implementation)\n\n";
+        cout << "5. SIFT (Hess's Implementation)\n";
+        cout << "6. SURF\n\n";
 
         cout << "Correlation:\n";
-        cout << "6. Turing's Multi-Resolution Progressive Alignment Tracker\n\n";
+        cout << "7. Turing's Multi-Resolution Progressive Alignment Tracker\n\n";
 
         cout << "9. End program\n";
         cout << "\n===> ";
@@ -263,10 +268,12 @@ int main(int argc, char *argv[])
         } else if (choice == 3) {
             runOpticalFlowBirchfieldKLT();
         } else if (choice == 4) {
-            //
+            runOpticalFlowLKOpenCV();
         } else if (choice == 5) {
             runBlobSIFT();
         } else if (choice == 6) {
+            //
+        } else if (choice == 7) {
             runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
         } else if (choice == 9) {
             running = false;
@@ -604,6 +611,34 @@ void runOpticalFlowFarneback ()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// runOpticalFlowLKOpenCV
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void runOpticalFlowLKOpenCV ()
+{
+    initLKOpenCV();
+
+    for (int i=0; i<sortedFiles.size()-1; i++) {
+
+        string tempA = path + '/' + sortedFiles.at(i);
+
+        printf("trying to load %s\n", tempA.c_str());
+
+        IplImage *imgA = cvLoadImage(tempA.c_str());
+
+        runLKOpenCV(imgA);
+
+        //cvReleaseImage(&imgA);
+    }
+
+    endLKOpenCV();
+
+} // runOpticalFlowLKOpenCV
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // runOpticalFlowBirchfieldKLT
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -698,10 +733,85 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
 
     bool trackingInstantiated = false;
     bool continueTest = true;
-    int frameNumber = start;
+    int frameNumber = 0;
+
+    // loop over the first image and wait for the mouse click
+    bool pointSelected = false;
+    bool loaded = false;
+    IplImage *temp;
+    IplImage *temp2;
+    while (pointSelected == false) {
+
+        if (loaded == false) {
+            // grab the first image and display it
+            string t = path + '/' + sortedFiles.at(frameNumber);
+            temp = cvLoadImage(t.c_str());
+
+            // swap the red and blue channels
+            temp2 = cvCreateImage(cvSize(temp->width, temp->height), 8, 3);
+            cvConvertImage(temp, temp2, CV_CVTIMG_SWAP_RB);
+
+            loaded = true;
+
+            printf("\n\n\nTRACKING INIIIALIZED...\n\n\n");
+        }
+
+        SDL_Surface *image = SDL_CreateRGBSurfaceFrom(temp2->imageData, temp2->width, temp->height, 24, temp2->widthStep, 0x0000ff, 0x00ff00, 0xff0000, 0);
+
+        // generate a texture object handle
+        glGenTextures(1, &texture);
+
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        // set the stretching properties
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        // edit the texture object's image data
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+        // now, draw it
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glBegin(GL_QUADS);
+
+            // top left
+            glTexCoord2i(0, 0);
+            glVertex3f(1, 1, 0.0f);
+
+            // bottom left
+            glTexCoord2i(1, 0);
+            glVertex3f(640, 1, 0.0f);
+
+            // bottom right
+            glTexCoord2i(1, 1);
+            glVertex3f(640, 480, 0);
+
+            // top right
+            glTexCoord2i(0, 1);
+            glVertex3f(1, 480, 0);
+
+        glEnd();
+
+        // flip the OpenGL to SDL
+        SDL_GL_SwapBuffers();
+
+        // delete the texture
+        glDeleteTextures(1, &texture);
+
+        // handle any SDL events
+        handleSDLEvents();
+        if (trackEvent == true) {
+            pointSelected = true;
+            cvReleaseImage(&temp);
+            cvReleaseImage(&temp2);
+        }
+    }
 
     // main loop
     while (continueTest == true) {
+
+        trackingActivated = true;
 
         string t = path + '/' + sortedFiles.at(frameNumber);
 
@@ -711,7 +821,7 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
             string h = itos(temp->height);
             string w = itos(temp->width);
             tracking = new turingTracking(h.c_str(), w.c_str());
-            trackingInstantiated == true;
+            trackingInstantiated = true;
          }
 
         // swap the red and blue channels
@@ -875,6 +985,7 @@ void runBlobSIFT ()
     double d0, d1;
     int n1, n2, k, m=0;
     int siftCount = 0;
+    int frameNumberSIFT = 0;
 
     // loop through all of the image
     for (int i=0; i<sortedFiles.size()-1; i++) {
@@ -959,8 +1070,8 @@ void runBlobSIFT ()
 
                 // save the image
 //                if (archive == true) {
-//                    string fileName = path + "_transformed" + itos(frameNumberSIFT) + ".bmp";
-//                    cvSaveImage(fileName.c_str(), transformed);
+                    string fileName = path + "/transformed/transformed_" + itos(frameNumberSIFT) + ".bmp";
+                    cvSaveImage(fileName.c_str(), transformed);
 //                }
 
                 cvReleaseImage(&transformed);
@@ -978,6 +1089,7 @@ void runBlobSIFT ()
         free(feat1);
         free(feat2);
         siftCount = 0;
+        frameNumberSIFT++;
     }
 
  } // end runBlobSIFT

@@ -132,7 +132,9 @@ SOURCES += main.cpp\
         tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
         tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp \
         # farneback's polynomial expansion
-        tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp
+        tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp \
+        # opencv's lk implementation
+        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
@@ -156,6 +158,8 @@ HEADERS += mainwindow.h\
         tracking_algorithms/Optical_Flow/klt++/pnmio.h \
         tracking_algorithms/Optical_Flow/klt++/pyramid.h \
         # farneback's polynomial expansion
-        tracking_algorithms/Optical_Flow/Farneback/Farneback.h
+        tracking_algorithms/Optical_Flow/Farneback/Farneback.h \
+        # opencv's lk implementation
+        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h
 
 FORMS += mainwindow.ui

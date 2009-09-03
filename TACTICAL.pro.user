@@ -53,7 +53,7 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZwEMsmy12M,guid=2e18dff4e42fdfef3dbf605c4a9eb6b5</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-FL2AuFnP0L,guid=0770ab69a9ebc0c9c545c8714a9f9589</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
     <value type="QString" >DISPLAY=:0.0</value>
@@ -61,9 +61,9 @@
     <value type="QString" >GDM_LANG=en_US.UTF-8</value>
     <value type="QString" >GDM_XSERVER_LOCATION=local</value>
     <value type="QString" >GNOME_DESKTOP_SESSION_ID=Default</value>
-    <value type="QString" >GNOME_KEYRING_PID=5961</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-z3VQ0j/socket</value>
-    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-QbRYgr/S.gpg-agent:6047:1</value>
+    <value type="QString" >GNOME_KEYRING_PID=5766</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-lV0bvm/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-jgWhmq/S.gpg-agent:5852:1</value>
     <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/lab/.gtkrc-1.2-gnome2</value>
     <value type="QString" >HOME=/home/lab</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
@@ -74,15 +74,15 @@
     <value type="QString" >PATH=/home/lab/qtsdk-2009.03/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
     <value type="QString" >PWD=/home/lab/qtsdk-2009.03/bin</value>
     <value type="QString" >QTDIR=/home/lab/qtsdk-2009.03/qt</value>
-    <value type="QString" >SESSION_MANAGER=local/lab-laptop:/tmp/.ICE-unix/5962</value>
+    <value type="QString" >SESSION_MANAGER=local/lab-laptop:/tmp/.ICE-unix/5767</value>
     <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-z3VQ0j/ssh</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-lV0bvm/ssh</value>
     <value type="QString" >USER=lab</value>
     <value type="QString" >USERNAME=lab</value>
     <value type="QString" >WINDOWPATH=7</value>
     <value type="QString" >XAUTHORITY=/home/lab/.Xauthority</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
-    <value type="QString" >XDG_SESSION_COOKIE=602b24422841ce9021077af54a72e6b4-1251915443.270602-599612612</value>
+    <value type="QString" >XDG_SESSION_COOKIE=602b24422841ce9021077af54a72e6b4-1251972487.331880-923267390</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >/home/lab/Development/TACTICAL/TACTICAL.pro</value>
@@ -102,7 +102,7 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-ZwEMsmy12M,guid=2e18dff4e42fdfef3dbf605c4a9eb6b5</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-FL2AuFnP0L,guid=0770ab69a9ebc0c9c545c8714a9f9589</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
     <value type="QString" >DISPLAY=:0.0</value>
@@ -110,9 +110,9 @@
     <value type="QString" >GDM_LANG=en_US.UTF-8</value>
     <value type="QString" >GDM_XSERVER_LOCATION=local</value>
     <value type="QString" >GNOME_DESKTOP_SESSION_ID=Default</value>
-    <value type="QString" >GNOME_KEYRING_PID=5961</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-z3VQ0j/socket</value>
-    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-QbRYgr/S.gpg-agent:6047:1</value>
+    <value type="QString" >GNOME_KEYRING_PID=5766</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-lV0bvm/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-jgWhmq/S.gpg-agent:5852:1</value>
     <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/lab/.gtkrc-1.2-gnome2</value>
     <value type="QString" >HOME=/home/lab</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
@@ -123,15 +123,15 @@
     <value type="QString" >PATH=/home/lab/qtsdk-2009.03/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
     <value type="QString" >PWD=/home/lab/qtsdk-2009.03/bin</value>
     <value type="QString" >QTDIR=/home/lab/qtsdk-2009.03/qt</value>
-    <value type="QString" >SESSION_MANAGER=local/lab-laptop:/tmp/.ICE-unix/5962</value>
+    <value type="QString" >SESSION_MANAGER=local/lab-laptop:/tmp/.ICE-unix/5767</value>
     <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-z3VQ0j/ssh</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-lV0bvm/ssh</value>
     <value type="QString" >USER=lab</value>
     <value type="QString" >USERNAME=lab</value>
     <value type="QString" >WINDOWPATH=7</value>
     <value type="QString" >XAUTHORITY=/home/lab/.Xauthority</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
-    <value type="QString" >XDG_SESSION_COOKIE=602b24422841ce9021077af54a72e6b4-1251915443.270602-599612612</value>
+    <value type="QString" >XDG_SESSION_COOKIE=602b24422841ce9021077af54a72e6b4-1251972487.331880-923267390</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >-w</value>
