@@ -40,8 +40,8 @@
 //  easily changed.
 //
 // Due to the limited amount of storage available at Google code, the datasets
-//  that I have been working with will be published at
-//  http://tigrs.eng.wayne.edu
+//  that I have been working with are published at:
+//  http://tigrs.eng.wayne.edu/code.html
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -197,12 +197,31 @@ int main(int argc, char *argv[])
         return a.exec();
     }
 
+    int dirChoice=0;
     string dirIn;
-    cout << "What is the image directory path (/home/lab/Development/NavigationData/...)? ";
-    cin >> dirIn;
+    cout << "What is the dataset to run? (/home/lab/Development/NavigationData/...)? \n\n";
+    cout << "1. Sign\n";
+    cout << "2. Silver car\n";
+    cout << "3. SUV\n";
+    cout << "4. Wood pile\n";
+    cout << "5. Other (manually specify)\n";
+    cout << "\n===> ";
+    cin >> dirChoice;
 
-    // append the directory to the main image path
-    path = path + dirIn;
+    if (dirChoice == 1) {
+        path = path + "Sign";
+    } else if (dirChoice == 2) {
+        path = path + "SilverCar";
+    } else if (dirChoice == 3) {
+        path = path + "SUV";
+    } else if (dirChoice == 4) {
+        path = path + "WoodPile";
+    } else if (dirChoice == 5) {
+        cout << "\n===> ";
+        cin  >> dirChoice;
+        path = path + dirIn;
+    }
+
     printf("Path is set to: %s\n", path.c_str());
 
     // get the contents of our directory
