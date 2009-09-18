@@ -20,15 +20,15 @@
 // move these too, this is just a test for libmv
 #include <algorithm>
 #include <vector>
-#include "libmv/image/image.h"
-#include "libmv/image/image_io.h"
-#include "libmv/image/image_pyramid.h"
-#include "libmv/image/image_sequence_io.h"
-#include "libmv/image/cached_image_sequence.h"
-#include "libmv/image/pyramid_sequence.h"
-#include "libmv/correspondence/correspondence.h"
-#include "libmv/correspondence/feature.h"
-#include "libmv/correspondence/klt.h"
+//#include "libmv/image/image.h"
+//#include "libmv/image/image_io.h"
+//#include "libmv/image/image_pyramid.h"
+//#include "libmv/image/image_sequence_io.h"
+//#include "libmv/image/cached_image_sequence.h"
+//#include "libmv/image/pyramid_sequence.h"
+//#include "libmv/correspondence/correspondence.h"
+//#include "libmv/correspondence/feature.h"
+//#include "libmv/correspondence/klt.h"
 
 namespace Ui
 {

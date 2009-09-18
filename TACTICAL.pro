@@ -28,8 +28,8 @@ unix {
 
 # libmv
 win32 {
-    INCLUDEPATH += C:\libmv\src
-    INCLUDEPATH += C:\libmv\src\third_party\eigen
+#    INCLUDEPATH += C:\libmv\src
+#    INCLUDEPATH += C:\libmv\src\third_party\eigen
 }
 
 # correlation tracking
@@ -61,9 +61,9 @@ unix {
 
 #libmv
 win32 {
-    LIBS += C:\libmv\lib\image.lib
-    LIBS += C:\libmv\lib\correspondence.lib
-    LIBS += C:\libmv\lib\numeric.lib
+#    LIBS += C:\libmv\lib\image.lib
+#    LIBS += C:\libmv\lib\correspondence.lib
+#    LIBS += C:\libmv\lib\numeric.lib
 }
 
 unix {
@@ -141,7 +141,9 @@ SOURCES += main.cpp\
         tracking_algorithms/Blob/OpenSURF/integral.cpp \
         tracking_algorithms/Blob/OpenSURF/fasthessian.cpp \
         tracking_algorithms/Blob/OpenSURF/surf.cpp \
-        tracking_algorithms/Blob/OpenSURF/ipoint.cpp
+        tracking_algorithms/Blob/OpenSURF/ipoint.cpp \
+        # correlation
+        tracking_algorithms/Correlation/TuringTracking/TuringTracking.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
@@ -176,6 +178,7 @@ HEADERS += mainwindow.h\
         tracking_algorithms/Blob/OpenSURF/surf.h \
         tracking_algorithms/Blob/OpenSURF/ipoint.h \
         tracking_algorithms/Blob/OpenSURF/kmeans.h \
-
+        # turing tracking
+        tracking_algorithms/Correlation/TuringTracking/TuringTracking.h
 
 FORMS += mainwindow.ui

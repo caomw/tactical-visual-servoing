@@ -109,15 +109,15 @@
 #include <algorithm>
 #include <vector>
 
-#include "libmv/image/image.h"
-#include "libmv/image/image_io.h"
-#include "libmv/image/image_pyramid.h"
-#include "libmv/image/image_sequence_io.h"
-#include "libmv/image/cached_image_sequence.h"
-#include "libmv/image/pyramid_sequence.h"
-#include "libmv/correspondence/correspondence.h"
-#include "libmv/correspondence/feature.h"
-#include "libmv/correspondence/klt.h"
+//#include "libmv/image/image.h"
+//#include "libmv/image/image_io.h"
+//#include "libmv/image/image_pyramid.h"
+//#include "libmv/image/image_sequence_io.h"
+//#include "libmv/image/cached_image_sequence.h"
+//#include "libmv/image/pyramid_sequence.h"
+//#include "libmv/correspondence/correspondence.h"
+//#include "libmv/correspondence/feature.h"
+//#include "libmv/correspondence/klt.h"
 
 // this is a hack until I can get sdl events recognized from within qt
 #define USEQT_0_USESDL_1 1
@@ -130,7 +130,7 @@
 
 #undef main
 
-using namespace libmv;
+//using namespace libmv;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -145,7 +145,7 @@ int initializeSDL();
 string itos(int);
 
 void listDirectoryContents(string);
-void libmvRunKLT();
+//void libmvRunKLT();
 void runBlobSIFT();
 void runBlobSURF();
 void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
@@ -153,7 +153,7 @@ void runOpticalFlowBirchfieldKLT();
 void runOpticalFlowFarneback ();
 void runOpticalFlowHornSchunck();
 void runOpticalFlowLKOpenCV();
-void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
+//void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -380,6 +380,7 @@ string itos (int i)
 
 void listDirectoryContents (string directory)
 {
+#ifdef unix
     vector <string> files;
     size_t found;
     string searchArg = ".bmp";
@@ -415,6 +416,7 @@ void listDirectoryContents (string directory)
     }
 
     closedir(d);
+#endif
 
 } // end listDirectoryContents
 
@@ -424,7 +426,7 @@ void listDirectoryContents (string directory)
 // libmvRunKLT
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
 void libmvRunKLT ()
 {
     // klt stuff
@@ -478,14 +480,14 @@ void libmvRunKLT ()
     }
 
 }  // end libmvRunKLT
-
+**.
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // WriteOutputImage :: code taken from libmv's track.cc
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
 void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename)
 {
     FloatImage output_image(image.Height(), image.Width(), 3);
@@ -507,7 +509,7 @@ void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeatu
     WritePnm(output_image, output_filename);
 
 } // end WriteOutputImage
-
+**/
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -618,6 +620,7 @@ void runOpticalFlowLKOpenCV ()
 void runOpticalFlowBirchfieldKLT ()
 {
     #define REPLACE
+#ifdef unix
 
     string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
     string base = "captured";
@@ -688,6 +691,8 @@ void runOpticalFlowBirchfieldKLT ()
     KLTFreeTrackingContext(tc);
     free(img1);
     free(img2);
+
+#endif
 
 } // end runOpticalFlowBirchfieldKLT
 
