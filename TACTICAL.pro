@@ -141,9 +141,9 @@ SOURCES += main.cpp\
         tracking_algorithms/Blob/OpenSURF/integral.cpp \
         tracking_algorithms/Blob/OpenSURF/fasthessian.cpp \
         tracking_algorithms/Blob/OpenSURF/surf.cpp \
-        tracking_algorithms/Blob/OpenSURF/ipoint.cpp \
-        # correlation
-        tracking_algorithms/Correlation/TuringTracking/TuringTracking.cpp
+        tracking_algorithms/Blob/OpenSURF/ipoint.cpp
+        # correlation - only build in windows
+        #tracking_algorithms/Correlation/TuringTracking/TuringTracking.cpp
 
 HEADERS += mainwindow.h\
         ImageProcessing.h \
@@ -177,8 +177,8 @@ HEADERS += mainwindow.h\
         tracking_algorithms/Blob/OpenSURF/fasthessian.h \
         tracking_algorithms/Blob/OpenSURF/surf.h \
         tracking_algorithms/Blob/OpenSURF/ipoint.h \
-        tracking_algorithms/Blob/OpenSURF/kmeans.h \
-        # turing tracking
-        tracking_algorithms/Correlation/TuringTracking/TuringTracking.h
+        tracking_algorithms/Blob/OpenSURF/kmeans.h
+        # turing tracking -- only build in windows
+        #tracking_algorithms/Correlation/TuringTracking/TuringTracking.h
 
 FORMS += mainwindow.ui
