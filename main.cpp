@@ -952,6 +952,13 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
 
 void runBlobSIFT ()
 {
+    // save the stacked images to make a movie
+    string outPath = "/home/lab/Development/sift_out/";
+    int outFrameNumber = 0;
+    bool saveOutput = true;
+
+
+    bool doRANSAC = false;
     cvNamedWindow("Matches", 1);
     cvNamedWindow("Transformed", 1);
 
@@ -964,7 +971,7 @@ void runBlobSIFT ()
     int siftCount = 0;
     int frameNumberSIFT = 0;
 
-    // loop through all of the image
+    // loop through all of the images
     for (int i=0; i<sortedFiles.size()-1; i++) {
 
         IplImage *stacked;
@@ -1021,42 +1028,54 @@ void runBlobSIFT ()
 
         printf("Now, doing RANSAC...j=%d\n", j);
 
-        // now, do RANSAC
-        feat1[j].fwd_match = nbrs[0];
-        {
-            CvMat *H;
-            printf("n1 = %d\n", n1);
-            H = ransac_xform(feat1, n1, FEATURE_FWD_MATCH, lsq_homog, 4, 0.01, homog_xfer_err, 3.0, NULL, NULL);
-            printf("Transformation found...\n");
+        if (doRANSAC) {
 
-            if (H) {
+            // now, do RANSAC
+            feat1[j].fwd_match = nbrs[0];
+            {
+                CvMat *H;
+                printf("n1 = %d\n", n1);
+                H = ransac_xform(feat1, n1, FEATURE_FWD_MATCH, lsq_homog, 4, 0.01, homog_xfer_err, 3.0, NULL, NULL);
+                printf("Transformation found...\n");
 
-                for (int ti=0; ti<3; ti++) {
-                    for (int tj=0; tj<3; tj++) {
-                        cout << cvmGet(H, ti, tj) << " ";
+                if (H) {
+
+                    for (int ti=0; ti<3; ti++) {
+                        for (int tj=0; tj<3; tj++) {
+                            cout << cvmGet(H, ti, tj) << " ";
+                        }
+                        cout << "\n";
                     }
-                    cout << "\n";
+
+                    IplImage *transformed;
+                    transformed = cvCreateImage(cvGetSize(imgA), 8, 3);
+                    cvWarpPerspective(imgA, transformed, H, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+
+                    cvShowImage("Transformed", transformed);
+                    cvWaitKey(10);
+
+                    // save the image
+    //                if (archive == true) {
+                        string fileName = path + "/transformed/transformed_" + itos(frameNumberSIFT) + ".bmp";
+                        cvSaveImage(fileName.c_str(), transformed);
+    //                }
+
+                    cvReleaseImage(&transformed);
+                    cvReleaseMat(&H);
+
                 }
 
-                IplImage *transformed;
-                transformed = cvCreateImage(cvGetSize(imgA), 8, 3);
-                cvWarpPerspective(imgA, transformed, H, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(0));
+            } // end RANSAC
 
-                cvShowImage("Transformed", transformed);
-                cvWaitKey(10);
+        } // end if do RANSAC
 
-                // save the image
-//                if (archive == true) {
-                    string fileName = path + "/transformed/transformed_" + itos(frameNumberSIFT) + ".bmp";
-                    cvSaveImage(fileName.c_str(), transformed);
-//                }
+        if (saveOutput) {
+            string fileName = outPath + "out_" + itos(outFrameNumber) + ".bmp";
+            printf("saving :: %s\n", fileName.c_str());
+            cvSaveImage(fileName.c_str(), stacked);
+            outFrameNumber++;
+        }
 
-                cvReleaseImage(&transformed);
-                cvReleaseMat(&H);
-
-            }
-
-        } // end RANSAC
 
         // free allocated memory
         cvReleaseImage(&stacked);

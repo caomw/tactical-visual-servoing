@@ -114,8 +114,7 @@ HOST   := ganesh.cs.ucla.edu:/var/www/vlfeat.org
 NDEBUG ?= YES
 VERB   ?= NO
 
-# programs required to build VLFeatSuccess.
-
+# programs required to build VLFeat
 CC         ?= cc
 MATLABEXE  ?= matlab
 MEX        ?= mex
@@ -172,10 +171,8 @@ ifeq ($(ARCH),)
 die:=$(error $(err_no_arch))
 endif
 
-#MATLABPATH := $(strip $(shell $(MEX) -v 2>&1 |                       \
-#                sed -n 's/.*MATLAB *= *\(.*\)/\1/gp'))
-
-MATLABPATH := /home/lab/MATLAB
+MATLABPATH := $(strip $(shell $(MEX) -v 2>&1 |                       \
+                sed -n 's/.*MATLAB *= *\(.*\)/\1/gp'))
 
 # --------------------------------------------------------------------
 #                                                            Functions
