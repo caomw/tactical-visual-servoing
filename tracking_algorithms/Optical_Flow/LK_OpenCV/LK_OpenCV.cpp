@@ -16,7 +16,7 @@ const int MAX_COUNT = 500;
 CvPoint2D32f* points[2] = {0,0}, *swap_points;
 char* status = 0;
 int count = 0;
-int need_to_init = 0;
+int need_to_init = 1;
 int night_mode = 0;
 int flags = 0;
 int add_remove_pt = 0;
@@ -36,6 +36,7 @@ void endLKOpenCV ()
 int runLKOpenCV (IplImage *imgA)
 {
     int i=0, k=0, c=0;
+
 
     if (!image) {
         // allocate all the buffers

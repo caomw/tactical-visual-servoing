@@ -23,6 +23,8 @@ using namespace std;
 
 IplImage *image1 = NULL;
 
+#define FARBEBACK 0
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // forward declarations
@@ -89,13 +91,14 @@ void endFarneback()
 
 int runFarneback(IplImage *image1, IplImage *image2)
 {
-	IplImage *image1_grey = NULL, *image2_grey = NULL;
-	IplImage *flow = NULL;
-	IplImage *velx = NULL, *vely = NULL, *vel = NULL;
+#ifdef FARNEBECK 
+    IplImage *image1_grey = NULL, *image2_grey = NULL;
+    IplImage *flow = NULL;
+    IplImage *velx = NULL, *vely = NULL, *vel = NULL;
 
-	int imageCounter = 0;
-	int c = 0;
-	bool loadedRef = false;
+    int imageCounter = 0;
+    int c = 0;
+    bool loadedRef = false;
 
     CvSize image1_size, image2_size;
     image1_size.height = image1->height;
@@ -126,10 +129,10 @@ int runFarneback(IplImage *image1, IplImage *image2)
     allocateOnDemand(&flow, image1_size, IPL_DEPTH_32F, 2);
 
     // Run GFB optical flow analysis
-    //cv::Mat im1 = cv::cvarrToMat(image1_grey), im2 = cv::cvarrToMat(image2_grey);
-    //cv::Mat _flow = cv::cvarrToMat(flow);
-    //cv::calcOpticalFlowFarneback( im1, im2, _flow, 0.5, 2, 5, 2, 7, 1.5, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
-    //cv::calcOpticalFlowFarneback( im1, im2, _flow, 0.5, 2, 10, 2, 14, 2.0, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
+    cv::Mat im1 = cv::cvarrToMat(image1_grey), im2 = cv::cvarrToMat(image2_grey);
+    cv::Mat _flow = cv::cvarrToMat(flow);
+    cv::calcOpticalFlowFarneback( im1, im2, _flow, 0.5, 2, 5, 2, 7, 1.5, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
+    cv::calcOpticalFlowFarneback( im1, im2, _flow, 0.5, 2, 10, 2, 14, 2.0, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
 		
     float pyrScale = 1.0;
     int levels = 5;
@@ -138,7 +141,7 @@ int runFarneback(IplImage *image1, IplImage *image2)
     int polyN = 14;
     float polySigma = 3.0;
 
-    //cv::calcOpticalFlowFarneback( im1, im2, _flow, pyrScale, levels, winSize, iterations, polyN, polySigma, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
+    cv::calcOpticalFlowFarneback( im1, im2, _flow, pyrScale, levels, winSize, iterations, polyN, polySigma, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
 
     // Extract from flow field, velx and vely
     for (int y = 0; y<flow->height; y++) {
@@ -194,6 +197,12 @@ int runFarneback(IplImage *image1, IplImage *image2)
     cvReleaseImage(&flow);
     cvReleaseImage(&image2);
     cvReleaseImage(&image2_grey);
+
+#else
+
+    printf("FARNEBACK currently set to NOT RUN......\n");
+    
+#endif
 
     return 0;
 }

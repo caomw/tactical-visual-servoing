@@ -177,6 +177,7 @@ ImageFunctions *imageFunctions = new ImageFunctions();
 
 // global vector to hold all file names
 vector <string> sortedFiles;
+vector <string> sortedFilesPGMs;
 
 // OpenGL texture
 GLuint texture;
@@ -381,6 +382,8 @@ string itos (int i)
 void listDirectoryContents (string directory)
 {
 #ifdef unix
+
+    // for the bitmaps
     vector <string> files;
     size_t found;
     string searchArg = ".bmp";
@@ -410,12 +413,51 @@ void listDirectoryContents (string directory)
 
         if (found != string::npos) {
             string temp = files.at(i);
-            printf("%s\n", temp.c_str());
+            printf("bmp :: %s\n", temp.c_str());
             sortedFiles.push_back(temp);
         }
     }
 
     closedir(d);
+
+    // for the pgms
+    vector <string> files2;
+    size_t found2;
+    string searchArg2 = ".pgm";
+
+    struct dirent *de2=NULL;
+    DIR *d2=NULL;
+
+    string temp = directory + "/pgms";
+    d2=opendir(temp.c_str());
+    if (d2 == NULL) {
+        perror("Couldn't open directory");
+    }
+
+    // loop while there are files
+    while (de2 = readdir(d2)) {
+        files2.push_back(de2->d_name);
+        printf("pgm :: %s\n",de2->d_name);
+    }
+
+    // sort the vector
+    sort(files2.rbegin(), files2.rend());
+
+    for (int i=files2.size()-1; i>=0; i--) {
+
+        string tmp = files2.at(i);
+        // search for a valid bmp file
+        found = tmp.find(searchArg2);
+
+        if (found != string::npos) {
+            string temp = files2.at(i);
+            printf("%s\n", temp.c_str());
+            sortedFilesPGMs.push_back(temp);
+        }
+    }
+
+    closedir(d2);
+
 #endif
 
 } // end listDirectoryContents
@@ -480,7 +522,6 @@ void libmvRunKLT ()
     }
 
 }  // end libmvRunKLT
-**.
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -522,8 +563,8 @@ void runOpticalFlowHornSchunck ()
     initHornSchunck();
 
     for (int i=0; i<sortedFiles.size()-1; i++) {
-        string tempA = path + sortedFiles.at(i);
-        string tempB = path + sortedFiles.at(i+1);
+        string tempA = path + "/" + sortedFiles.at(i);
+        string tempB = path + "/" + sortedFiles.at(i+1);
 
         printf("trying to load %s and %s\n", tempA.c_str(), tempB.c_str());
 
@@ -558,24 +599,24 @@ void runOpticalFlowFarneback ()
     initFarneback();
 
     for (int i=0; i<sortedFiles.size()-1; i++) {
-        string tempA = path + sortedFiles.at(i);
-        string tempB = path + sortedFiles.at(i+1);
+        string tempA = path + "/" + sortedFiles.at(i);
+        string tempB = path + "/" + sortedFiles.at(i+1);
 
         printf("trying to load %s and %s\n", tempA.c_str(), tempB.c_str());
 
         IplImage *imgA = cvLoadImage(tempA.c_str());
         IplImage *imgB = cvLoadImage(tempB.c_str());
 
-//        IplImage *imgA_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
-//        IplImage *imgB_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+        IplImage *imgA_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
+        IplImage *imgB_1 = cvCreateImage(cvGetSize(imgA), 8, 1);
 
-//        cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
-//        cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
+        cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
+        cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
 
-//        cvReleaseImage(&imgA);
-//        cvReleaseImage(&imgB);
+        runFarneback(imgA, imgB);
 
-        runHornSchunck(imgA, imgB);
+        cvReleaseImage(&imgA);
+        cvReleaseImage(&imgB);
     }
 
     endFarneback();
@@ -620,10 +661,11 @@ void runOpticalFlowLKOpenCV ()
 void runOpticalFlowBirchfieldKLT ()
 {
     #define REPLACE
+
 #ifdef unix
 
-    string path = "/home/lab/Development/NavigationData/WoodPile/pgm/";
-    string base = "captured";
+//    string path = "/home/lab/Development/NavigationData/WoodPile/pgms/";
+//    string base = "captured";
     string imgFileName;
     string flFileName;
     string ftFileName;
@@ -639,7 +681,6 @@ void runOpticalFlowBirchfieldKLT ()
     int ncols, nrows;
     int i=0;
     int frameCounter = 1;
-    int start=503, stop=552;
 
     tc = KLTCreateTrackingContext();
     fl = KLTCreateFeatureList(nFeatures);
@@ -648,8 +689,9 @@ void runOpticalFlowBirchfieldKLT ()
     tc->writeInternalImages = FALSE;
     tc->affineConsistencyCheck = 2;  // set this to 2 to turn on affine consistency check, -1 turns it off
 
-    // load in the first image of our set
-    imgFileName = path + base + itos(start) + ".pgm";
+    // load in the first image of our set        
+    imgFileName = path + "/pgms/" + sortedFilesPGMs.at(0);
+    cout << "Trying to load :: " << imgFileName << "\n";
     img1 = pgmReadFile((char *)imgFileName.c_str(), NULL, &ncols, &nrows);
     img2 = (unsigned char *) malloc(ncols*nrows*sizeof(unsigned char));
 
@@ -660,11 +702,12 @@ void runOpticalFlowBirchfieldKLT ()
     KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, (char *)flFileName.c_str());
 
     frameCounter++;
-    start++;
+    //start++;
 
-    for (i=start; i<stop; i++)  {
+    for (int i=0; i<sortedFilesPGMs.size()-1; i++) {
 
-        imgFileName = path + base + itos(i) + ".pgm";
+        imgFileName = path + "/pgms/" + sortedFilesPGMs.at(i);
+
         cout << "Reading :: " << imgFileName << "\n";
         pgmReadFile((char *)imgFileName.c_str(), img2, &ncols, &nrows);
         KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
@@ -705,6 +748,8 @@ void runOpticalFlowBirchfieldKLT ()
 
 void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
 {
+    initializeSDL();
+
     // declare the tracking library
     turingTracking *tracking;
 
@@ -722,6 +767,7 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
         if (loaded == false) {
             // grab the first image and display it
             string t = path + '/' + sortedFiles.at(frameNumber);
+            cout << "Loaded :: " << t << "\n";
             temp = cvLoadImage(t.c_str());
 
             // swap the red and blue channels
@@ -785,7 +831,7 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
         }
     }
 
-    // main loop
+    // got our point, so now do the main loop
     while (continueTest == true) {
 
         trackingActivated = true;
@@ -1150,7 +1196,7 @@ void runBlobSURF ()
 
 int initializeSDL()
 {
-    if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER) == -1)) {
+    if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)) {
         cout << "Could not initialize SDL: " << SDL_GetError() << endl;
         return 1;
     }
