@@ -1149,15 +1149,47 @@ void runBlobSURF ()
     IpVec ipts, old_ipts, motion;
     IpPairVec matches;
 
+    IplImage *img1, *img2;
     cvNamedWindow("OpenSURF");
+
+    cvNamedWindow("1", CV_WINDOW_AUTOSIZE );
+    cvNamedWindow("2", CV_WINDOW_AUTOSIZE );
 
     // loop through all of the image
     for (int i=0; i<sortedFiles.size()-1; i++) {
 
         string tempA = path + '/' + sortedFiles.at(i);
+        string tempB = path + '/' + sortedFiles.at(i+1);
 
-        printf("Trying to load :: %s\n", tempA.c_str());
+        printf("Trying to load :: %s & %s\n", tempA.c_str(), tempB.c_str());
 
+        img1 = cvLoadImage(tempA.c_str());
+        img2 = cvLoadImage(tempB.c_str());
+
+        IpVec ipts1, ipts2;
+        surfDetDes(img1,ipts1, false,4, 4, 2, 0.0006f);
+        surfDetDes(img2,ipts2, false,4, 4, 2, 0.0006f);
+
+        IpPairVec matches;
+        getMatches(ipts1,ipts2,matches);
+
+        for (unsigned int j = 0; j < matches.size(); ++j) {
+            drawPoint(img1,matches[j].first);
+            drawPoint(img2,matches[j].second);
+
+            const int & w = img1->width;
+            cvLine(img1,cvPoint(matches[j].first.x,matches[j].first.y),cvPoint(matches[j].second.x+w,matches[j].second.y), cvScalar(255,255,255),1);
+            cvLine(img2,cvPoint(matches[j].first.x-w,matches[j].first.y),cvPoint(matches[j].second.x,matches[j].second.y), cvScalar(255,255,255),1);
+
+        }
+
+        std::cout<< "Matches: " << matches.size();
+
+        cvShowImage("1", img1);
+        cvShowImage("2",img2);
+        cvWaitKey(10);
+
+        /** this shows motion
         IplImage *imgA  = cvLoadImage(tempA.c_str());
 
         // Detect and describe interest points in the image
@@ -1177,6 +1209,7 @@ void runBlobSURF ()
 
         // Display the result
         cvShowImage("OpenSURF", imgA);
+        **/
 
         // If ESC key pressed exit loop
         if( (cvWaitKey(10) & 255) == 27 ) break;
@@ -1184,6 +1217,8 @@ void runBlobSURF ()
     }
 
     cvDestroyWindow("OpenSURF");
+    cvDestroyWindow("1");
+    cvDestroyWindow("2");
 
 } // end runBlobSURF
 
