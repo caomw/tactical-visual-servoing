@@ -13,9 +13,18 @@
 
 #include "Horn_Schunck.h"
 
+#include<iostream>
+#include<string>
+#include<sstream>
+
+using namespace std;
 
 #define CVX_GRAY50 cvScalar(100)
 #define CVX_WHITE  cvScalar(255)
+
+string itos2(int i);
+
+int outNum = 0;
 
 void initHornSchunck ()
 {
@@ -67,6 +76,11 @@ int runHornSchunck (IplImage *imgA, IplImage *imgB)
 
     // show tracking
     cvShowImage("Flow Results",imgC);
+
+    // save the output to /tmp
+    string fileName = "/tmp/out" + itos2(outNum) + ".bmp";
+    cvSaveImage(fileName.c_str(), imgC);
+    outNum++;
     
     cvWaitKey(10);
 
@@ -76,4 +90,17 @@ int runHornSchunck (IplImage *imgA, IplImage *imgB)
     cvReleaseImage( &imgC );
 
     return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// itos
+//
+///////////////////////////////////////////////////////////////////////////////
+
+string itos2(int i)
+{
+    stringstream s;
+    s << i;
+    return s.str();
 }

@@ -205,7 +205,8 @@ int main(int argc, char *argv[])
     cout << "2. Silver car\n";
     cout << "3. SUV\n";
     cout << "4. Wood pile\n";
-    cout << "5. Other (manually specify)\n";
+    cout << "5. Sun (PackBot)\n";
+    cout << "6. Other (manually specify)\n";
     cout << "\n===> ";
     cin >> dirChoice;
 
@@ -218,6 +219,8 @@ int main(int argc, char *argv[])
     } else if (dirChoice == 4) {
         path = path + "WoodPile";
     } else if (dirChoice == 5) {
+        path = path + "Sun";
+    } else if (dirChoice == 6) {
         cout << "\n===> ";
         cin  >> dirChoice;
         path = path + dirIn;
@@ -613,7 +616,7 @@ void runOpticalFlowFarneback ()
         cvCvtColor(imgA, imgA_1, CV_BGR2GRAY);
         cvCvtColor(imgB, imgB_1, CV_BGR2GRAY);
 
-        runFarneback(imgA, imgB);
+        runFarneback(imgA_1, imgB_1);
 
         cvReleaseImage(&imgA);
         cvReleaseImage(&imgB);
@@ -999,7 +1002,7 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
 void runBlobSIFT ()
 {
     // save the stacked images to make a movie
-    string outPath = "/home/lab/Development/sift_out/";
+    string outPath = "/tmp/";
     int outFrameNumber = 0;
     bool saveOutput = true;
 
@@ -1148,6 +1151,7 @@ void runBlobSURF ()
     // declare Ipoints and other stuff
     IpVec ipts, old_ipts, motion;
     IpPairVec matches;
+    int numOut = 0;
 
     IplImage *img1, *img2;
     cvNamedWindow("OpenSURF");
@@ -1186,10 +1190,11 @@ void runBlobSURF ()
         std::cout<< "Matches: " << matches.size();
 
         cvShowImage("1", img1);
-        cvShowImage("2",img2);
+        cvShowImage("2", img2);
         cvWaitKey(10);
 
-        /** this shows motion
+
+        // this shows motion
         IplImage *imgA  = cvLoadImage(tempA.c_str());
 
         // Detect and describe interest points in the image
@@ -1209,7 +1214,11 @@ void runBlobSURF ()
 
         // Display the result
         cvShowImage("OpenSURF", imgA);
-        **/
+        string fileName = "/tmp/out" + itos(numOut) + ".bmp";
+        cvSaveImage(fileName.c_str(), imgA);
+        numOut++;
+
+
 
         // If ESC key pressed exit loop
         if( (cvWaitKey(10) & 255) == 27 ) break;

@@ -23,7 +23,9 @@ using namespace std;
 
 IplImage *image1 = NULL;
 
-#define FARBEBACK 0
+#define FARNEBECK 1
+
+int outNumF = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -31,7 +33,7 @@ IplImage *image1 = NULL;
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-string itos2(int i);
+string itos3(int i);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -190,6 +192,11 @@ int runFarneback(IplImage *image1, IplImage *image2)
 
     cvShowImage("GFB Flow", vel);
 
+    // save the output to /tmp
+    string fileName = "/tmp/out" + itos3(outNumF) + ".bmp";
+    cvSaveImage(fileName.c_str(), vel);
+    outNumF++;
+
     // free the allocated memory
     cvReleaseImage(&velx);
     cvReleaseImage(&vely);
@@ -214,7 +221,7 @@ int runFarneback(IplImage *image1, IplImage *image2)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-string itos2(int i)
+string itos3(int i)
 {
     stringstream s;
     s << i;
