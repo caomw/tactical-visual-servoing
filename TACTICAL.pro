@@ -12,10 +12,10 @@ QT += network opengl
 
 # OpenCV
 win32 {
-    INCLUDEPATH += C:\OpenCVTemp\cv\include
-    INCLUDEPATH += C:\OpenCVTemp\otherlibs\highgui
-    INCLUDEPATH += C:\OpenCVTemp\cxcore\include
-    INCLUDEPATH += C:\OpenCVTemp\cvaux\include
+    INCLUDEPATH += C:\TACTICAL\OpenCV\cv\include
+    INCLUDEPATH += C:\TACTICAL\OpenCV\otherlibs\highgui
+    INCLUDEPATH += C:\TACTICAL\OpenCV\cxcore\include
+    INCLUDEPATH += C:\TACTICAL\OpenCV\cvaux\include
 
 }
 
@@ -39,20 +39,20 @@ unix {
 
 # gsl
 win32 {
-    INCLUDEPATH += C:\gsl-1.8-lib\include
+    INCLUDEPATH += C:\TACTICAL\gsl-1.8-lib\include
 }
 
 # sdl
 win32 {
-    INCLUDEPATH += C:\SDL-1.2.13\include
+    INCLUDEPATH += C:\TACTICAL\SDL-1.2.13\include
 }
 
 # OpenCV
 win32 {
-    LIBS += C:\OpenCVTemp\lib\cv.lib
-    LIBS += C:\OpenCVTemp\lib\highgui.lib
-    LIBS += C:\OpenCVTemp\lib\cxcore.lib
-    LIBS += C:\OpenCVTemp\lib\cvaux.lib
+    LIBS += C:\TACTICAL\OpenCV\lib\cv.lib
+    LIBS += C:\TACTICAL\OpenCV\lib\highgui.lib
+    LIBS += C:\TACTICAL\OpenCV\lib\cxcore.lib
+    LIBS += C:\TACTICAL\OpenCV\lib\cvaux.lib
 }
 
 unix {
@@ -77,8 +77,8 @@ unix {
 
 # gsl
 win32 {
-    LIBS += C:\gsl-1.8-lib\lib\libgsl.a
-    LIBS += C:\gsl-1.8-lib\lib\libgslcblas.a
+    LIBS += C:\TACTICAL\gsl-1.8-lib\lib\libgsl.a
+    LIBS += C:\TACTICAL\gsl-1.8-lib\lib\libgslcblas.a
 }
 
 unix {
@@ -90,8 +90,8 @@ unix {
     LIBS += -lSDL -lSDL_image
 }
 win32 {
-    LIBS += C:\SDL-1.2.13\lib\SDL.lib
-    LIBS += C:\SDL-1.2.13\lib\SDL_image.lib
+    LIBS += C:\TACTICAL\SDL-1.2.13\lib\SDL.lib
+    LIBS += C:\TACTICAL\SDL-1.2.13\lib\SDL_image.lib
 }
 
 # math
@@ -133,7 +133,7 @@ SOURCES += main.cpp\
         tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
         tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp \
         # farneback's polynomial expansion
-        tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp \
+        #tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp \
         # opencv's lk implementation
         tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.cpp \
         # OpenSURF
@@ -167,7 +167,7 @@ HEADERS += mainwindow.h\
         tracking_algorithms/Optical_Flow/klt++/pnmio.h \
         tracking_algorithms/Optical_Flow/klt++/pyramid.h \
         # farneback's polynomial expansion
-        tracking_algorithms/Optical_Flow/Farneback/Farneback.h \
+        #tracking_algorithms/Optical_Flow/Farneback/Farneback.h \
         # opencv's lk implementation
         tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h \
         # OpenSURF

@@ -78,7 +78,9 @@
 #include "tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h"
 
 // optical flow :: farneback
-#include "tracking_algorithms/Optical_Flow/Farneback/Farneback.h"
+#ifdef unix
+    #include "tracking_algorithms/Optical_Flow/Farneback/Farneback.h"
+#endif
 
 // optical flow :: klt++
 #include "tracking_algorithms/Optical_Flow/klt++/klt.h"
@@ -150,7 +152,10 @@ void runBlobSIFT();
 void runBlobSURF();
 void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
 void runOpticalFlowBirchfieldKLT();
-void runOpticalFlowFarneback ();
+#ifdef unix
+    void runOpticalFlowFarneback ();
+#endif
+
 void runOpticalFlowHornSchunck();
 void runOpticalFlowLKOpenCV();
 //void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeature>::Iterator features, const char *output_filename);
@@ -245,7 +250,7 @@ int main(int argc, char *argv[])
 
         cout << "Optical Flow:\n";
         cout << "1. Horn-Schnuck (Dense)\n";
-        cout << "2. Farneback's Polynomial Expansion (Dense)\n";
+        cout << "2. Farneback's Polynomial Expansion (Dense) LINUX ONLY\n";
         cout << "3. Birchfield's KLT Tracker (Sparse)\n";
         cout << "4. OpenCV's KLT Tracker (Sparse)\n\n";
 
@@ -263,7 +268,9 @@ int main(int argc, char *argv[])
         if (choice == 1) {
             runOpticalFlowHornSchunck();
         } else if (choice == 2) {
-            runOpticalFlowFarneback();
+            #ifdef unix
+                runOpticalFlowFarneback();
+            #endif
         } else if (choice == 3) {
             runOpticalFlowBirchfieldKLT();
         } else if (choice == 4) {
@@ -599,6 +606,7 @@ void runOpticalFlowHornSchunck ()
 
 void runOpticalFlowFarneback ()
 {
+#ifdef unix
     initFarneback();
 
     for (int i=0; i<sortedFiles.size()-1; i++) {
@@ -623,6 +631,7 @@ void runOpticalFlowFarneback ()
     }
 
     endFarneback();
+#endif
 
 } // end runOpticalFlowFarneback
 

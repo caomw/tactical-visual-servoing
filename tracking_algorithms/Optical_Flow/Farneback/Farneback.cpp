@@ -135,7 +135,7 @@ int runFarneback(IplImage *image1, IplImage *image2)
     cv::Mat _flow = cv::cvarrToMat(flow);
     cv::calcOpticalFlowFarneback( im1, im2, _flow, 0.5, 2, 5, 2, 7, 1.5, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
     cv::calcOpticalFlowFarneback( im1, im2, _flow, 0.5, 2, 10, 2, 14, 2.0, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
-		
+
     float pyrScale = 1.0;
     int levels = 5;
     int winSize = 20;
