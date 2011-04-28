@@ -20,10 +20,10 @@ win32 {
 }
 
 unix {
-    INCLUDEPATH += /usr/include/opencv
-    INCLUDEPATH += /usr/include/opencv
-    INCLUDEPATH += /home/lab/Development/libmv/src
-    INCLUDEPATH += /home/lab/Development/libmv/src/third_party/eigen
+    INCLUDEPATH += /usr/local/include/opencv
+    INCLUDEPATH += /usr/local/include/opencv
+    #INCLUDEPATH += /home/lab/Development/libmv/src
+    #INCLUDEPATH += /home/lab/Development/libmv/src/third_party/eigen
 }
 
 # libmv
@@ -56,7 +56,8 @@ win32 {
 }
 
 unix {
-    LIBS += -lcv -lcxcore -lhighgui
+    #LIBS += -lcv -lcxcore -lhighgui
+    LIBS += -L /usr/local/lib -lopencv_calib3d -lopencv_contrib -lopencv_features2d -lopencv_flann -lopencv_gpu -lopencv_imgproc -lopencv_legacy -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_highgui -lopencv_core
 }
 
 #libmv
@@ -67,12 +68,12 @@ win32 {
 }
 
 unix {
-    LIBS += -lcorrespondence -limage -lglog -lgflags -lgsl -lgslcblas
+#    LIBS += -lcorrespondence -limage -lglog -lgflags -lgsl -lgslcblas
 }
 
 # correlation tracking
 unix {
-    LIBS += -lturingtracking
+#    LIBS += -lturingtracking
 }
 
 # gsl
@@ -101,7 +102,7 @@ unix {
 
 # birchfield klt (I am not sure why I have to copy libklt.a to /usr/lib, it was hung up on finding KLTStoreFeatureList
 unix {
-    LIBS += -lklt
+#    LIBS += -lklt
 }
 
 
@@ -114,12 +115,12 @@ SOURCES += main.cpp\
         utilities\utilities.cpp\
         image_functions\Image_Functions.cpp\
         # sift (hess)
-        tracking_algorithms/Blob/SIFT/imgfeatures.cpp \
-        tracking_algorithms/Blob/SIFT/kdtree.cpp \
-        tracking_algorithms/Blob/SIFT/minpq.cpp \
-        tracking_algorithms/Blob/SIFT/sift.cpp \
-        tracking_algorithms/Blob/SIFT/utils.cpp \
-        tracking_algorithms/Blob/SIFT/xform.cpp \
+ #       tracking_algorithms/Blob/SIFT/imgfeatures.cpp \
+ #       tracking_algorithms/Blob/SIFT/kdtree.cpp \
+ #       tracking_algorithms/Blob/SIFT/minpq.cpp \
+ #       tracking_algorithms/Blob/SIFT/sift.cpp \
+ #       tracking_algorithms/Blob/SIFT/utils.cpp \
+ #       tracking_algorithms/Blob/SIFT/xform.cpp \
         # horn schunck optical flow
         tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.cpp \
        # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
@@ -150,12 +151,12 @@ HEADERS += mainwindow.h\
         utilities\utilities.h\
         image_functions\Image_Functions.h\
         # sift (hess)
-        tracking_algorithms/Blob/SIFT/imgfeatures.h \
-        tracking_algorithms/Blob/SIFT/kdtree.h \
-        tracking_algorithms/Blob/SIFT/minpq.h \
-        tracking_algorithms/Blob/SIFT/sift.h \
-        tracking_algorithms/Blob/SIFT/utils.h \
-        tracking_algorithms/Blob/SIFT/xform.h \
+#        tracking_algorithms/Blob/SIFT/imgfeatures.h \
+#        tracking_algorithms/Blob/SIFT/kdtree.h \
+#        tracking_algorithms/Blob/SIFT/minpq.h \
+#        tracking_algorithms/Blob/SIFT/sift.h \
+#        tracking_algorithms/Blob/SIFT/utils.h \
+#        tracking_algorithms/Blob/SIFT/xform.h \
         # horn schunck optical flow
         tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h \
         # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)

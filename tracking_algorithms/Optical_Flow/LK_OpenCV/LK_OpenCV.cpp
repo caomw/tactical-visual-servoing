@@ -15,7 +15,7 @@ int win_size = 10;
 const int MAX_COUNT = 500;
 CvPoint2D32f* points[2] = {0,0}, *swap_points;
 char* status = 0;
-int count = 0;
+//int count = 0;
 int need_to_init = 1;
 int night_mode = 0;
 int flags = 0;
@@ -64,16 +64,16 @@ int runLKOpenCV (IplImage *imgA)
         double quality = 0.01;
         double min_distance = 10;
 
-        count = MAX_COUNT;
-        cvGoodFeaturesToTrack(grey, eig, temp, points[1], &count, quality, min_distance, 0, 3, 0, 0.04);
-        cvFindCornerSubPix(grey, points[1], count, cvSize(win_size,win_size), cvSize(-1,-1),
-                cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS,20,0.03));
+        //count = MAX_COUNT;
+        //cvGoodFeaturesToTrack(grey, eig, temp, points[1], &count, quality, min_distance, 0, 3, 0, 0.04);
+        //cvFindCornerSubPix(grey, points[1], count, cvSize(win_size,win_size), cvSize(-1,-1),
+        //        cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS,20,0.03));
         cvReleaseImage(&eig);
         cvReleaseImage(&temp);
 
         add_remove_pt = 0;
 
-    } else if (count > 0) {
+    } /* else if (count > 0) {
 
         cvCalcOpticalFlowPyrLK( prev_grey, grey, prev_pyramid, pyramid,
                 points[0], points[1], count, cvSize(win_size,win_size), 3, status, 0,
@@ -102,13 +102,16 @@ int runLKOpenCV (IplImage *imgA)
         }
         count = k;
     }
+    */
 
+    /*
     if (add_remove_pt && count < MAX_COUNT) {
         points[1][count++] = cvPointTo32f(pt);
         cvFindCornerSubPix( grey, points[1] + count - 1, 1, cvSize(win_size,win_size), cvSize(-1,-1),
                 cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS,20,0.03));
         add_remove_pt = 0;
     }
+    */
 
     CV_SWAP(prev_grey, grey, swap_temp);
     CV_SWAP(prev_pyramid, pyramid, swap_temp);
@@ -126,7 +129,7 @@ int runLKOpenCV (IplImage *imgA)
         need_to_init = 1;
         break;
     case 'c':
-        count = 0;
+        //count = 0;
         break;
     case 'n':
         night_mode ^= 1;

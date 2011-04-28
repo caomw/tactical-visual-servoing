@@ -143,7 +143,7 @@ basename command.
 
 @return Returns the basename of \a pathname.
 */
-extern char* basename( const char* pathname );
+//sth extern char* basename( const char* pathname );
 
 
 /**

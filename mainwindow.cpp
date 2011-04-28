@@ -87,6 +87,9 @@ void MainWindow::on_pushButtonTrack_clicked()
 
         IplImage *tmp = cvLoadImage(name.c_str());
 
+        // swap red and blue
+        cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
+
         printf("%d, %d...\n", tmp->height, tmp->width);
 
         // update the display
@@ -96,10 +99,18 @@ void MainWindow::on_pushButtonTrack_clicked()
 
         // TODO :: this needs some work yet because i cannot refresh the screen properly with the new image coming in
         scene->clear();
+        scene->setSceneRect(0, 0, tmp->width, tmp->height);
         scene->addPixmap(QPixmap::fromImage(img));
         scene->update();
+        QApplication::processEvents();
 
         cvReleaseImage(&tmp);
+
+        // update the status bar
+        QString msg2 = name.c_str();
+        ui->statusBar->showMessage(msg2);
+
+
     }
 
     /**
@@ -244,6 +255,7 @@ void MainWindow::timerEvent(QTimerEvent *)
 
 void MainWindow::updateImageNumber(int value)
 {
+    /**
     // load an IplImage
     CvSize size;
     size.height = datasetHeight;
@@ -268,6 +280,7 @@ void MainWindow::updateImageNumber(int value)
 
     // free memory
     cvReleaseImage(&temp);
+    **/
 }
 
 

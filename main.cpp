@@ -122,7 +122,7 @@
 //#include "libmv/correspondence/klt.h"
 
 // this is a hack until I can get sdl events recognized from within qt
-#define USEQT_0_USESDL_1 1
+#define USEQT_0_USESDL_1 0
 
 // sift defines
 #define KDTREE_BBF_MAX_NN_CHKS 200
@@ -193,7 +193,7 @@ GLuint texture;
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     // OpenGL
     if (USEQT_0_USESDL_1 == 0) {
@@ -606,6 +606,7 @@ void runOpticalFlowHornSchunck ()
 
 void runOpticalFlowFarneback ()
 {
+/**
 #ifdef unix
     initFarneback();
 
@@ -632,7 +633,7 @@ void runOpticalFlowFarneback ()
 
     endFarneback();
 #endif
-
+**/
 } // end runOpticalFlowFarneback
 
 
@@ -672,6 +673,7 @@ void runOpticalFlowLKOpenCV ()
 
 void runOpticalFlowBirchfieldKLT ()
 {
+/**
     #define REPLACE
 
 #ifdef unix
@@ -749,6 +751,9 @@ void runOpticalFlowBirchfieldKLT ()
 
 #endif
 
+
+**/
+
 } // end runOpticalFlowBirchfieldKLT
 
 
@@ -760,6 +765,7 @@ void runOpticalFlowBirchfieldKLT ()
 
 void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
 {
+/**
     initializeSDL();
 
     // declare the tracking library
@@ -999,6 +1005,8 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
     // clear up memory
     delete tracking;
 
+**/
+
 } // end runCorrelationTuringMultiResolutionProgressiveAlignmentSearch
 
 
@@ -1010,6 +1018,7 @@ void runCorrelationTuringMultiResolutionProgressiveAlignmentSearch ()
 
 void runBlobSIFT ()
 {
+/**
     // save the stacked images to make a movie
     string outPath = "/tmp/";
     int outFrameNumber = 0;
@@ -1145,7 +1154,7 @@ void runBlobSIFT ()
         siftCount = 0;
         frameNumberSIFT++;
     }
-
+**/
  } // end runBlobSIFT
 
 
