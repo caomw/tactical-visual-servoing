@@ -35,7 +35,17 @@ MainWindow::MainWindow(QWidget *parent)
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
 
+    fitImageToWindow = false;
+    windowWidth = 640;
+    windowHeight = 480;
+
     ui->statusBar->showMessage("NO DATASET LOADED");
+
+    iniFile = "TACTICAL.ini";
+
+    CSimpleIniA ini(true, true, true);
+    SI_Error rc = ini.LoadFile(iniFile.c_str());
+
 }
 
 
@@ -93,18 +103,39 @@ void MainWindow::on_pushButtonTrack_clicked()
         printf("%d, %d...\n", tmp->height, tmp->width);
 
         // update the display
-        uchar *cv = (uchar*)(tmp->imageData);
 
-        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+        IplImage *resized = cvCreateImage(cvSize(windowHeight, windowWidth), tmp->depth, tmp->nChannels);
+
+        // fit the image to the window?
+        if (fitImageToWindow == true) {
+            cvResize(tmp, resized, CV_INTER_LINEAR);
+            cvSaveImage("resized.bmp", resized);
+            printf("resized...[%d,%d]\n", windowWidth, windowHeight);
+        }
+
+//        uchar *cv = (uchar*)(tmp->imageData);
+//        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+
+        uchar *cv;
+        QImage *img;
+
+        if (fitImageToWindow == true) {
+            cv = (uchar*)(resized->imageData);
+            img = new QImage(cv, resized->width, resized->height, QImage::Format_RGB888);
+        } else {
+            cv = (uchar*)(tmp->imageData);
+            img = new QImage(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+        }
 
         // TODO :: this needs some work yet because i cannot refresh the screen properly with the new image coming in
         scene->clear();
         scene->setSceneRect(0, 0, tmp->width, tmp->height);
-        scene->addPixmap(QPixmap::fromImage(img));
+        scene->addPixmap(QPixmap::fromImage(*img));
         scene->update();
         QApplication::processEvents();
 
         cvReleaseImage(&tmp);
+        cvReleaseImage(&resized);
 
         // update the status bar
         QString msg2 = name.c_str();
@@ -297,10 +328,32 @@ void MainWindow::createActions()
     // file open
     connect(ui->action_Open_Sequence, SIGNAL(triggered()), this, SLOT(openImageDirectory()) );
 
+    // exit
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exitApplication()));
+
     // scroll bar
-    connect(ui->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(updateImageNumber(int)));
+    connect(ui->imageScrollBar, SIGNAL(valueChanged(int)), this, SLOT(updateImageNumber(int)));
+
+    // fit image to window
+    connect(ui->checkBoxFitToWindow, SIGNAL(clicked()), this, SLOT(toggleFitToWindow()));
+
+    // mouse events
+    connect(ui->graphicsView, SIGNAL(mousePressEvent(QGraphicsSceneMouseEvent *)), this, SLOT(mousePressEvent(QGraphicsSceneMouseEvent *)));
 
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// exitApplication
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::exitApplication()
+{
+    QApplication::exit();
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -311,6 +364,7 @@ void MainWindow::createActions()
 void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     trace("mouse pressed");
+    printf("Mouse pressed...\n");
 
 }
 
@@ -391,5 +445,26 @@ void MainWindow::listFiles(QString directoryName)
         QString temp = files.value(i);
         trace(temp);
     }
+
+    // set the scroll bar to the number of images
+    ui->imageScrollBar->setMaximum(files.size());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleFitToWindow
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleFitToWindow()
+{
+    if (fitImageToWindow == false) {
+        fitImageToWindow = true;
+        trace("fitToWindow is TRUE");
+    } else {
+        fitImageToWindow = false;
+        trace("fitToWindow is FALSE");
+    }
+
 }
 

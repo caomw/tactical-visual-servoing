@@ -109,11 +109,13 @@ unix {
 TARGET = TACTICAL
 TEMPLATE = app
 
-SOURCES += main.cpp\
-        mainwindow.cpp\
+SOURCES += main.cpp \
+        mainwindow.cpp \
+        image_functions\Image_Functions.cpp \
         ImageProcessing.cpp \
-        utilities\utilities.cpp\
-        image_functions\Image_Functions.cpp\
+        utilities\utilities.cpp \
+    ConvertUTF.c
+
         # sift (hess)
  #       tracking_algorithms/Blob/SIFT/imgfeatures.cpp \
  #       tracking_algorithms/Blob/SIFT/kdtree.cpp \
@@ -122,34 +124,38 @@ SOURCES += main.cpp\
  #       tracking_algorithms/Blob/SIFT/utils.cpp \
  #       tracking_algorithms/Blob/SIFT/xform.cpp \
         # horn schunck optical flow
-        tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.cpp \
+ #       tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.cpp \
        # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
-        tracking_algorithms/Optical_Flow/klt++/convolve.cpp \
-        tracking_algorithms/Optical_Flow/klt++/error.cpp \
-        tracking_algorithms/Optical_Flow/klt++/klt.cpp \
-        tracking_algorithms/Optical_Flow/klt++/klt_util.cpp \
-        tracking_algorithms/Optical_Flow/klt++/pnmio.cpp \
-        tracking_algorithms/Optical_Flow/klt++/pyramid.cpp \
-        tracking_algorithms/Optical_Flow/klt++/selectGoodFeatures.cpp \
-        tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
-        tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/convolve.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/error.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/klt.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/klt_util.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/pnmio.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/pyramid.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/selectGoodFeatures.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/trackFeatures.cpp \
+ #       tracking_algorithms/Optical_Flow/klt++/writeFeatures.cpp \
         # farneback's polynomial expansion
         #tracking_algorithms/Optical_Flow/Farneback/Farneback.cpp \
         # opencv's lk implementation
-        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.cpp \
+        #tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.cpp \
         # OpenSURF
-        tracking_algorithms/Blob/OpenSURF/utils_surf.cpp \
-        tracking_algorithms/Blob/OpenSURF/integral.cpp \
-        tracking_algorithms/Blob/OpenSURF/fasthessian.cpp \
-        tracking_algorithms/Blob/OpenSURF/surf.cpp \
-        tracking_algorithms/Blob/OpenSURF/ipoint.cpp
+        #tracking_algorithms/Blob/OpenSURF/utils_surf.cpp \
+        #tracking_algorithms/Blob/OpenSURF/integral.cpp \
+        #tracking_algorithms/Blob/OpenSURF/fasthessian.cpp \
+        #tracking_algorithms/Blob/OpenSURF/surf.cpp \
+        #tracking_algorithms/Blob/OpenSURF/ipoint.cpp
         # correlation - only build in windows
         #tracking_algorithms/Correlation/TuringTracking/TuringTracking.cpp
 
-HEADERS += mainwindow.h\
+HEADERS += mainwindow.h \
+        image_functions\Image_Functions.h \
         ImageProcessing.h \
-        utilities\utilities.h\
-        image_functions\Image_Functions.h\
+        utilities\utilities.h \
+        image_functions/Image_Functions.h \
+    SimpleIni.h \
+    ConvertUTF.h
+
         # sift (hess)
 #        tracking_algorithms/Blob/SIFT/imgfeatures.h \
 #        tracking_algorithms/Blob/SIFT/kdtree.h \
@@ -158,27 +164,27 @@ HEADERS += mainwindow.h\
 #        tracking_algorithms/Blob/SIFT/utils.h \
 #        tracking_algorithms/Blob/SIFT/xform.h \
         # horn schunck optical flow
-        tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h \
+#        tracking_algorithms/Optical_Flow/Horn_Schunck/Horn_Schunck.h \
         # stan birchfield's klt tracker (http://www.ces.clemson.edu/~stb/klt/index.html)
-        tracking_algorithms/Optical_Flow/klt++/klt.h \
-        tracking_algorithms/Optical_Flow/klt++/klt_util.h \
-        tracking_algorithms/Optical_Flow/klt++/base.h \
-        tracking_algorithms/Optical_Flow/klt++/convolve.h \
-        tracking_algorithms/Optical_Flow/klt++/error.h \
-        tracking_algorithms/Optical_Flow/klt++/pnmio.h \
-        tracking_algorithms/Optical_Flow/klt++/pyramid.h \
+#        tracking_algorithms/Optical_Flow/klt++/klt.h \
+#        tracking_algorithms/Optical_Flow/klt++/klt_util.h \
+#        tracking_algorithms/Optical_Flow/klt++/base.h \
+#        tracking_algorithms/Optical_Flow/klt++/convolve.h \
+#        tracking_algorithms/Optical_Flow/klt++/error.h \
+#        tracking_algorithms/Optical_Flow/klt++/pnmio.h \
+#        tracking_algorithms/Optical_Flow/klt++/pyramid.h \
         # farneback's polynomial expansion
         #tracking_algorithms/Optical_Flow/Farneback/Farneback.h \
         # opencv's lk implementation
-        tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h \
+ #       tracking_algorithms/Optical_Flow/LK_OpenCV/LK_OpenCV.h \
         # OpenSURF
-        tracking_algorithms/Blob/OpenSURF/surflib.h \
-        tracking_algorithms/Blob/OpenSURF/utils_surf.h \
-        tracking_algorithms/Blob/OpenSURF/integral.h \
-        tracking_algorithms/Blob/OpenSURF/fasthessian.h \
-        tracking_algorithms/Blob/OpenSURF/surf.h \
-        tracking_algorithms/Blob/OpenSURF/ipoint.h \
-        tracking_algorithms/Blob/OpenSURF/kmeans.h
+ #       tracking_algorithms/Blob/OpenSURF/surflib.h \
+ #       tracking_algorithms/Blob/OpenSURF/utils_surf.h \
+ #       tracking_algorithms/Blob/OpenSURF/integral.h \
+ #       tracking_algorithms/Blob/OpenSURF/fasthessian.h \
+ #       tracking_algorithms/Blob/OpenSURF/surf.h \
+ #       tracking_algorithms/Blob/OpenSURF/ipoint.h \
+ #       tracking_algorithms/Blob/OpenSURF/kmeans.h
         # turing tracking -- only build in windows
         #tracking_algorithms/Correlation/TuringTracking/TuringTracking.h
 

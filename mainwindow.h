@@ -30,6 +30,10 @@
 //#include "libmv/correspondence/feature.h"
 //#include "libmv/correspondence/klt.h"
 
+#ifdef linux
+#include "SimpleIni.h"
+#endif
+
 namespace Ui
 {
     class MainWindow;
@@ -67,10 +71,18 @@ private:
     int datasetWidth;
     int datasetHeight;
 
+    bool fitImageToWindow;
+    bool windowHeight;
+    bool windowWidth;
+
+    string iniFile;
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 protected Q_SLOTS:
+    void exitApplication();
+    void toggleFitToWindow();
     void openImageDirectory();
     void updateImageNumber(int);
 

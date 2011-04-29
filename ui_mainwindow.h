@@ -1,10 +1,10 @@
 /********************************************************************************
-** Form generated from reading ui file 'mainwindow.ui'
+** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Sep 21 06:39:04 2009
-**      by: Qt User Interface Compiler version 4.5.2
+** Created: Fri Apr 29 08:43:32 2011
+**      by: Qt User Interface Compiler version 4.7.0
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_MAINWINDOW_H
@@ -41,6 +41,9 @@ public:
     QAction *action_About;
     QAction *actionEvaluation;
     QAction *actionNavigation;
+    QAction *actionExit;
+    QAction *actionApply_to_Entire_Dataset;
+    QAction *actionExport_Dataset;
     QWidget *centralWidget;
     QTabWidget *tabWidget;
     QWidget *tabPreprocess;
@@ -84,11 +87,12 @@ public:
     QGraphicsView *graphicsView;
     QPlainTextEdit *plainTextEditTrace;
     QPushButton *pushButtonTrack;
-    QCheckBox *checkBox_2;
-    QScrollBar *horizontalScrollBar;
+    QScrollBar *imageScrollBar;
+    QCheckBox *checkBoxFitToWindow;
     QMenuBar *menuBar;
     QMenu *menu_File;
     QMenu *menu_Help;
+    QMenu *menuDataset_Actions;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -106,6 +110,12 @@ public:
         actionNavigation = new QAction(MainWindow);
         actionNavigation->setObjectName(QString::fromUtf8("actionNavigation"));
         actionNavigation->setCheckable(true);
+        actionExit = new QAction(MainWindow);
+        actionExit->setObjectName(QString::fromUtf8("actionExit"));
+        actionApply_to_Entire_Dataset = new QAction(MainWindow);
+        actionApply_to_Entire_Dataset->setObjectName(QString::fromUtf8("actionApply_to_Entire_Dataset"));
+        actionExport_Dataset = new QAction(MainWindow);
+        actionExport_Dataset->setObjectName(QString::fromUtf8("actionExport_Dataset"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
@@ -227,7 +237,7 @@ public:
         tabWidget->addTab(tabNavigation, QString());
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(590, 40, 650, 490));
+        graphicsView->setGeometry(QRect(590, 40, 640, 480));
         graphicsView->setMouseTracking(true);
         plainTextEditTrace = new QPlainTextEdit(centralWidget);
         plainTextEditTrace->setObjectName(QString::fromUtf8("plainTextEditTrace"));
@@ -235,13 +245,13 @@ public:
         pushButtonTrack = new QPushButton(centralWidget);
         pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
         pushButtonTrack->setGeometry(QRect(1150, 570, 80, 23));
-        checkBox_2 = new QCheckBox(centralWidget);
-        checkBox_2->setObjectName(QString::fromUtf8("checkBox_2"));
-        checkBox_2->setGeometry(QRect(950, 570, 161, 20));
-        horizontalScrollBar = new QScrollBar(centralWidget);
-        horizontalScrollBar->setObjectName(QString::fromUtf8("horizontalScrollBar"));
-        horizontalScrollBar->setGeometry(QRect(590, 540, 651, 16));
-        horizontalScrollBar->setOrientation(Qt::Horizontal);
+        imageScrollBar = new QScrollBar(centralWidget);
+        imageScrollBar->setObjectName(QString::fromUtf8("imageScrollBar"));
+        imageScrollBar->setGeometry(QRect(590, 540, 651, 16));
+        imageScrollBar->setOrientation(Qt::Horizontal);
+        checkBoxFitToWindow = new QCheckBox(centralWidget);
+        checkBoxFitToWindow->setObjectName(QString::fromUtf8("checkBoxFitToWindow"));
+        checkBoxFitToWindow->setGeometry(QRect(590, 570, 161, 20));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -250,6 +260,8 @@ public:
         menu_File->setObjectName(QString::fromUtf8("menu_File"));
         menu_Help = new QMenu(menuBar);
         menu_Help->setObjectName(QString::fromUtf8("menu_Help"));
+        menuDataset_Actions = new QMenu(menuBar);
+        menuDataset_Actions->setObjectName(QString::fromUtf8("menuDataset_Actions"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -259,13 +271,17 @@ public:
         MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menu_File->menuAction());
+        menuBar->addAction(menuDataset_Actions->menuAction());
         menuBar->addAction(menu_Help->menuAction());
         menu_File->addAction(action_Open_Sequence);
+        menu_File->addAction(actionExit);
         menu_Help->addAction(action_About);
+        menuDataset_Actions->addAction(actionApply_to_Entire_Dataset);
+        menuDataset_Actions->addAction(actionExport_Dataset);
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -278,6 +294,9 @@ public:
         action_About->setText(QApplication::translate("MainWindow", "&About", 0, QApplication::UnicodeUTF8));
         actionEvaluation->setText(QApplication::translate("MainWindow", "Evaluation", 0, QApplication::UnicodeUTF8));
         actionNavigation->setText(QApplication::translate("MainWindow", "Navigation", 0, QApplication::UnicodeUTF8));
+        actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
+        actionApply_to_Entire_Dataset->setText(QApplication::translate("MainWindow", "Apply to Entire Dataset", 0, QApplication::UnicodeUTF8));
+        actionExport_Dataset->setText(QApplication::translate("MainWindow", "Export Dataset", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabPreprocess), QApplication::translate("MainWindow", "Preprocess", 0, QApplication::UnicodeUTF8));
         labelConstOffset->setText(QApplication::translate("MainWindow", "Constellation Offset", 0, QApplication::UnicodeUTF8));
         labelSearchRadius->setText(QApplication::translate("MainWindow", "Search Radius", 0, QApplication::UnicodeUTF8));
@@ -307,9 +326,10 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabBlob), QApplication::translate("MainWindow", "Blob", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabNavigation), QApplication::translate("MainWindow", "Navigation", 0, QApplication::UnicodeUTF8));
         pushButtonTrack->setText(QApplication::translate("MainWindow", "Track", 0, QApplication::UnicodeUTF8));
-        checkBox_2->setText(QApplication::translate("MainWindow", "Backtrack the points", 0, QApplication::UnicodeUTF8));
+        checkBoxFitToWindow->setText(QApplication::translate("MainWindow", "Fit to window", 0, QApplication::UnicodeUTF8));
         menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
         menu_Help->setTitle(QApplication::translate("MainWindow", "&Help", 0, QApplication::UnicodeUTF8));
+        menuDataset_Actions->setTitle(QApplication::translate("MainWindow", "Dataset Actions", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

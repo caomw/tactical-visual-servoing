@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tabPreprocess">
      <attribute name="title">
@@ -453,8 +453,8 @@
      <rect>
       <x>590</x>
       <y>40</y>
-      <width>650</width>
-      <height>490</height>
+      <width>640</width>
+      <height>480</height>
      </rect>
     </property>
     <property name="mouseTracking">
@@ -484,20 +484,7 @@
      <string>Track</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_2">
-    <property name="geometry">
-     <rect>
-      <x>950</x>
-      <y>570</y>
-      <width>161</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Backtrack the points</string>
-    </property>
-   </widget>
-   <widget class="QScrollBar" name="horizontalScrollBar">
+   <widget class="QScrollBar" name="imageScrollBar">
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -508,6 +495,19 @@
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxFitToWindow">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>570</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Fit to window</string>
     </property>
    </widget>
   </widget>
@@ -525,6 +525,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Open_Sequence"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -532,7 +533,15 @@
     </property>
     <addaction name="action_About"/>
    </widget>
+   <widget class="QMenu" name="menuDataset_Actions">
+    <property name="title">
+     <string>Dataset Actions</string>
+    </property>
+    <addaction name="actionApply_to_Entire_Dataset"/>
+    <addaction name="actionExport_Dataset"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuDataset_Actions"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -565,6 +574,21 @@
    </property>
    <property name="text">
     <string>Navigation</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionApply_to_Entire_Dataset">
+   <property name="text">
+    <string>Apply to Entire Dataset</string>
+   </property>
+  </action>
+  <action name="actionExport_Dataset">
+   <property name="text">
+    <string>Export Dataset</string>
    </property>
   </action>
  </widget>

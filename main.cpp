@@ -264,7 +264,7 @@ int main (int argc, char *argv[])
         cout << "9. End program\n";
         cout << "\n===> ";
         cin >> choice;
-
+/**
         if (choice == 1) {
             runOpticalFlowHornSchunck();
         } else if (choice == 2) {
@@ -284,7 +284,7 @@ int main (int argc, char *argv[])
         } else if (choice == 9) {
             running = false;
         }
-
+**/
     }
 
     // exit nicely
@@ -570,6 +570,7 @@ void WriteOutputImage(const FloatImage &image, CorrespondencesView<KLTPointFeatu
 
 void runOpticalFlowHornSchunck ()
 {
+    /**
     initHornSchunck();
 
     for (int i=0; i<sortedFiles.size()-1; i++) {
@@ -594,6 +595,7 @@ void runOpticalFlowHornSchunck ()
     }
 
     endHornSchunck();
+    **/
 }
 
 
@@ -645,6 +647,7 @@ void runOpticalFlowFarneback ()
 
 void runOpticalFlowLKOpenCV ()
 {
+    /**
     initLKOpenCV();
 
     for (int i=0; i<sortedFiles.size()-1; i++) {
@@ -661,6 +664,7 @@ void runOpticalFlowLKOpenCV ()
     }
 
     endLKOpenCV();
+    **/
 
 } // runOpticalFlowLKOpenCV
 
@@ -1166,6 +1170,7 @@ void runBlobSIFT ()
 
 void runBlobSURF ()
 {
+/**
     // declare Ipoints and other stuff
     IpVec ipts, old_ipts, motion;
     IpPairVec matches;
@@ -1246,6 +1251,7 @@ void runBlobSURF ()
     cvDestroyWindow("OpenSURF");
     cvDestroyWindow("1");
     cvDestroyWindow("2");
+**/
 
 } // end runBlobSURF
 
