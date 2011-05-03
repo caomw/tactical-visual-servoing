@@ -76,6 +76,7 @@ private:
     bool windowWidth;
 
     string iniFile;
+    string dPath;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

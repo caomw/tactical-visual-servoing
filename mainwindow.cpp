@@ -286,6 +286,76 @@ void MainWindow::timerEvent(QTimerEvent *)
 
 void MainWindow::updateImageNumber(int value)
 {
+
+    QString t = files.value(value);
+     char t2[64];
+     sprintf(t2, "%s\0", qPrintable(t));
+     QString msg2 = t2;
+     trace(msg2);
+
+     char fileName[256];
+
+     printf("%s\n", dPath.c_str());
+
+     sprintf(fileName, "%s/%s\0", dPath.c_str(), t2);
+     printf("%s\n", fileName);
+     QString t3 = fileName;
+     trace(fileName);
+
+     IplImage *tmp = cvLoadImage(fileName);
+
+     if (tmp != NULL) {
+
+         // swap red and blue
+         cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
+
+         // update the display
+         uchar *cv = (uchar*)(tmp->imageData);
+         QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+
+         scene->clear();
+         scene->setSceneRect(0, 0, tmp->width, tmp->height);
+         scene->addPixmap(QPixmap::fromImage(img));
+         scene->update();
+         QApplication::processEvents();
+
+         cvReleaseImage(&tmp);
+
+     }
+
+
+        // update the status bar
+        //QString msg3 = fileName;
+        //ui->statusBar->showMessage(msg3);
+
+
+        /**
+        // load an IplImage
+        CvSize size;
+        size.height = datasetHeight;
+        size.width  = datasetWidth;
+
+        IplImage *temp = imageFunctions->aviGrabFrame(value-1);
+        uchar *cv = (uchar*)(temp->imageData);
+
+        string msg = "AVI :: frame = " + utilities->itos(value-1);
+        trace(msg.c_str());
+
+        QImage img(cv, temp->width, temp->height, QImage::Format_RGB888);
+
+        scene->clear();
+        scene->addPixmap(QPixmap::fromImage(img));
+        scene->update();
+
+        // update the status bar
+        string tmp = datasetName.toStdString() + "  " + utilities->itos(value) + "/" + utilities->itos(imageFunctions->captureAVIFrames);
+        QString msg2 = tmp.c_str();
+        ui->statusBar->showMessage(msg2);
+
+        // free memory
+        cvReleaseImage(&temp);
+        **/
+
     /**
     // load an IplImage
     CvSize size;
@@ -376,11 +446,42 @@ void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void MainWindow::openImageDirectory()
 {
-    //QString fileName = QFileDialog::getOpenName(this, tr("Select the first image or a movie file"));
-    QString fileName = QFileDialog::getExistingDirectory(this, tr("Select the directory containing bitmap images"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select the first image or a movie file"));
+
+    // This shows fine in Linux, but not under Windows.....reverting back to getOpenFileName
+    //QString fileName = QFileDialog::getExistingDirectory(this, tr("Select the directory containing bitmap images"));
+
+    string t = fileName.toStdString();
+    string toFind = "/";
+    int  found = 0;
+    found = t.find_last_of(toFind);
+
+    string path;
+    if (found > 0) {
+        path = t.substr(0, found);
+    }
+
+    QString path2 = QString::fromStdString(path);
+    trace(path2);
+
+    dPath = path2.toStdString();
+
+    char msg[128];
+    sprintf(msg, "Found at %d\0", found);
+    trace(msg);
+
     trace(fileName);
 
-    listFiles(fileName);
+    //listFiles(fileName);
+    listFiles(path2);
+
+
+
+//    //QString fileName = QFileDialog::getOpenName(this, tr("Select the first image or a movie file"));
+//    QString fileName = QFileDialog::getExistingDirectory(this, tr("Select the directory containing bitmap images"));
+//    trace(fileName);
+
+//    listFiles(fileName);
     
 /**    
 
