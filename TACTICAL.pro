@@ -114,7 +114,8 @@ SOURCES += main.cpp \
         image_functions\Image_Functions.cpp \
         ImageProcessing.cpp \
         utilities\utilities.cpp \
-    ConvertUTF.c
+        ConvertUTF.c \
+        tracking_algorithms/Optical_Flow/KLT/KLT.cpp
 
         # sift (hess)
  #       tracking_algorithms/Blob/SIFT/imgfeatures.cpp \
@@ -153,8 +154,9 @@ HEADERS += mainwindow.h \
         ImageProcessing.h \
         utilities\utilities.h \
         image_functions/Image_Functions.h \
-    SimpleIni.h \
-    ConvertUTF.h
+        SimpleIni.h \
+        ConvertUTF.h \
+        tracking_algorithms/Optical_Flow/KLT/KLT.h
 
         # sift (hess)
 #        tracking_algorithms/Blob/SIFT/imgfeatures.h \

@@ -34,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // instantiations
     utilities = new Utilities();
+
+    klt = new KLT();
+
+
     imageFunctions = new ImageFunctions();
   //  turingTracking = new TuringTracking();
 
@@ -45,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //windowWidth = ui->graphicsView->width();
     //windowHeight = ui->graphicsView->height();
-
 
     ui->statusBar->showMessage("NO DATASET LOADED");
 
@@ -69,6 +72,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete utilities;
     delete imageFunctions;
+    delete klt;
     //delete turingTracking;
 }
 
@@ -312,6 +316,14 @@ void MainWindow::updateImageNumber(int value)
     trace(fileName);
 
     IplImage *tmp = cvLoadImage(fileName);
+
+    klt->lkOpticalFlow(tmp);
+    printf("There are %d features....\n", klt->lkCount);
+    // draw the points
+    //for (int i=0; i<klt->lkCount; i++) {
+    //    cvCircle(tmp, cvPointFrom32f(klt->lkPoints[1][i]), 3, CV_RGB(0,0,255), -1, 8, 0);
+    //}
+
 
     if (tmp != NULL && fitImageToWindow == 0) {
 

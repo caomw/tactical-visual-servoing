@@ -17,6 +17,8 @@
 #include "utilities/utilities.h"
 //#include "tracking_algorithms/correlation/TuringTracking.h"
 
+#include "tracking_algorithms/Optical_Flow/KLT/KLT.h"
+
 // move these too, this is just a test for libmv
 #include <algorithm>
 #include <vector>
@@ -55,6 +57,8 @@ public:
     Utilities *utilities;
     ImageFunctions *imageFunctions;
     //TuringTracking *turingTracking;
+
+    KLT *klt;
 
 private:
     Ui::MainWindow *ui;

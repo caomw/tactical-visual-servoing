@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue May 3 09:00:03 2011
+** Created: Tue May 3 14:35:56 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -82,6 +82,9 @@ public:
     QSpinBox *spinBoxStarOutOfBounds;
     QSpinBox *spinBoxCenterOutOfBounds;
     QWidget *tabOpticalFlow;
+    QComboBox *comboBoxOFAlgorithm;
+    QLabel *label;
+    QCheckBox *checkBoxOFShowFeatures;
     QWidget *tabBlob;
     QWidget *tabNavigation;
     QGraphicsView *graphicsView;
@@ -100,7 +103,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1246, 653);
+        MainWindow->resize(1680, 1050);
         action_Open_Sequence = new QAction(MainWindow);
         action_Open_Sequence->setObjectName(QString::fromUtf8("action_Open_Sequence"));
         action_About = new QAction(MainWindow);
@@ -228,6 +231,15 @@ public:
         tabWidget->addTab(tabCorrelation, QString());
         tabOpticalFlow = new QWidget();
         tabOpticalFlow->setObjectName(QString::fromUtf8("tabOpticalFlow"));
+        comboBoxOFAlgorithm = new QComboBox(tabOpticalFlow);
+        comboBoxOFAlgorithm->setObjectName(QString::fromUtf8("comboBoxOFAlgorithm"));
+        comboBoxOFAlgorithm->setGeometry(QRect(110, 18, 85, 27));
+        label = new QLabel(tabOpticalFlow);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setGeometry(QRect(20, 20, 81, 21));
+        checkBoxOFShowFeatures = new QCheckBox(tabOpticalFlow);
+        checkBoxOFShowFeatures->setObjectName(QString::fromUtf8("checkBoxOFShowFeatures"));
+        checkBoxOFShowFeatures->setGeometry(QRect(20, 240, 141, 22));
         tabWidget->addTab(tabOpticalFlow, QString());
         tabBlob = new QWidget();
         tabBlob->setObjectName(QString::fromUtf8("tabBlob"));
@@ -255,7 +267,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1246, 25));
+        menuBar->setGeometry(QRect(0, 0, 1680, 25));
         menu_File = new QMenu(menuBar);
         menu_File->setObjectName(QString::fromUtf8("menu_File"));
         menu_Help = new QMenu(menuBar);
@@ -281,7 +293,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -322,6 +334,14 @@ public:
         labelStarOutOfBounds->setText(QApplication::translate("MainWindow", "Star Out of Bounds", 0, QApplication::UnicodeUTF8));
         labelCenterOutOfBounds->setText(QApplication::translate("MainWindow", "Center Out of Bounds", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabCorrelation), QApplication::translate("MainWindow", "Correlation", 0, QApplication::UnicodeUTF8));
+        comboBoxOFAlgorithm->clear();
+        comboBoxOFAlgorithm->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "KLT", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Horn-Schunck", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Farneback", 0, QApplication::UnicodeUTF8)
+        );
+        label->setText(QApplication::translate("MainWindow", "Algorithm", 0, QApplication::UnicodeUTF8));
+        checkBoxOFShowFeatures->setText(QApplication::translate("MainWindow", "Show Features?", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabBlob), QApplication::translate("MainWindow", "Blob", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabNavigation), QApplication::translate("MainWindow", "Navigation", 0, QApplication::UnicodeUTF8));
