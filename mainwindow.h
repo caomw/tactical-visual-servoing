@@ -71,7 +71,8 @@ private:
     int datasetWidth;
     int datasetHeight;
 
-    bool fitImageToWindow;
+    int fitImageToWindow;
+
     bool windowHeight;
     bool windowWidth;
 

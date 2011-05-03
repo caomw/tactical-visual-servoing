@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri Apr 29 08:43:32 2011
+** Created: Tue May 3 09:00:03 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -237,7 +237,7 @@ public:
         tabWidget->addTab(tabNavigation, QString());
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(590, 40, 640, 480));
+        graphicsView->setGeometry(QRect(590, 40, 650, 490));
         graphicsView->setMouseTracking(true);
         plainTextEditTrace = new QPlainTextEdit(centralWidget);
         plainTextEditTrace->setObjectName(QString::fromUtf8("plainTextEditTrace"));

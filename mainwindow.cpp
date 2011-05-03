@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#define COLS 640
+#define ROWS 480
+
 //using namespace libmv;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,6 +23,9 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    windowWidth = 640;
+    windowHeight = 480;
+
     ui->setupUi(this);
 
     createActions();
@@ -35,16 +41,18 @@ MainWindow::MainWindow(QWidget *parent)
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
 
-    fitImageToWindow = false;
-    windowWidth = 640;
-    windowHeight = 480;
+    fitImageToWindow = 0;
+
+    //windowWidth = ui->graphicsView->width();
+    //windowHeight = ui->graphicsView->height();
+
 
     ui->statusBar->showMessage("NO DATASET LOADED");
 
-    iniFile = "TACTICAL.ini";
+    //iniFile = "TACTICAL.ini";
 
-    CSimpleIniA ini(true, true, true);
-    SI_Error rc = ini.LoadFile(iniFile.c_str());
+    //CSimpleIniA ini(true, true, true);
+    //SI_Error rc = ini.LoadFile(iniFile.c_str());
 
 }
 
@@ -103,14 +111,15 @@ void MainWindow::on_pushButtonTrack_clicked()
         printf("%d, %d...\n", tmp->height, tmp->width);
 
         // update the display
-
         IplImage *resized = cvCreateImage(cvSize(windowHeight, windowWidth), tmp->depth, tmp->nChannels);
 
         // fit the image to the window?
-        if (fitImageToWindow == true) {
+        if (fitImageToWindow == 1) {
+            trace("fitting to window....");
             cvResize(tmp, resized, CV_INTER_LINEAR);
             cvSaveImage("resized.bmp", resized);
             printf("resized...[%d,%d]\n", windowWidth, windowHeight);
+            printf("resized...[%d,%d]\n", ui->graphicsView->width(), ui->graphicsView->height());
         }
 
 //        uchar *cv = (uchar*)(tmp->imageData);
@@ -119,7 +128,7 @@ void MainWindow::on_pushButtonTrack_clicked()
         uchar *cv;
         QImage *img;
 
-        if (fitImageToWindow == true) {
+        if (fitImageToWindow == 1) {
             cv = (uchar*)(resized->imageData);
             img = new QImage(cv, resized->width, resized->height, QImage::Format_RGB888);
         } else {
@@ -288,100 +297,73 @@ void MainWindow::updateImageNumber(int value)
 {
 
     QString t = files.value(value);
-     char t2[64];
-     sprintf(t2, "%s\0", qPrintable(t));
-     QString msg2 = t2;
-     trace(msg2);
+    char t2[64];
+    sprintf(t2, "%s\0", qPrintable(t));
+    QString msg2 = t2;
+    trace(msg2);
 
-     char fileName[256];
+    char fileName[256];
 
-     printf("%s\n", dPath.c_str());
+    printf("%s\n", dPath.c_str());
 
-     sprintf(fileName, "%s/%s\0", dPath.c_str(), t2);
-     printf("%s\n", fileName);
-     QString t3 = fileName;
-     trace(fileName);
+    sprintf(fileName, "%s/%s\0", dPath.c_str(), t2);
+    printf("%s\n", fileName);
+    QString t3 = fileName;
+    trace(fileName);
 
-     IplImage *tmp = cvLoadImage(fileName);
+    IplImage *tmp = cvLoadImage(fileName);
 
-     if (tmp != NULL) {
+    if (tmp != NULL && fitImageToWindow == 0) {
 
-         // swap red and blue
-         cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
+        // swap red and blue
+        cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
 
-         // update the display
-         uchar *cv = (uchar*)(tmp->imageData);
-         QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
-
-         scene->clear();
-         scene->setSceneRect(0, 0, tmp->width, tmp->height);
-         scene->addPixmap(QPixmap::fromImage(img));
-         scene->update();
-         QApplication::processEvents();
-
-         cvReleaseImage(&tmp);
-
-     }
-
-
-        // update the status bar
-        //QString msg3 = fileName;
-        //ui->statusBar->showMessage(msg3);
-
-
-        /**
-        // load an IplImage
-        CvSize size;
-        size.height = datasetHeight;
-        size.width  = datasetWidth;
-
-        IplImage *temp = imageFunctions->aviGrabFrame(value-1);
-        uchar *cv = (uchar*)(temp->imageData);
-
-        string msg = "AVI :: frame = " + utilities->itos(value-1);
-        trace(msg.c_str());
-
-        QImage img(cv, temp->width, temp->height, QImage::Format_RGB888);
+        // update the display
+        uchar *cv = (uchar*)(tmp->imageData);
+        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
 
         scene->clear();
+        scene->setSceneRect(0, 0, tmp->width, tmp->height);
         scene->addPixmap(QPixmap::fromImage(img));
         scene->update();
+        QApplication::processEvents();
 
-        // update the status bar
-        string tmp = datasetName.toStdString() + "  " + utilities->itos(value) + "/" + utilities->itos(imageFunctions->captureAVIFrames);
-        QString msg2 = tmp.c_str();
-        ui->statusBar->showMessage(msg2);
+        cvReleaseImage(&tmp);
 
-        // free memory
-        cvReleaseImage(&temp);
-        **/
+    } else if (tmp != NULL && fitImageToWindow == 1) {
 
-    /**
-    // load an IplImage
-    CvSize size;
-    size.height = datasetHeight;
-    size.width  = datasetWidth;
+        // swap red and blue
+        cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
 
-    IplImage *temp = imageFunctions->aviGrabFrame(value-1);
-    uchar *cv = (uchar*)(temp->imageData);
+        //IplImage *resized = cvCreateImage(cvSize(windowHWidth, windowHeight), tmp->depth, tmp->nChannels);
+        IplImage *resized = cvCreateImage(cvSize(640, 480), tmp->depth, tmp->nChannels);
 
-    string msg = "AVI :: frame = " + utilities->itos(value-1);
-    trace(msg.c_str());
+        trace("fitting to window....");
+        cvResize(tmp, resized, CV_INTER_LINEAR);
+        //cvSaveImage("resized.bmp", resized);
+        printf("resized...[%d,%d]\n", windowWidth, windowHeight);
+        printf("resized...[%d,%d]\n", ui->graphicsView->width(), ui->graphicsView->height());
+        printf("resized...[%d,%d]\n", COLS, ROWS);
 
-    QImage img(cv, temp->width, temp->height, QImage::Format_RGB888);
+        // update the display
+        uchar *cv = (uchar*)(resized->imageData);
+        QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
 
-    scene->clear();
-    scene->addPixmap(QPixmap::fromImage(img));
-    scene->update();
+        scene->clear();
+        scene->setSceneRect(0, 0, resized->width, resized->height);
+        scene->addPixmap(QPixmap::fromImage(img));
+        scene->update();
+        QApplication::processEvents();
 
-    // update the status bar
-    string tmp = datasetName.toStdString() + "  " + utilities->itos(value) + "/" + utilities->itos(imageFunctions->captureAVIFrames);
-    QString msg2 = tmp.c_str();
-    ui->statusBar->showMessage(msg2);
+        cvReleaseImage(&tmp);
+        cvReleaseImage(&resized);
 
-    // free memory
-    cvReleaseImage(&temp);
-    **/
+    }
+
+     // update the status bar
+     QString msg3 = fileName;
+     ui->statusBar->showMessage(msg3);
+
 }
 
 
@@ -559,11 +541,11 @@ void MainWindow::listFiles(QString directoryName)
 
 void MainWindow::toggleFitToWindow()
 {
-    if (fitImageToWindow == false) {
-        fitImageToWindow = true;
+    if (fitImageToWindow == 0) {
+        fitImageToWindow = 1;
         trace("fitToWindow is TRUE");
     } else {
-        fitImageToWindow = false;
+        fitImageToWindow = 0;
         trace("fitToWindow is FALSE");
     }
 
