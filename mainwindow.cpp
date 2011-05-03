@@ -317,13 +317,15 @@ void MainWindow::updateImageNumber(int value)
 
     IplImage *tmp = cvLoadImage(fileName);
 
-    klt->lkOpticalFlow(tmp);
+    printf("Before call...\n");
+    //klt->lkOpticalFlow(tmp);
+    printf("After call...\n");
     printf("There are %d features....\n", klt->lkCount);
+
     // draw the points
     //for (int i=0; i<klt->lkCount; i++) {
     //    cvCircle(tmp, cvPointFrom32f(klt->lkPoints[1][i]), 3, CV_RGB(0,0,255), -1, 8, 0);
     //}
-
 
     if (tmp != NULL && fitImageToWindow == 0) {
 
@@ -468,7 +470,6 @@ void MainWindow::openImageDirectory()
 
     //listFiles(fileName);
     listFiles(path2);
-
 
 
 //    //QString fileName = QFileDialog::getOpenName(this, tr("Select the first image or a movie file"));
