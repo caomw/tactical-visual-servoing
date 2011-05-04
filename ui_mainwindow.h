@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 4 09:03:26 2011
+** Created: Wed May 4 13:40:22 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -88,14 +88,30 @@ public:
     QWidget *tabBlob;
     QWidget *tabNavigation;
     QWidget *tab;
-    QWidget *tab_2;
-    QWidget *tab_3;
-    QGraphicsView *graphicsView;
     QPlainTextEdit *plainTextEditTrace;
+    QGraphicsView *graphicsView;
     QPushButton *pushButtonTrack;
     QScrollBar *imageScrollBar;
     QCheckBox *checkBoxFitToWindow;
     QGraphicsView *graphicsView_2;
+    QTabWidget *tabWidget_2;
+    QWidget *tab_4;
+    QLabel *label_4;
+    QComboBox *comboBox;
+    QLabel *label_5;
+    QComboBox *comboBox_2;
+    QWidget *tab_5;
+    QLabel *label_6;
+    QComboBox *comboBox_3;
+    QWidget *tab_6;
+    QComboBox *comboBoxReduceGraylevels;
+    QLabel *label_3;
+    QWidget *tab_7;
+    QCheckBox *checkBoxHistogramEqualization;
+    QWidget *tab_8;
+    QComboBox *comboBoxSecondWindow;
+    QLabel *label_2;
+    QCheckBox *checkBoxSwapRedBlue;
     QMenuBar *menuBar;
     QMenu *menu_File;
     QMenu *menu_Help;
@@ -107,7 +123,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1680, 1050);
+        MainWindow->resize(1311, 1050);
         action_Open_Sequence = new QAction(MainWindow);
         action_Open_Sequence->setObjectName(QString::fromUtf8("action_Open_Sequence"));
         action_About = new QAction(MainWindow);
@@ -127,7 +143,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 600, 561, 311));
+        tabWidget->setGeometry(QRect(660, 570, 560, 310));
         tabPreprocess = new QWidget();
         tabPreprocess->setObjectName(QString::fromUtf8("tabPreprocess"));
         tabWidget->addTab(tabPreprocess, QString());
@@ -253,23 +269,17 @@ public:
         tabWidget->addTab(tabNavigation, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
+        plainTextEditTrace = new QPlainTextEdit(tab);
+        plainTextEditTrace->setObjectName(QString::fromUtf8("plainTextEditTrace"));
+        plainTextEditTrace->setGeometry(QRect(7, 10, 541, 251));
         tabWidget->addTab(tab, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        tabWidget->addTab(tab_2, QString());
-        tab_3 = new QWidget();
-        tab_3->setObjectName(QString::fromUtf8("tab_3"));
-        tabWidget->addTab(tab_3, QString());
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
         graphicsView->setGeometry(QRect(10, 0, 642, 482));
         graphicsView->setMouseTracking(true);
-        plainTextEditTrace = new QPlainTextEdit(centralWidget);
-        plainTextEditTrace->setObjectName(QString::fromUtf8("plainTextEditTrace"));
-        plainTextEditTrace->setGeometry(QRect(650, 600, 561, 181));
         pushButtonTrack = new QPushButton(centralWidget);
         pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
-        pushButtonTrack->setGeometry(QRect(1150, 570, 80, 23));
+        pushButtonTrack->setGeometry(QRect(810, 510, 80, 23));
         imageScrollBar = new QScrollBar(centralWidget);
         imageScrollBar->setObjectName(QString::fromUtf8("imageScrollBar"));
         imageScrollBar->setGeometry(QRect(10, 490, 651, 16));
@@ -281,10 +291,64 @@ public:
         graphicsView_2->setObjectName(QString::fromUtf8("graphicsView_2"));
         graphicsView_2->setGeometry(QRect(660, 0, 642, 482));
         graphicsView_2->setMouseTracking(true);
+        tabWidget_2 = new QTabWidget(centralWidget);
+        tabWidget_2->setObjectName(QString::fromUtf8("tabWidget_2"));
+        tabWidget_2->setGeometry(QRect(10, 570, 560, 310));
+        tab_4 = new QWidget();
+        tab_4->setObjectName(QString::fromUtf8("tab_4"));
+        label_4 = new QLabel(tab_4);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(20, 34, 67, 17));
+        comboBox = new QComboBox(tab_4);
+        comboBox->setObjectName(QString::fromUtf8("comboBox"));
+        comboBox->setGeometry(QRect(100, 30, 131, 27));
+        label_5 = new QLabel(tab_4);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setGeometry(QRect(10, 90, 67, 17));
+        comboBox_2 = new QComboBox(tab_4);
+        comboBox_2->setObjectName(QString::fromUtf8("comboBox_2"));
+        comboBox_2->setGeometry(QRect(120, 90, 85, 27));
+        tabWidget_2->addTab(tab_4, QString());
+        tab_5 = new QWidget();
+        tab_5->setObjectName(QString::fromUtf8("tab_5"));
+        label_6 = new QLabel(tab_5);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_6->setGeometry(QRect(40, 50, 67, 17));
+        comboBox_3 = new QComboBox(tab_5);
+        comboBox_3->setObjectName(QString::fromUtf8("comboBox_3"));
+        comboBox_3->setGeometry(QRect(140, 40, 85, 27));
+        tabWidget_2->addTab(tab_5, QString());
+        tab_6 = new QWidget();
+        tab_6->setObjectName(QString::fromUtf8("tab_6"));
+        comboBoxReduceGraylevels = new QComboBox(tab_6);
+        comboBoxReduceGraylevels->setObjectName(QString::fromUtf8("comboBoxReduceGraylevels"));
+        comboBoxReduceGraylevels->setGeometry(QRect(200, 36, 85, 27));
+        label_3 = new QLabel(tab_6);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(20, 40, 161, 17));
+        tabWidget_2->addTab(tab_6, QString());
+        tab_7 = new QWidget();
+        tab_7->setObjectName(QString::fromUtf8("tab_7"));
+        checkBoxHistogramEqualization = new QCheckBox(tab_7);
+        checkBoxHistogramEqualization->setObjectName(QString::fromUtf8("checkBoxHistogramEqualization"));
+        checkBoxHistogramEqualization->setGeometry(QRect(20, 30, 241, 22));
+        tabWidget_2->addTab(tab_7, QString());
+        tab_8 = new QWidget();
+        tab_8->setObjectName(QString::fromUtf8("tab_8"));
+        tabWidget_2->addTab(tab_8, QString());
+        comboBoxSecondWindow = new QComboBox(centralWidget);
+        comboBoxSecondWindow->setObjectName(QString::fromUtf8("comboBoxSecondWindow"));
+        comboBoxSecondWindow->setGeometry(QRect(780, 526, 191, 27));
+        label_2 = new QLabel(centralWidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setGeometry(QRect(660, 531, 121, 17));
+        checkBoxSwapRedBlue = new QCheckBox(centralWidget);
+        checkBoxSwapRedBlue->setObjectName(QString::fromUtf8("checkBoxSwapRedBlue"));
+        checkBoxSwapRedBlue->setGeometry(QRect(170, 530, 161, 20));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1680, 25));
+        menuBar->setGeometry(QRect(0, 0, 1311, 25));
         menu_File = new QMenu(menuBar);
         menu_File->setObjectName(QString::fromUtf8("menu_File"));
         menu_Help = new QMenu(menuBar);
@@ -310,7 +374,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(7);
+        tabWidget->setCurrentIndex(5);
+        tabWidget_2->setCurrentIndex(4);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -362,11 +427,63 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabBlob), QApplication::translate("MainWindow", "Blob", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabNavigation), QApplication::translate("MainWindow", "Navigation", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Debug Messages", 0, QApplication::UnicodeUTF8));
         pushButtonTrack->setText(QApplication::translate("MainWindow", "Track", 0, QApplication::UnicodeUTF8));
         checkBoxFitToWindow->setText(QApplication::translate("MainWindow", "Fit to window", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("MainWindow", "Filter", 0, QApplication::UnicodeUTF8));
+        comboBox->clear();
+        comboBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Mean Filter :: Arithmetic", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Mean Filter :: Geometric", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Mean Filter :: Contraharmonic", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Mean Filter :: Harmonic", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Order Statistics :: Median", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Order Statistics :: Max", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Order Statistics :: Min", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Order Statistics :: Midpoint", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Order Statistics :: Alpha Trimmed", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Adaptive Local Noise Reduction Filter", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Adaptive Median Filter", 0, QApplication::UnicodeUTF8)
+        );
+        label_5->setText(QApplication::translate("MainWindow", "Mask Size", 0, QApplication::UnicodeUTF8));
+        comboBox_2->clear();
+        comboBox_2->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "1x1", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "3x3", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "5x5", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "7x7", 0, QApplication::UnicodeUTF8)
+        );
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "Smoothing", 0, QApplication::UnicodeUTF8));
+        label_6->setText(QApplication::translate("MainWindow", "Algorithm", 0, QApplication::UnicodeUTF8));
+        comboBox_3->clear();
+        comboBox_3->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Highboost Laplacian", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Gradient", 0, QApplication::UnicodeUTF8)
+        );
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_5), QApplication::translate("MainWindow", "Sharpening", 0, QApplication::UnicodeUTF8));
+        comboBoxReduceGraylevels->clear();
+        comboBoxReduceGraylevels->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "128", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "64", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "32", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "16", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "8", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "4", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "2", 0, QApplication::UnicodeUTF8)
+        );
+        label_3->setText(QApplication::translate("MainWindow", "Number of Gray levels", 0, QApplication::UnicodeUTF8));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_6), QApplication::translate("MainWindow", "Reduce Graylevels", 0, QApplication::UnicodeUTF8));
+        checkBoxHistogramEqualization->setText(QApplication::translate("MainWindow", "Apply histogram equalization?", 0, QApplication::UnicodeUTF8));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_7), QApplication::translate("MainWindow", "Histogram Equalization", 0, QApplication::UnicodeUTF8));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_8), QApplication::translate("MainWindow", "Noise", 0, QApplication::UnicodeUTF8));
+        comboBoxSecondWindow->clear();
+        comboBoxSecondWindow->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Blank", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Show Processed Image", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Show Previous Frame", 0, QApplication::UnicodeUTF8)
+        );
+        label_2->setText(QApplication::translate("MainWindow", "Second Window", 0, QApplication::UnicodeUTF8));
+        checkBoxSwapRedBlue->setText(QApplication::translate("MainWindow", "Swap red and blue?", 0, QApplication::UnicodeUTF8));
         menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
         menu_Help->setTitle(QApplication::translate("MainWindow", "&Help", 0, QApplication::UnicodeUTF8));
         menuDataset_Actions->setTitle(QApplication::translate("MainWindow", "Dataset Actions", 0, QApplication::UnicodeUTF8));

@@ -428,11 +428,11 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
 
 /////////////////////////////////////////////////////////////////////
 //
-// histogramEqualization
+// runHistogramEqualization
 //
 /////////////////////////////////////////////////////////////////////
 
-TNT::Array2D <double> histogramEqualization(TNT::Array2D <double> array)
+TNT::Array2D <double> runHistogramEqualization(TNT::Array2D <double> array)
 {
     int height = array.dim1(), width = array.dim2();
     int	max = 255, range = 255;
@@ -480,7 +480,7 @@ TNT::Array2D <double> histogramEqualization(TNT::Array2D <double> array)
 
     return a;
 
-} // end histogramEqualization
+} // end runHistogramEqualization
 
 
 /////////////////////////////////////////////////////////////////////

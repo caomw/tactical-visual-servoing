@@ -19,19 +19,6 @@
 
 #include "tracking_algorithms/Optical_Flow/KLT/KLT.h"
 
-// move these too, this is just a test for libmv
-#include <algorithm>
-#include <vector>
-//#include "libmv/image/image.h"
-//#include "libmv/image/image_io.h"
-//#include "libmv/image/image_pyramid.h"
-//#include "libmv/image/image_sequence_io.h"
-//#include "libmv/image/cached_image_sequence.h"
-//#include "libmv/image/pyramid_sequence.h"
-//#include "libmv/correspondence/correspondence.h"
-//#include "libmv/correspondence/feature.h"
-//#include "libmv/correspondence/klt.h"
-
 #ifdef linux
 #include "SimpleIni.h"
 #endif
@@ -70,7 +57,9 @@ private:
     void createActions();
     void listFiles(QString);
     string itos(int i);
+
     QGraphicsScene *scene;
+    QGraphicsScene *scene2;
 
     bool datasetLoaded;
     QString datasetName;
@@ -88,16 +77,26 @@ private:
     string iniFile;
     string dPath;
 
+    int displayOption;
+
+    bool histogramEqualization;
+
 protected:
+
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 protected Q_SLOTS:
+
     void exitApplication();
+    void toggleHistogramEqualization();
     void toggleFitToWindow();
     void openImageDirectory();
     void updateImageNumber(int);
 
+    void getDisplayOption(int);
+
 private slots:
+
     void timerEvent(QTimerEvent *);
     void on_pushButtonTrack_clicked();
 

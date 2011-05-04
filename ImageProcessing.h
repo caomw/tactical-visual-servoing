@@ -46,4 +46,4 @@ IplImage  *getIplImageFromArray2(const TNT::Array2D<double> &array);
 
 TNT::Array2D<double> getArrayFromIplImage(IplImage *frame);
 TNT::Array1D <long int> getHistogram (TNT::Array2D <double> array);
-TNT::Array2D <double> histogramEqualization(TNT::Array2D <double> array);
+TNT::Array2D <double> runHistogramEqualization(TNT::Array2D <double> array);

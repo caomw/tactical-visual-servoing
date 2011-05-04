@@ -4,15 +4,9 @@
 #define COLS 640
 #define ROWS 480
 
-//using namespace libmv;
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// function prototypes
-//
-///////////////////////////////////////////////////////////////////////////////
-
-
+#define SECOND_DISPLAY_BLANK 0
+#define SECOND_DISPLAY_PROCESSED 1
+#define SECOND_DISPLAY_PREVIOUS 2
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -23,32 +17,29 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    windowWidth = 640;
-    windowHeight = 480;
+    windowWidth = COLS;
+    windowHeight = ROWS;
 
     ui->setupUi(this);
 
     createActions();
 
-    //timer.start(50);
-
     // instantiations
     utilities = new Utilities();
-
     klt = new KLT();
-
-
     imageFunctions = new ImageFunctions();
-  //  turingTracking = new TuringTracking();
+
+    // turingTracking = new TuringTracking();
 
     // set the scene up with the graphicsview
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
 
-    fitImageToWindow = 0;
+    // second display
+    scene2 = new QGraphicsScene(ui->graphicsView_2);
+    ui->graphicsView_2->setScene(scene2);
 
-    //windowWidth = ui->graphicsView->width();
-    //windowHeight = ui->graphicsView->height();
+    fitImageToWindow = 0;
 
     ui->statusBar->showMessage("NO DATASET LOADED");
 
@@ -57,7 +48,11 @@ MainWindow::MainWindow(QWidget *parent)
     //CSimpleIniA ini(true, true, true);
     //SI_Error rc = ini.LoadFile(iniFile.c_str());
 
-}
+    displayOption = 0;
+
+    histogramEqualization = false;
+
+} // end contrsuctor
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,7 +69,9 @@ MainWindow::~MainWindow()
     delete imageFunctions;
     delete klt;
     //delete turingTracking;
-}
+
+} // end destructor
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -84,8 +81,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::trace(QString str)
 {
+
     ui->plainTextEditTrace->appendPlainText(str);
-}
+
+} // end trace
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,130 +153,9 @@ void MainWindow::on_pushButtonTrack_clicked()
         QString msg2 = name.c_str();
         ui->statusBar->showMessage(msg2);
 
-
     }
 
-    /**
-
-    string msg = "Current tab index = " + utilities->itos(ui->tabWidget->currentIndex());
-    trace(msg.c_str());
-
-    // correlation tracking
-    if (ui->tabWidget->currentIndex() == 0) {
-
-        // grab the current values set and set those in the tracking algorithms
-
-
-    QAction *action_Open_Sequence;
-    QAction *action_About;
-    QWidget *centralWidget;
-    QTabWidget *tabWidget;
-    QWidget *tabCorrelation;
-    QLabel *labelConstOffset;
-    QSpinBox *spinBoxConstOffset;
-    QLabel *labelSearchRadius;
-    QSpinBox *spinBoxSearchRadius;
-    QLabel *labelSearchLevels;
-    QSpinBox *spinBoxSearchLevels;
-    QLabel *labelMinSample;
-    QLabel *labelFovealKernelBaseConstant;
-    QLabel *labelFovealKernelNumLevels;
-    QLabel *labelFovealKernelTypeSpacing;
-    QCheckBox *checkBoxDisplayFovealKernel;
-    QDoubleSpinBox *doubleSpinBoxMinSample;
-    QDoubleSpinBox *doubleSpinBoxFovealKernelBaseConstant;
-    QSpinBox *spinBoxFovealKernelNumLevels;
-    QComboBox *comboBoxFovealKernelTypeSpacing;
-    QLabel *labelCorrErrorThresh;
-    QLabel *labelDegeneracyThresh;
-    QLabel *labelShapeChangeThresh;
-    QLabel *labelRejectionRateTimeConstant;
-    QLabel *labelRejectionRateThresh;
-    QLabel *labelConstExpansionThresh;
-    QLabel *labelInverseConstellationExpansionThresh;
-    QLabel *labelStarOutOfBounds;
-    QLabel *labelCenterOutOfBounds;
-    QDoubleSpinBox *doubleSpinBoxCorrErrorThresh;
-    QDoubleSpinBox *doubleSpinBoxDegeneracyThresh;
-    QDoubleSpinBox *doubleSpinBoxShapeChangeThresh;
-    QDoubleSpinBox *doubleSpinBoxRejectionRateTimeConstant;
-    QDoubleSpinBox *doubleSpinBoxRejectionRateThresh;
-    QSpinBox *spinBoxConstExpansionThresh;
-    QDoubleSpinBox *doubleSpinBoxInverseConstellationExpansionThresh;
-    QSpinBox *spinBoxStarOutOfBounds;
-    QSpinBox *spinBoxCenterOutOfBounds;
-    QWidget *tabOpticalFlow;
-    QWidget *tabBlob;
-    QGraphicsView *graphicsView;
-    QPlainTextEdit *plainTextEditTrace;
-    QPushButton *pushButtonTrack;
-    QCheckBox *checkBox_2;
-    QScrollBar *horizontalScrollBar;
-    QMenuBar *menuBar;
-    QMenu *menu_File;
-    QMenu *menu_Help;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
-
-
-        ///////////////////////////////////////////////////////////////////////
-        // GOOD FEATURES
-
-
-        // find good features using Shi and Tomasi
-
-        // first, allocate the storage
-        IplImage *curr  = imageFunctions->aviGrabFrame(ui->horizontalScrollBar->value());
-        IplImage *grey  = cvCreateImage(cvSize(datasetWidth, datasetHeight), 8, 1);
-        IplImage *eigen = cvCreateImage(cvSize(datasetWidth, datasetHeight), IPL_DEPTH_32F, 1);
-        IplImage *temp  = cvCreateImage(cvSize(datasetWidth, datasetHeight), IPL_DEPTH_32F, 1);
-        CvPoint2D32f features[500];
-        int numberFeatures = 500;
-
-        // convert the frame to grayscale
-        cvCvtColor(curr, grey, CV_BGR2GRAY);
-
-        // parameters:
-        //  grey: input greyscale image
-        //  eigen: working storage
-        //  temp: working storage
-        //  features: this will contain the feature points
-        //  minQuality: minimum quality of the features based on the eigenvalues
-        //  minDistance: minimum Euclidean distance between features
-        float minQuality  = 0.01;
-        float minDistance = 5.0;
-        cvGoodFeaturesToTrack(grey, eigen, temp, features, &numberFeatures, minQuality, minDistance, NULL);
-
-        IplImage *draw = cvCreateImage(cvSize(datasetWidth, datasetHeight), 8, 3);
-
-        cvCopy(curr, draw, 0);
-        for (int i=0; i<numberFeatures; i++) {
-            cvCircle(draw, cvPointFrom32f(features[i]), 3, CV_RGB(0,255,0), -1, 8, 0);
-        }
-
-        // update the display
-        uchar *cv = (uchar*)(draw->imageData);
-
-        QImage img(cv, temp->width, temp->height, QImage::Format_RGB888);
-
-        scene->clear();
-        scene->addPixmap(QPixmap::fromImage(img));
-        scene->update();
-
-        // release memory
-        cvReleaseImage(&curr);
-        cvReleaseImage(&eigen);
-        cvReleaseImage(&temp);
-        cvReleaseImage(&draw);
-        cvReleaseImage(&grey);
-
-
-        // END GOOD FEATURES
-        ///////////////////////////////////////////////////////////////////////
-    }
-**/
-
-}
+} // end on_pushButtonTrack_clicked
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -288,8 +166,11 @@ void MainWindow::on_pushButtonTrack_clicked()
 
 void MainWindow::timerEvent(QTimerEvent *)
 {
+
     trace("timer event");
-}
+
+} // end timerEvent
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -302,7 +183,7 @@ void MainWindow::updateImageNumber(int value)
 
     QString t = files.value(value);
     char t2[64];
-    sprintf(t2, "%s\0", qPrintable(t));
+    sprintf(t2, "%s", qPrintable(t));
     QString msg2 = t2;
     trace(msg2);
 
@@ -310,67 +191,101 @@ void MainWindow::updateImageNumber(int value)
 
     printf("%s\n", dPath.c_str());
 
-    sprintf(fileName, "%s/%s\0", dPath.c_str(), t2);
+    sprintf(fileName, "%s/%s", dPath.c_str(), t2);
     printf("%s\n", fileName);
     QString t3 = fileName;
     trace(fileName);
 
-    IplImage *tmp = cvLoadImage(fileName);
+    // load the current frame
+    IplImage *frame = cvLoadImage(fileName);
 
-    // histogram equalization
-    TNT::Array2D<double> array = getArrayFromIplImage(tmp);
-    TNT::Array2D<double> temp;
-    temp = histogramEqualization(array);
-    IplImage *display = getIplImageFromArray2(temp);
-    printf("ran histogram...\n");
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // this is where we do any processing on the input frame
+    //
+    ///////////////////////////////////////////////////////////////////////////
 
-    //delete array;
-    //delete temp;
+    if (histogramEqualization == true) {
 
-    //printf("Before call...\n");
-    //klt->lkOpticalFlow(tmp);
-    //printf("After call...\n");
-    //printf("There are %d features....\n", klt->lkCount);
+        // histogram equalization
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        temp = runHistogramEqualization(array);
+        IplImage *processed = getIplImageFromArray2(temp);
+        printf("ran histogram..., displayOption = %d\n", displayOption);
 
-    // draw the points
-    //for (int i=0; i<klt->lkCount; i++) {
-    //    cvCircle(tmp, cvPointFrom32f(klt->lkPoints[1][i]), 3, CV_RGB(0,0,255), -1, 8, 0);
-    //}
+        if (displayOption == SECOND_DISPLAY_PROCESSED) {
 
-    if (tmp != NULL && fitImageToWindow == 0) {
+                if (processed != NULL && fitImageToWindow == 0) {
+
+                    // update the display
+                    uchar *cv = (uchar*)(processed->imageData);
+                    QImage img(cv, processed->width, processed->height, QImage::Format_RGB888);
+
+                    scene2->clear();
+                    scene2->setSceneRect(0, 0, processed->width, processed->height);
+                    scene2->addPixmap(QPixmap::fromImage(img));
+                    scene2->update();
+                    QApplication::processEvents();
+
+                } else if  (processed != NULL && fitImageToWindow == 1) {
+
+                    IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), processed->depth, processed->nChannels);
+
+                    trace("hist .... fitting to window....");
+                    cvResize(processed, resized, CV_INTER_LINEAR);
+
+                    // update the display
+                    uchar *cv = (uchar*)(resized->imageData);
+                    QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
+
+                    scene2->clear();
+                    scene2->setSceneRect(0, 0, resized->width, resized->height);
+                    scene2->addPixmap(QPixmap::fromImage(img));
+                    scene2->update();
+                    QApplication::processEvents();
+
+                    //cvReleaseImage(&frame);
+                    cvReleaseImage(&resized);
+
+                }
+
+        }
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // main display image
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (frame != NULL && fitImageToWindow == 0) {
 
         // swap red and blue
-        cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
+        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
 
         // update the display
-//        uchar *cv = (uchar*)(tmp->imageData);
-//        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
-
-        uchar *cv = (uchar*)(display->imageData);
-        QImage img(cv, display->width, display->height, QImage::Format_RGB888);
+        uchar *cv = (uchar*)(frame->imageData);
+        QImage img(cv, frame->width, frame->height, QImage::Format_RGB888);
 
         scene->clear();
-        scene->setSceneRect(0, 0, tmp->width, tmp->height);
+        scene->setSceneRect(0, 0, frame->width, frame->height);
         scene->addPixmap(QPixmap::fromImage(img));
         scene->update();
         QApplication::processEvents();
 
-        cvReleaseImage(&tmp);
+        cvReleaseImage(&frame);
 
-    } else if (tmp != NULL && fitImageToWindow == 1) {
+    } else if (frame != NULL && fitImageToWindow == 1) {
 
         // swap red and blue
-        cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
+        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
 
-        //IplImage *resized = cvCreateImage(cvSize(windowHWidth, windowHeight), tmp->depth, tmp->nChannels);
-        IplImage *resized = cvCreateImage(cvSize(640, 480), tmp->depth, tmp->nChannels);
+        IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), frame->depth, frame->nChannels);
 
         trace("fitting to window....");
-        cvResize(tmp, resized, CV_INTER_LINEAR);
-        //cvSaveImage("resized.bmp", resized);
-        printf("resized...[%d,%d]\n", windowWidth, windowHeight);
-        printf("resized...[%d,%d]\n", ui->graphicsView->width(), ui->graphicsView->height());
-        printf("resized...[%d,%d]\n", COLS, ROWS);
+        cvResize(frame, resized, CV_INTER_LINEAR);
 
         // update the display
         uchar *cv = (uchar*)(resized->imageData);
@@ -382,7 +297,7 @@ void MainWindow::updateImageNumber(int value)
         scene->update();
         QApplication::processEvents();
 
-        cvReleaseImage(&tmp);
+        cvReleaseImage(&frame);
         cvReleaseImage(&resized);
 
     }
@@ -391,7 +306,7 @@ void MainWindow::updateImageNumber(int value)
      QString msg3 = fileName;
      ui->statusBar->showMessage(msg3);
 
-}
+} // end updateImageNumber
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -416,10 +331,16 @@ void MainWindow::createActions()
     // fit image to window
     connect(ui->checkBoxFitToWindow, SIGNAL(clicked()), this, SLOT(toggleFitToWindow()));
 
+    // display option
+    connect(ui->comboBoxSecondWindow, SIGNAL(currentIndexChanged(int)), this, SLOT(getDisplayOption(int)));
+
     // mouse events
     connect(ui->graphicsView, SIGNAL(mousePressEvent(QGraphicsSceneMouseEvent *)), this, SLOT(mousePressEvent(QGraphicsSceneMouseEvent *)));
 
-}
+    // histogram equalization
+    connect(ui->checkBoxHistogramEqualization, SIGNAL(clicked()), this, SLOT(toggleHistogramEqualization()));
+
+} // end createActions
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -431,7 +352,8 @@ void MainWindow::createActions()
 void MainWindow::exitApplication()
 {
     QApplication::exit();
-}
+
+} // end exitApplication
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -445,7 +367,9 @@ void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
     trace("mouse pressed");
     printf("Mouse pressed...\n");
 
-}
+
+} // end mousePressEvent
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -456,9 +380,6 @@ void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void MainWindow::openImageDirectory()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select the first image or a movie file"));
-
-    // This shows fine in Linux, but not under Windows.....reverting back to getOpenFileName
-    //QString fileName = QFileDialog::getExistingDirectory(this, tr("Select the directory containing bitmap images"));
 
     string t = fileName.toStdString();
     string toFind = "/";
@@ -476,54 +397,15 @@ void MainWindow::openImageDirectory()
     dPath = path2.toStdString();
 
     char msg[128];
-    sprintf(msg, "Found at %d\0", found);
+    sprintf(msg, "Found at %d", found);
     trace(msg);
 
     trace(fileName);
 
-    //listFiles(fileName);
     listFiles(path2);
 
+} // end openImageDirectory
 
-//    //QString fileName = QFileDialog::getOpenName(this, tr("Select the first image or a movie file"));
-//    QString fileName = QFileDialog::getExistingDirectory(this, tr("Select the directory containing bitmap images"));
-//    trace(fileName);
-
-//    listFiles(fileName);
-    
-/**    
-
-    // try opening the avi
-    imageFunctions->aviInitialize(fileName.toStdString());
-    int numFrames = imageFunctions->captureAVIFrames;
-
-    if (numFrames > 0) {
-
-        datasetName = fileName;
-        datasetLoaded = true;
-
-        // set the bounds of the horizontal scroll bar
-        ui->horizontalScrollBar->setMaximum(numFrames);
-
-        ui->statusBar->showMessage("Dataset loaded...");
-
-        // load the first image so we can get the height and width
-        //  and load the first image on the ui
-        IplImage *temp = imageFunctions->aviGrabFrame(0);
-        datasetHeight = temp->height;
-        datasetWidth  = temp->width;
-
-        uchar *cv = (uchar*)(temp->imageData);
-
-        QImage img(cv, temp->width, temp->height, QImage::Format_RGB888);
-
-        scene->clear();
-        scene->addPixmap(QPixmap::fromImage(img));
-        scene->update();
-    }
- **/   
-
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -539,7 +421,6 @@ void MainWindow::listFiles(QString directoryName)
     t = directoryName.toStdString();
     datasetPath = t.c_str();
 
-    //datasetPath = directoryName;
     printf("datasetPath = %s\n", t.c_str());
 
     if (fileName.isEmpty()) {
@@ -557,7 +438,9 @@ void MainWindow::listFiles(QString directoryName)
 
     // set the scroll bar to the number of images
     ui->imageScrollBar->setMaximum(files.size());
-}
+
+} // end listFiles
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -575,5 +458,40 @@ void MainWindow::toggleFitToWindow()
         trace("fitToWindow is FALSE");
     }
 
-}
+} // end toggleFitToWindow
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleHistogramEqualization
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleHistogramEqualization()
+{
+    if (histogramEqualization == 0) {
+        histogramEqualization = 1;
+        trace("histogramEqualization is TRUE");
+    } else {
+        histogramEqualization = 0;
+        trace("histogramEqualization is FALSE");
+    }
+
+} // end toggleHistogramEqualization
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getDisplayOption
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getDisplayOption(int value)
+{
+    char msg[128];
+    sprintf(msg, "The value is %d\n", value);
+    trace(msg);
+
+    displayOption = value;
+
+} // end getDisplayOption

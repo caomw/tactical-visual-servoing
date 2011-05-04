@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1680</width>
+    <width>1311</width>
     <height>1050</height>
    </rect>
   </property>
@@ -17,14 +17,14 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>600</y>
-      <width>561</width>
-      <height>311</height>
+      <x>660</x>
+      <y>570</y>
+      <width>560</width>
+      <height>310</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tabPreprocess">
      <attribute name="title">
@@ -500,18 +500,18 @@
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Page</string>
+      <string>Debug Messages</string>
      </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Page</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_3">
-     <attribute name="title">
-      <string>Page</string>
-     </attribute>
+     <widget class="QPlainTextEdit" name="plainTextEditTrace">
+      <property name="geometry">
+       <rect>
+        <x>7</x>
+        <y>10</y>
+        <width>541</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGraphicsView" name="graphicsView">
@@ -527,21 +527,11 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEditTrace">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>600</y>
-      <width>561</width>
-      <height>181</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButtonTrack">
     <property name="geometry">
      <rect>
-      <x>1150</x>
-      <y>570</y>
+      <x>810</x>
+      <y>510</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -589,13 +579,327 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QTabWidget" name="tabWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>570</y>
+      <width>560</width>
+      <height>310</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>4</number>
+    </property>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Smoothing</string>
+     </attribute>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>34</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Filter</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>30</y>
+        <width>131</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Mean Filter :: Arithmetic</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mean Filter :: Geometric</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mean Filter :: Contraharmonic</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mean Filter :: Harmonic</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Order Statistics :: Median</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Order Statistics :: Max</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Order Statistics :: Min</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Order Statistics :: Midpoint</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Order Statistics :: Alpha Trimmed</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Adaptive Local Noise Reduction Filter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Adaptive Median Filter</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mask Size</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_2">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>90</y>
+        <width>85</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>1x1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>3x3</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>5x5</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>7x7</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Sharpening</string>
+     </attribute>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>50</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Algorithm</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>40</y>
+        <width>85</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Highboost Laplacian</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Gradient</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>Reduce Graylevels</string>
+     </attribute>
+     <widget class="QComboBox" name="comboBoxReduceGraylevels">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>36</y>
+        <width>85</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>128</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>64</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>32</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>161</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Number of Gray levels</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_7">
+     <attribute name="title">
+      <string>Histogram Equalization</string>
+     </attribute>
+     <widget class="QCheckBox" name="checkBoxHistogramEqualization">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>241</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply histogram equalization?</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_8">
+     <attribute name="title">
+      <string>Noise</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QComboBox" name="comboBoxSecondWindow">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>526</y>
+      <width>191</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Blank</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Show Processed Image</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Show Previous Frame</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>531</y>
+      <width>121</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Second Window</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxSwapRedBlue">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>530</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Swap red and blue?</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1680</width>
+     <width>1311</width>
      <height>25</height>
     </rect>
    </property>
