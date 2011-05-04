@@ -17,6 +17,9 @@
 
 #include <iostream>
 
+// template libary
+#include "third_party/tnt/tnt.h"
+
 double mean2 (int **imageBuffer, int rows, int cols, int numberPlanes);
 
 int *SDLImageTo1DArrayOnePlane (SDL_Surface *image, int rows, int cols, int plane);
@@ -34,3 +37,13 @@ void free2DArray(int **p, int rows);
 
 Uint32 getpixel(SDL_Surface *surface, int x, int y);
 int **SDLImageTo2DArrayOnePlane2 (SDL_Surface *image, int rows, int cols, int plane);
+
+TNT::Array1D <long int> getHistogram (TNT::Array2D <double>);
+TNT::Array2D <double> histogramEqualization(TNT::Array2D <double> array);
+
+IplImage  *getIplImageFromArray(const TNT::Array2D<double> &array);
+IplImage  *getIplImageFromArray2(const TNT::Array2D<double> &array);
+
+TNT::Array2D<double> getArrayFromIplImage(IplImage *frame);
+TNT::Array1D <long int> getHistogram (TNT::Array2D <double> array);
+TNT::Array2D <double> histogramEqualization(TNT::Array2D <double> array);

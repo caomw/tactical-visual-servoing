@@ -36,6 +36,11 @@
 #include "SimpleIni.h"
 #endif
 
+#include "ImageProcessing.h"
+
+// template libary
+#include "third_party/tnt/tnt.h"
+
 namespace Ui
 {
     class MainWindow;

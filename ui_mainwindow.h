@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue May 3 15:00:55 2011
+** Created: Wed May 4 09:03:26 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -87,11 +87,15 @@ public:
     QCheckBox *checkBoxOFShowFeatures;
     QWidget *tabBlob;
     QWidget *tabNavigation;
+    QWidget *tab;
+    QWidget *tab_2;
+    QWidget *tab_3;
     QGraphicsView *graphicsView;
     QPlainTextEdit *plainTextEditTrace;
     QPushButton *pushButtonTrack;
     QScrollBar *imageScrollBar;
     QCheckBox *checkBoxFitToWindow;
+    QGraphicsView *graphicsView_2;
     QMenuBar *menuBar;
     QMenu *menu_File;
     QMenu *menu_Help;
@@ -123,7 +127,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 20, 561, 311));
+        tabWidget->setGeometry(QRect(10, 600, 561, 311));
         tabPreprocess = new QWidget();
         tabPreprocess->setObjectName(QString::fromUtf8("tabPreprocess"));
         tabWidget->addTab(tabPreprocess, QString());
@@ -247,23 +251,36 @@ public:
         tabNavigation = new QWidget();
         tabNavigation->setObjectName(QString::fromUtf8("tabNavigation"));
         tabWidget->addTab(tabNavigation, QString());
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        tabWidget->addTab(tab, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QString::fromUtf8("tab_2"));
+        tabWidget->addTab(tab_2, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName(QString::fromUtf8("tab_3"));
+        tabWidget->addTab(tab_3, QString());
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(590, 40, 642, 482));
+        graphicsView->setGeometry(QRect(10, 0, 642, 482));
         graphicsView->setMouseTracking(true);
         plainTextEditTrace = new QPlainTextEdit(centralWidget);
         plainTextEditTrace->setObjectName(QString::fromUtf8("plainTextEditTrace"));
-        plainTextEditTrace->setGeometry(QRect(10, 340, 561, 181));
+        plainTextEditTrace->setGeometry(QRect(650, 600, 561, 181));
         pushButtonTrack = new QPushButton(centralWidget);
         pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
         pushButtonTrack->setGeometry(QRect(1150, 570, 80, 23));
         imageScrollBar = new QScrollBar(centralWidget);
         imageScrollBar->setObjectName(QString::fromUtf8("imageScrollBar"));
-        imageScrollBar->setGeometry(QRect(590, 540, 651, 16));
+        imageScrollBar->setGeometry(QRect(10, 490, 651, 16));
         imageScrollBar->setOrientation(Qt::Horizontal);
         checkBoxFitToWindow = new QCheckBox(centralWidget);
         checkBoxFitToWindow->setObjectName(QString::fromUtf8("checkBoxFitToWindow"));
-        checkBoxFitToWindow->setGeometry(QRect(590, 570, 161, 20));
+        checkBoxFitToWindow->setGeometry(QRect(10, 530, 161, 20));
+        graphicsView_2 = new QGraphicsView(centralWidget);
+        graphicsView_2->setObjectName(QString::fromUtf8("graphicsView_2"));
+        graphicsView_2->setGeometry(QRect(660, 0, 642, 482));
+        graphicsView_2->setMouseTracking(true);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -293,7 +310,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(7);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -345,6 +362,9 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabBlob), QApplication::translate("MainWindow", "Blob", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabNavigation), QApplication::translate("MainWindow", "Navigation", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
         pushButtonTrack->setText(QApplication::translate("MainWindow", "Track", 0, QApplication::UnicodeUTF8));
         checkBoxFitToWindow->setText(QApplication::translate("MainWindow", "Fit to window", 0, QApplication::UnicodeUTF8));
         menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));

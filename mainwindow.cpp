@@ -317,10 +317,20 @@ void MainWindow::updateImageNumber(int value)
 
     IplImage *tmp = cvLoadImage(fileName);
 
-    printf("Before call...\n");
+    // histogram equalization
+    TNT::Array2D<double> array = getArrayFromIplImage(tmp);
+    TNT::Array2D<double> temp;
+    temp = histogramEqualization(array);
+    IplImage *display = getIplImageFromArray2(temp);
+    printf("ran histogram...\n");
+
+    //delete array;
+    //delete temp;
+
+    //printf("Before call...\n");
     //klt->lkOpticalFlow(tmp);
-    printf("After call...\n");
-    printf("There are %d features....\n", klt->lkCount);
+    //printf("After call...\n");
+    //printf("There are %d features....\n", klt->lkCount);
 
     // draw the points
     //for (int i=0; i<klt->lkCount; i++) {
@@ -333,8 +343,11 @@ void MainWindow::updateImageNumber(int value)
         cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
 
         // update the display
-        uchar *cv = (uchar*)(tmp->imageData);
-        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+//        uchar *cv = (uchar*)(tmp->imageData);
+//        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
+
+        uchar *cv = (uchar*)(display->imageData);
+        QImage img(cv, display->width, display->height, QImage::Format_RGB888);
 
         scene->clear();
         scene->setSceneRect(0, 0, tmp->width, tmp->height);
