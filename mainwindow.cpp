@@ -495,3 +495,6 @@ void MainWindow::getDisplayOption(int value)
     displayOption = value;
 
 } // end getDisplayOption
+
+
+

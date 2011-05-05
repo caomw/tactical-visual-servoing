@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 4 13:40:22 2011
+** Created: Thu May 5 08:12:19 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -26,6 +26,7 @@
 #include <QtGui/QPlainTextEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QScrollBar>
+#include <QtGui/QSlider>
 #include <QtGui/QSpinBox>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
@@ -46,7 +47,14 @@ public:
     QAction *actionExport_Dataset;
     QWidget *centralWidget;
     QTabWidget *tabWidget;
+    QWidget *tab_2;
     QWidget *tabPreprocess;
+    QPushButton *pushButtonDrawTripwire;
+    QSpinBox *spinBox;
+    QLabel *label_7;
+    QLabel *label_15;
+    QCheckBox *checkBox;
+    QCheckBox *checkBox_2;
     QWidget *tabCorrelation;
     QLabel *labelConstOffset;
     QSpinBox *spinBoxConstOffset;
@@ -103,6 +111,26 @@ public:
     QWidget *tab_5;
     QLabel *label_6;
     QComboBox *comboBox_3;
+    QWidget *tab_3;
+    QCheckBox *checkBoxGLTNegative;
+    QCheckBox *checkBoxLogarithm;
+    QCheckBox *checkBoxPowerLaw;
+    QCheckBox *checkBoxGLTPiecewise;
+    QCheckBox *checkBoxBitPlaneSlicing;
+    QSlider *horizontalSliderR1;
+    QSlider *horizontalSliderR1_2;
+    QLabel *label_8;
+    QLabel *label_9;
+    QLabel *label_10;
+    QSlider *horizontalSliderR1_3;
+    QSlider *horizontalSliderR1_4;
+    QLabel *label_11;
+    QDoubleSpinBox *doubleSpinBox;
+    QLabel *label_12;
+    QDoubleSpinBox *doubleSpinBox_2;
+    QLabel *label_13;
+    QDoubleSpinBox *doubleSpinBox_3;
+    QLabel *label_14;
     QWidget *tab_6;
     QComboBox *comboBoxReduceGraylevels;
     QLabel *label_3;
@@ -143,9 +171,30 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(660, 570, 560, 310));
+        tabWidget->setGeometry(QRect(650, 570, 560, 310));
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QString::fromUtf8("tab_2"));
+        tabWidget->addTab(tab_2, QString());
         tabPreprocess = new QWidget();
         tabPreprocess->setObjectName(QString::fromUtf8("tabPreprocess"));
+        pushButtonDrawTripwire = new QPushButton(tabPreprocess);
+        pushButtonDrawTripwire->setObjectName(QString::fromUtf8("pushButtonDrawTripwire"));
+        pushButtonDrawTripwire->setGeometry(QRect(20, 170, 111, 27));
+        spinBox = new QSpinBox(tabPreprocess);
+        spinBox->setObjectName(QString::fromUtf8("spinBox"));
+        spinBox->setGeometry(QRect(240, 27, 59, 27));
+        label_7 = new QLabel(tabPreprocess);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setGeometry(QRect(20, 30, 211, 17));
+        label_15 = new QLabel(tabPreprocess);
+        label_15->setObjectName(QString::fromUtf8("label_15"));
+        label_15->setGeometry(QRect(20, 90, 101, 17));
+        checkBox = new QCheckBox(tabPreprocess);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+        checkBox->setGeometry(QRect(150, 90, 98, 22));
+        checkBox_2 = new QCheckBox(tabPreprocess);
+        checkBox_2->setObjectName(QString::fromUtf8("checkBox_2"));
+        checkBox_2->setGeometry(QRect(150, 120, 98, 22));
         tabWidget->addTab(tabPreprocess, QString());
         tabCorrelation = new QWidget();
         tabCorrelation->setObjectName(QString::fromUtf8("tabCorrelation"));
@@ -279,10 +328,10 @@ public:
         graphicsView->setMouseTracking(true);
         pushButtonTrack = new QPushButton(centralWidget);
         pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
-        pushButtonTrack->setGeometry(QRect(810, 510, 80, 23));
+        pushButtonTrack->setGeometry(QRect(780, 910, 80, 23));
         imageScrollBar = new QScrollBar(centralWidget);
         imageScrollBar->setObjectName(QString::fromUtf8("imageScrollBar"));
-        imageScrollBar->setGeometry(QRect(10, 490, 651, 16));
+        imageScrollBar->setGeometry(QRect(10, 490, 641, 16));
         imageScrollBar->setOrientation(Qt::Horizontal);
         checkBoxFitToWindow = new QCheckBox(centralWidget);
         checkBoxFitToWindow->setObjectName(QString::fromUtf8("checkBoxFitToWindow"));
@@ -318,6 +367,74 @@ public:
         comboBox_3->setObjectName(QString::fromUtf8("comboBox_3"));
         comboBox_3->setGeometry(QRect(140, 40, 85, 27));
         tabWidget_2->addTab(tab_5, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName(QString::fromUtf8("tab_3"));
+        checkBoxGLTNegative = new QCheckBox(tab_3);
+        checkBoxGLTNegative->setObjectName(QString::fromUtf8("checkBoxGLTNegative"));
+        checkBoxGLTNegative->setGeometry(QRect(31, 20, 98, 22));
+        checkBoxLogarithm = new QCheckBox(tab_3);
+        checkBoxLogarithm->setObjectName(QString::fromUtf8("checkBoxLogarithm"));
+        checkBoxLogarithm->setGeometry(QRect(30, 60, 98, 22));
+        checkBoxPowerLaw = new QCheckBox(tab_3);
+        checkBoxPowerLaw->setObjectName(QString::fromUtf8("checkBoxPowerLaw"));
+        checkBoxPowerLaw->setGeometry(QRect(30, 100, 98, 22));
+        checkBoxGLTPiecewise = new QCheckBox(tab_3);
+        checkBoxGLTPiecewise->setObjectName(QString::fromUtf8("checkBoxGLTPiecewise"));
+        checkBoxGLTPiecewise->setGeometry(QRect(30, 140, 141, 22));
+        checkBoxBitPlaneSlicing = new QCheckBox(tab_3);
+        checkBoxBitPlaneSlicing->setObjectName(QString::fromUtf8("checkBoxBitPlaneSlicing"));
+        checkBoxBitPlaneSlicing->setGeometry(QRect(30, 220, 141, 22));
+        horizontalSliderR1 = new QSlider(tab_3);
+        horizontalSliderR1->setObjectName(QString::fromUtf8("horizontalSliderR1"));
+        horizontalSliderR1->setGeometry(QRect(240, 140, 111, 29));
+        horizontalSliderR1->setMaximum(255);
+        horizontalSliderR1->setOrientation(Qt::Horizontal);
+        horizontalSliderR1_2 = new QSlider(tab_3);
+        horizontalSliderR1_2->setObjectName(QString::fromUtf8("horizontalSliderR1_2"));
+        horizontalSliderR1_2->setGeometry(QRect(418, 140, 111, 29));
+        horizontalSliderR1_2->setMaximum(255);
+        horizontalSliderR1_2->setOrientation(Qt::Horizontal);
+        label_8 = new QLabel(tab_3);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+        label_8->setGeometry(QRect(390, 146, 21, 17));
+        label_9 = new QLabel(tab_3);
+        label_9->setObjectName(QString::fromUtf8("label_9"));
+        label_9->setGeometry(QRect(209, 145, 21, 17));
+        label_10 = new QLabel(tab_3);
+        label_10->setObjectName(QString::fromUtf8("label_10"));
+        label_10->setGeometry(QRect(209, 179, 21, 17));
+        horizontalSliderR1_3 = new QSlider(tab_3);
+        horizontalSliderR1_3->setObjectName(QString::fromUtf8("horizontalSliderR1_3"));
+        horizontalSliderR1_3->setGeometry(QRect(240, 174, 111, 29));
+        horizontalSliderR1_3->setMaximum(255);
+        horizontalSliderR1_3->setOrientation(Qt::Horizontal);
+        horizontalSliderR1_4 = new QSlider(tab_3);
+        horizontalSliderR1_4->setObjectName(QString::fromUtf8("horizontalSliderR1_4"));
+        horizontalSliderR1_4->setGeometry(QRect(418, 174, 111, 29));
+        horizontalSliderR1_4->setMaximum(255);
+        horizontalSliderR1_4->setOrientation(Qt::Horizontal);
+        label_11 = new QLabel(tab_3);
+        label_11->setObjectName(QString::fromUtf8("label_11"));
+        label_11->setGeometry(QRect(390, 180, 21, 17));
+        doubleSpinBox = new QDoubleSpinBox(tab_3);
+        doubleSpinBox->setObjectName(QString::fromUtf8("doubleSpinBox"));
+        doubleSpinBox->setGeometry(QRect(300, 60, 62, 27));
+        label_12 = new QLabel(tab_3);
+        label_12->setObjectName(QString::fromUtf8("label_12"));
+        label_12->setGeometry(QRect(201, 64, 67, 17));
+        doubleSpinBox_2 = new QDoubleSpinBox(tab_3);
+        doubleSpinBox_2->setObjectName(QString::fromUtf8("doubleSpinBox_2"));
+        doubleSpinBox_2->setGeometry(QRect(299, 96, 62, 27));
+        label_13 = new QLabel(tab_3);
+        label_13->setObjectName(QString::fromUtf8("label_13"));
+        label_13->setGeometry(QRect(200, 100, 67, 17));
+        doubleSpinBox_3 = new QDoubleSpinBox(tab_3);
+        doubleSpinBox_3->setObjectName(QString::fromUtf8("doubleSpinBox_3"));
+        doubleSpinBox_3->setGeometry(QRect(479, 92, 62, 27));
+        label_14 = new QLabel(tab_3);
+        label_14->setObjectName(QString::fromUtf8("label_14"));
+        label_14->setGeometry(QRect(380, 96, 67, 17));
+        tabWidget_2->addTab(tab_3, QString());
         tab_6 = new QWidget();
         tab_6->setObjectName(QString::fromUtf8("tab_6"));
         comboBoxReduceGraylevels = new QComboBox(tab_6);
@@ -338,10 +455,10 @@ public:
         tabWidget_2->addTab(tab_8, QString());
         comboBoxSecondWindow = new QComboBox(centralWidget);
         comboBoxSecondWindow->setObjectName(QString::fromUtf8("comboBoxSecondWindow"));
-        comboBoxSecondWindow->setGeometry(QRect(780, 526, 191, 27));
+        comboBoxSecondWindow->setGeometry(QRect(780, 485, 191, 27));
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(660, 531, 121, 17));
+        label_2->setGeometry(QRect(660, 490, 121, 17));
         checkBoxSwapRedBlue = new QCheckBox(centralWidget);
         checkBoxSwapRedBlue->setObjectName(QString::fromUtf8("checkBoxSwapRedBlue"));
         checkBoxSwapRedBlue->setGeometry(QRect(170, 530, 161, 20));
@@ -374,8 +491,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(5);
-        tabWidget_2->setCurrentIndex(4);
+        tabWidget->setCurrentIndex(2);
+        tabWidget_2->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -383,7 +500,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "TACTICAL :: Tracking Algorithm Comparison Testbed for Comprehensive Analysis and Learning", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Computer Vision Toolkit", 0, QApplication::UnicodeUTF8));
         action_Open_Sequence->setText(QApplication::translate("MainWindow", "&Open Sequence or Movie", 0, QApplication::UnicodeUTF8));
         action_About->setText(QApplication::translate("MainWindow", "&About", 0, QApplication::UnicodeUTF8));
         actionEvaluation->setText(QApplication::translate("MainWindow", "Evaluation", 0, QApplication::UnicodeUTF8));
@@ -391,7 +508,13 @@ public:
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
         actionApply_to_Entire_Dataset->setText(QApplication::translate("MainWindow", "Apply to Entire Dataset", 0, QApplication::UnicodeUTF8));
         actionExport_Dataset->setText(QApplication::translate("MainWindow", "Export Dataset", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tabPreprocess), QApplication::translate("MainWindow", "Preprocess", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Stablization", 0, QApplication::UnicodeUTF8));
+        pushButtonDrawTripwire->setText(QApplication::translate("MainWindow", "Draw Tripwire", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("MainWindow", "Ignore pixels smaller than NxN", 0, QApplication::UnicodeUTF8));
+        label_15->setText(QApplication::translate("MainWindow", "Classification:", 0, QApplication::UnicodeUTF8));
+        checkBox->setText(QApplication::translate("MainWindow", "Vehicles", 0, QApplication::UnicodeUTF8));
+        checkBox_2->setText(QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tabPreprocess), QApplication::translate("MainWindow", "Persistent Stare", 0, QApplication::UnicodeUTF8));
         labelConstOffset->setText(QApplication::translate("MainWindow", "Constellation Offset", 0, QApplication::UnicodeUTF8));
         labelSearchRadius->setText(QApplication::translate("MainWindow", "Search Radius", 0, QApplication::UnicodeUTF8));
         labelSearchLevels->setText(QApplication::translate("MainWindow", "Search Levels", 0, QApplication::UnicodeUTF8));
@@ -461,6 +584,19 @@ public:
          << QApplication::translate("MainWindow", "Gradient", 0, QApplication::UnicodeUTF8)
         );
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_5), QApplication::translate("MainWindow", "Sharpening", 0, QApplication::UnicodeUTF8));
+        checkBoxGLTNegative->setText(QApplication::translate("MainWindow", "Negative", 0, QApplication::UnicodeUTF8));
+        checkBoxLogarithm->setText(QApplication::translate("MainWindow", "Logarithm", 0, QApplication::UnicodeUTF8));
+        checkBoxPowerLaw->setText(QApplication::translate("MainWindow", "Power Law", 0, QApplication::UnicodeUTF8));
+        checkBoxGLTPiecewise->setText(QApplication::translate("MainWindow", "Piecewise Linear", 0, QApplication::UnicodeUTF8));
+        checkBoxBitPlaneSlicing->setText(QApplication::translate("MainWindow", "Bit Plane Slicing", 0, QApplication::UnicodeUTF8));
+        label_8->setText(QApplication::translate("MainWindow", "S1", 0, QApplication::UnicodeUTF8));
+        label_9->setText(QApplication::translate("MainWindow", "R1", 0, QApplication::UnicodeUTF8));
+        label_10->setText(QApplication::translate("MainWindow", "R2", 0, QApplication::UnicodeUTF8));
+        label_11->setText(QApplication::translate("MainWindow", "S2", 0, QApplication::UnicodeUTF8));
+        label_12->setText(QApplication::translate("MainWindow", "Constant", 0, QApplication::UnicodeUTF8));
+        label_13->setText(QApplication::translate("MainWindow", "Constant", 0, QApplication::UnicodeUTF8));
+        label_14->setText(QApplication::translate("MainWindow", "Gamma", 0, QApplication::UnicodeUTF8));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QApplication::translate("MainWindow", "Gray Level Transformations", 0, QApplication::UnicodeUTF8));
         comboBoxReduceGraylevels->clear();
         comboBoxReduceGraylevels->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "128", 0, QApplication::UnicodeUTF8)

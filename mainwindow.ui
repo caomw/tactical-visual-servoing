@@ -11,25 +11,105 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TACTICAL :: Tracking Algorithm Comparison Testbed for Comprehensive Analysis and Learning</string>
+   <string>Computer Vision Toolkit</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>650</x>
       <y>570</y>
       <width>560</width>
       <height>310</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>2</number>
     </property>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Stablization</string>
+     </attribute>
+    </widget>
     <widget class="QWidget" name="tabPreprocess">
      <attribute name="title">
-      <string>Preprocess</string>
+      <string>Persistent Stare</string>
      </attribute>
+     <widget class="QPushButton" name="pushButtonDrawTripwire">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>170</y>
+        <width>111</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Draw Tripwire</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBox">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>27</y>
+        <width>59</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>211</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ignore pixels smaller than NxN</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Classification:</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>90</y>
+        <width>98</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Vehicles</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>120</y>
+        <width>98</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>People</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tabCorrelation">
      <attribute name="title">
@@ -530,8 +610,8 @@
    <widget class="QPushButton" name="pushButtonTrack">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>510</y>
+      <x>780</x>
+      <y>910</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -545,7 +625,7 @@
      <rect>
       <x>10</x>
       <y>490</y>
-      <width>651</width>
+      <width>641</width>
       <height>16</height>
      </rect>
     </property>
@@ -589,7 +669,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -755,6 +835,261 @@
       </item>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Gray Level Transformations</string>
+     </attribute>
+     <widget class="QCheckBox" name="checkBoxGLTNegative">
+      <property name="geometry">
+       <rect>
+        <x>31</x>
+        <y>20</y>
+        <width>98</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Negative</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxLogarithm">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>60</y>
+        <width>98</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Logarithm</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxPowerLaw">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>100</y>
+        <width>98</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Power Law</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxGLTPiecewise">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>140</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Piecewise Linear</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxBitPlaneSlicing">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>220</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Bit Plane Slicing</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSliderR1">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>140</y>
+        <width>111</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>255</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSliderR1_2">
+      <property name="geometry">
+       <rect>
+        <x>418</x>
+        <y>140</y>
+        <width>111</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>255</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>146</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>S1</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>209</x>
+        <y>145</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>R1</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>209</x>
+        <y>179</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>R2</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSliderR1_3">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>174</y>
+        <width>111</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>255</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSliderR1_4">
+      <property name="geometry">
+       <rect>
+        <x>418</x>
+        <y>174</y>
+        <width>111</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>255</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>180</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>S2</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>60</y>
+        <width>62</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>201</x>
+        <y>64</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Constant</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+      <property name="geometry">
+       <rect>
+        <x>299</x>
+        <y>96</y>
+        <width>62</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>100</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Constant</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+      <property name="geometry">
+       <rect>
+        <x>479</x>
+        <y>92</y>
+        <width>62</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>96</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gamma</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
       <string>Reduce Graylevels</string>
@@ -846,7 +1181,7 @@
     <property name="geometry">
      <rect>
       <x>780</x>
-      <y>526</y>
+      <y>485</y>
       <width>191</width>
       <height>27</height>
      </rect>
@@ -871,7 +1206,7 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>531</y>
+      <y>490</y>
       <width>121</width>
       <height>17</height>
      </rect>
