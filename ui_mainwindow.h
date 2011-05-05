@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Thu May 5 08:12:19 2011
+** Created: Thu May 5 10:14:59 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -137,6 +137,7 @@ public:
     QWidget *tab_7;
     QCheckBox *checkBoxHistogramEqualization;
     QWidget *tab_8;
+    QWidget *tab_9;
     QComboBox *comboBoxSecondWindow;
     QLabel *label_2;
     QCheckBox *checkBoxSwapRedBlue;
@@ -453,6 +454,9 @@ public:
         tab_8 = new QWidget();
         tab_8->setObjectName(QString::fromUtf8("tab_8"));
         tabWidget_2->addTab(tab_8, QString());
+        tab_9 = new QWidget();
+        tab_9->setObjectName(QString::fromUtf8("tab_9"));
+        tabWidget_2->addTab(tab_9, QString());
         comboBoxSecondWindow = new QComboBox(centralWidget);
         comboBoxSecondWindow->setObjectName(QString::fromUtf8("comboBoxSecondWindow"));
         comboBoxSecondWindow->setGeometry(QRect(780, 485, 191, 27));
@@ -492,7 +496,7 @@ public:
         retranslateUi(MainWindow);
 
         tabWidget->setCurrentIndex(2);
-        tabWidget_2->setCurrentIndex(2);
+        tabWidget_2->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -612,6 +616,7 @@ public:
         checkBoxHistogramEqualization->setText(QApplication::translate("MainWindow", "Apply histogram equalization?", 0, QApplication::UnicodeUTF8));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_7), QApplication::translate("MainWindow", "Histogram Equalization", 0, QApplication::UnicodeUTF8));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_8), QApplication::translate("MainWindow", "Noise", 0, QApplication::UnicodeUTF8));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_9), QApplication::translate("MainWindow", "Edge Filters", 0, QApplication::UnicodeUTF8));
         comboBoxSecondWindow->clear();
         comboBoxSecondWindow->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "Blank", 0, QApplication::UnicodeUTF8)
