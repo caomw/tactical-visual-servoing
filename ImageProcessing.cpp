@@ -589,7 +589,7 @@ IplImage  *getIplImageFromArray(const TNT::Array2D<double> &array)
 /////////////////////////////////////////////////////////////////////
 
 IplImage  *getIplImageFromArray2(const TNT::Array2D<double> &array)
-{
+{    
     int height = array.dim1(), width = array.dim2();
     unsigned char intensity;
 
@@ -632,6 +632,8 @@ IplImage  *getIplImageFromArray2(const TNT::Array2D<double> &array)
 
 void getIplImageFromArray2(const TNT::Array2D<double> &array, IplImage *imageWork)
 {
+    printf("getIplImageFromArray2 start...\n");
+
     int height = array.dim1(), width = array.dim2();
     unsigned char intensity;
 
@@ -658,6 +660,8 @@ void getIplImageFromArray2(const TNT::Array2D<double> &array, IplImage *imageWor
         }
 
     }
+
+    printf("getIplImageFromArray2 end...\n");
 
 } // end getIplImageFromArray
 

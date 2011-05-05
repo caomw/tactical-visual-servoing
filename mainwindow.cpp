@@ -180,7 +180,6 @@ void MainWindow::timerEvent(QTimerEvent *)
 
 void MainWindow::updateImageNumber(int value)
 {
-
     QString t = files.value(value);
     char t2[64];
     sprintf(t2, "%s", qPrintable(t));
@@ -200,8 +199,11 @@ void MainWindow::updateImageNumber(int value)
     IplImage *frame = cvLoadImage(fileName);
 
     // allocate room for the processed image
-    IplImage *processed = cvCreateImage(cvGetSize(frame), frame->depth, 1);
+    //IplImage *processed = cvCreateImage(cvGetSize(frame), frame->depth, frame->nChannels);
+    IplImage *processed;
 
+    bool freeProcessedImage = false;
+\
     ///////////////////////////////////////////////////////////////////////////
     //
     // apply any requested image processing
@@ -215,9 +217,14 @@ void MainWindow::updateImageNumber(int value)
         TNT::Array2D<double> temp;
         temp = runHistogramEqualization(array);
 
-        getIplImageFromArray2(temp, processed);
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
 
         printf("ran histogram..., displayOption = %d\n", displayOption);
+
+        cvSaveImage("processed.bmp", processed);
+
+        freeProcessedImage = true;
 
     }
 
@@ -229,51 +236,54 @@ void MainWindow::updateImageNumber(int value)
 
     if (displayOption == SECOND_DISPLAY_PROCESSED) {
 
-            if (processed != NULL && fitImageToWindow == 0) {
+        if (processed != NULL && fitImageToWindow == 0) {
 
-                printf("trying to do the second display, no fitting\n");
+            printf("trying to do the second display, no fitting\n");
 
-                // update the display
-                uchar *cv = (uchar*)(processed->imageData);
-                QImage img(cv, processed->width, processed->height, QImage::Format_RGB888);
+            // update the display
+            uchar *cv = (uchar*)(processed->imageData);
+            QImage img(cv, processed->width, processed->height, QImage::Format_RGB888);
 
-                scene2->clear();
-                scene2->setSceneRect(0, 0, processed->width, processed->height);
-                scene2->addPixmap(QPixmap::fromImage(img));
-                scene2->update();
-                QApplication::processEvents();
+            scene2->clear();
+            scene2->setSceneRect(0, 0, processed->width, processed->height);
+            scene2->addPixmap(QPixmap::fromImage(img));
+            scene2->update();
+            QApplication::processEvents();
 
-                printf("here3\n");
+            printf("here3\n");
 
-            } else if  (processed != NULL && fitImageToWindow == 1) {
+        } else if  (processed != NULL && fitImageToWindow == 1) {
 
-                printf("trying to do the second display, fitting\n");
+            printf("trying to do the second display, fitting\n");
 
-                IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), processed->depth, processed->nChannels);
+            IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), processed->depth, processed->nChannels);
 
-                trace("hist .... fitting to window....");
-                cvResize(processed, resized, CV_INTER_LINEAR);
+            trace("hist .... fitting to window....");
+            cvResize(processed, resized, CV_INTER_LINEAR);
 
-                // update the display
-                uchar *cv = (uchar*)(resized->imageData);
-                QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
+            // update the display
+            uchar *cv = (uchar*)(resized->imageData);
+            QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
 
-                scene2->clear();
-                scene2->setSceneRect(0, 0, resized->width, resized->height);
-                scene2->addPixmap(QPixmap::fromImage(img));
-                scene2->update();
-                QApplication::processEvents();
+            scene2->clear();
+            scene2->setSceneRect(0, 0, resized->width, resized->height);
+            scene2->addPixmap(QPixmap::fromImage(img));
+            scene2->update();
+            QApplication::processEvents();
 
-                cvReleaseImage(&resized);
+            cvReleaseImage(&resized);
 
-            }
+        }
 
     }
 
     printf("here1\n");
 
     // release the processing frame
-    //cvReleaseImage(&processed);
+    if (freeProcessedImage == true) {
+        cvReleaseImage(&processed);
+        freeProcessedImage = false;
+    }
 
     printf("here2\n");
 
@@ -283,6 +293,7 @@ void MainWindow::updateImageNumber(int value)
     //
     ///////////////////////////////////////////////////////////////////////////
 
+    printf("here5...\n");
     if (frame != NULL && fitImageToWindow == 0) {
 
         // swap red and blue
@@ -322,14 +333,17 @@ void MainWindow::updateImageNumber(int value)
 
     }
 
-     // update the status bar
-     QString msg3 = fileName;
-     ui->statusBar->showMessage(msg3);
+    printf("here6...\n");
 
-     // release the current frame
-     cvReleaseImage(&frame);
+    // update the status bar
+    QString msg3 = fileName;
+    ui->statusBar->showMessage(msg3);
 
-     printf("done....\n");
+    // release the current frame
+    printf("here4...\n");
+    cvReleaseImage(&frame);
+
+    printf("done....\n");
 
 } // end updateImageNumber
 
