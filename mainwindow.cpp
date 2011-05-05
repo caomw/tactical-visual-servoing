@@ -49,8 +49,10 @@ MainWindow::MainWindow(QWidget *parent)
     //SI_Error rc = ini.LoadFile(iniFile.c_str());
 
     displayOption = 0;
+    edgeFilter = 0;
 
     histogramEqualization = false;
+    gltNegative = false;
 
 } // end contrsuctor
 
@@ -75,277 +77,14 @@ MainWindow::~MainWindow()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// trace
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void MainWindow::trace(QString str)
-{
-
-    ui->plainTextEditTrace->appendPlainText(str);
-
-} // end trace
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // on_pushButtonTrack_clicked
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::on_pushButtonTrack_clicked()
 {
-    // display for debug purposes
-    for (int i=0; i<files.size(); i++) {
-
-        QString temp = files.value(i);
-
-        string t2 = temp.toStdString();
-
-        string name = t + '/' + t2;
-
-        printf("loading...%s\n", name.c_str());
-
-        IplImage *tmp = cvLoadImage(name.c_str());
-
-        // swap red and blue
-        cvConvertImage(tmp, tmp, CV_CVTIMG_SWAP_RB);
-
-        printf("%d, %d...\n", tmp->height, tmp->width);
-
-        // update the display
-        IplImage *resized = cvCreateImage(cvSize(windowHeight, windowWidth), tmp->depth, tmp->nChannels);
-
-        // fit the image to the window?
-        if (fitImageToWindow == 1) {
-            trace("fitting to window....");
-            cvResize(tmp, resized, CV_INTER_LINEAR);
-            cvSaveImage("resized.bmp", resized);
-            printf("resized...[%d,%d]\n", windowWidth, windowHeight);
-            printf("resized...[%d,%d]\n", ui->graphicsView->width(), ui->graphicsView->height());
-        }
-
-//        uchar *cv = (uchar*)(tmp->imageData);
-//        QImage img(cv, tmp->width, tmp->height, QImage::Format_RGB888);
-
-        uchar *cv;
-        QImage *img;
-
-        if (fitImageToWindow == 1) {
-            cv = (uchar*)(resized->imageData);
-            img = new QImage(cv, resized->width, resized->height, QImage::Format_RGB888);
-        } else {
-            cv = (uchar*)(tmp->imageData);
-            img = new QImage(cv, tmp->width, tmp->height, QImage::Format_RGB888);
-        }
-
-        // TODO :: this needs some work yet because i cannot refresh the screen properly with the new image coming in
-        scene->clear();
-        scene->setSceneRect(0, 0, tmp->width, tmp->height);
-        scene->addPixmap(QPixmap::fromImage(*img));
-        scene->update();
-        QApplication::processEvents();
-
-        cvReleaseImage(&tmp);
-        cvReleaseImage(&resized);
-
-        // update the status bar
-        QString msg2 = name.c_str();
-        ui->statusBar->showMessage(msg2);
-
-    }
 
 } // end on_pushButtonTrack_clicked
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// timerEvent
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void MainWindow::timerEvent(QTimerEvent *)
-{
-
-    trace("timer event");
-
-} // end timerEvent
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// updateImageNumber
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void MainWindow::updateImageNumber(int value)
-{
-    QString t = files.value(value);
-    char t2[64];
-    sprintf(t2, "%s", qPrintable(t));
-    QString msg2 = t2;
-    trace(msg2);
-
-    char fileName[256];
-
-    printf("%s\n", dPath.c_str());
-
-    sprintf(fileName, "%s/%s", dPath.c_str(), t2);
-    printf("%s\n", fileName);
-    QString t3 = fileName;
-    trace(fileName);
-
-    // load the current frame
-    IplImage *frame = cvLoadImage(fileName);
-
-    // allocate room for the processed image
-    //IplImage *processed = cvCreateImage(cvGetSize(frame), frame->depth, frame->nChannels);
-    IplImage *processed;
-
-    bool freeProcessedImage = false;
-\
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // apply any requested image processing
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    if (histogramEqualization == true) {
-
-        // histogram equalization
-        TNT::Array2D<double> array = getArrayFromIplImage(frame);
-        TNT::Array2D<double> temp;
-        temp = runHistogramEqualization(array);
-
-        //getIplImageFromArray2(temp, processed);
-        processed = getIplImageFromArray2(temp);
-
-        printf("ran histogram..., displayOption = %d\n", displayOption);
-
-        cvSaveImage("processed.bmp", processed);
-
-        freeProcessedImage = true;
-
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // handle the second display
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    if (displayOption == SECOND_DISPLAY_PROCESSED) {
-
-        if (processed != NULL && fitImageToWindow == 0) {
-
-            printf("trying to do the second display, no fitting\n");
-
-            // update the display
-            uchar *cv = (uchar*)(processed->imageData);
-            QImage img(cv, processed->width, processed->height, QImage::Format_RGB888);
-
-            scene2->clear();
-            scene2->setSceneRect(0, 0, processed->width, processed->height);
-            scene2->addPixmap(QPixmap::fromImage(img));
-            scene2->update();
-            QApplication::processEvents();
-
-            printf("here3\n");
-
-        } else if  (processed != NULL && fitImageToWindow == 1) {
-
-            printf("trying to do the second display, fitting\n");
-
-            IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), processed->depth, processed->nChannels);
-
-            trace("hist .... fitting to window....");
-            cvResize(processed, resized, CV_INTER_LINEAR);
-
-            // update the display
-            uchar *cv = (uchar*)(resized->imageData);
-            QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
-
-            scene2->clear();
-            scene2->setSceneRect(0, 0, resized->width, resized->height);
-            scene2->addPixmap(QPixmap::fromImage(img));
-            scene2->update();
-            QApplication::processEvents();
-
-            cvReleaseImage(&resized);
-
-        }
-
-    }
-
-    printf("here1\n");
-
-    // release the processing frame
-    if (freeProcessedImage == true) {
-        cvReleaseImage(&processed);
-        freeProcessedImage = false;
-    }
-
-    printf("here2\n");
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // main display image
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    printf("here5...\n");
-    if (frame != NULL && fitImageToWindow == 0) {
-
-        // swap red and blue
-        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
-
-        // update the display
-        uchar *cv = (uchar*)(frame->imageData);
-        QImage img(cv, frame->width, frame->height, QImage::Format_RGB888);
-
-        scene->clear();
-        scene->setSceneRect(0, 0, frame->width, frame->height);
-        scene->addPixmap(QPixmap::fromImage(img));
-        scene->update();
-        QApplication::processEvents();
-
-    } else if (frame != NULL && fitImageToWindow == 1) {
-
-        // swap red and blue
-        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
-
-        IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), frame->depth, frame->nChannels);
-
-        trace("fitting to window....");
-        cvResize(frame, resized, CV_INTER_LINEAR);
-
-        // update the display
-        uchar *cv = (uchar*)(resized->imageData);
-        QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
-
-        scene->clear();
-        scene->setSceneRect(0, 0, resized->width, resized->height);
-        scene->addPixmap(QPixmap::fromImage(img));
-        scene->update();
-        QApplication::processEvents();
-
-        cvReleaseImage(&resized);
-
-    }
-
-    printf("here6...\n");
-
-    // update the status bar
-    QString msg3 = fileName;
-    ui->statusBar->showMessage(msg3);
-
-    // release the current frame
-    printf("here4...\n");
-    cvReleaseImage(&frame);
-
-    printf("done....\n");
-
-} // end updateImageNumber
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -379,6 +118,12 @@ void MainWindow::createActions()
     // histogram equalization
     connect(ui->checkBoxHistogramEqualization, SIGNAL(clicked()), this, SLOT(toggleHistogramEqualization()));
 
+    // glt negative
+    connect(ui->checkBoxNegative, SIGNAL(clicked()), this, SLOT(toggleNegative()));
+
+    // edge filters
+    connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
+
 } // end createActions
 
 
@@ -393,6 +138,75 @@ void MainWindow::exitApplication()
     QApplication::exit();
 
 } // end exitApplication
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getDisplayOption
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getDisplayOption(int value)
+{
+    char msg[128];
+    sprintf(msg, "getDisplayOption :: The value is %d\n", value);
+    trace(msg);
+
+    displayOption = value;
+
+} // end getDisplayOption
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getEdgeFilter
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getEdgeFilter(int value)
+{
+    char msg[128];
+    sprintf(msg, "getEdgeFilter :: The value is %d\n", value);
+    trace(msg);
+
+    edgeFilter = value;
+
+} // end getEdgeFilter
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// listFiles
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::listFiles(QString directoryName)
+{
+    QDir directory = QDir(directoryName);
+    QString fileName = "*.bmp";
+
+    t = directoryName.toStdString();
+    datasetPath = t.c_str();
+
+    printf("datasetPath = %s\n", t.c_str());
+
+    if (fileName.isEmpty()) {
+        fileName = "*";
+    }
+
+    // this will contain the list of images
+    files = directory.entryList(QStringList(fileName), QDir::Files | QDir::NoSymLinks);
+
+    // display for debug purposes
+    for (int i=0; i<files.size(); i++) {
+        QString temp = files.value(i);
+        trace(temp);
+    }
+
+    // set the scroll bar to the number of images
+    ui->imageScrollBar->setMaximum(files.size());
+
+} // end listFiles
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -448,37 +262,49 @@ void MainWindow::openImageDirectory()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// listFiles
+// resetDisplay
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-void MainWindow::listFiles(QString directoryName)
+void MainWindow::resetDisplay ()
 {
-    QDir directory = QDir(directoryName);
-    QString fileName = "*.bmp";
+    displayOption = SECOND_DISPLAY_BLANK;
+    ui->comboBoxSecondWindow->setCurrentIndex(0);
+    scene2->clear();
+    scene->update();
+    QApplication::processEvents();
 
-    t = directoryName.toStdString();
-    datasetPath = t.c_str();
+} // end resetDisplay
 
-    printf("datasetPath = %s\n", t.c_str());
 
-    if (fileName.isEmpty()) {
-        fileName = "*";
-    }
+///////////////////////////////////////////////////////////////////////////////
+//
+// timerEvent
+//
+// Might be useful at some point to have a timer event function set to go
+//
+///////////////////////////////////////////////////////////////////////////////
 
-    // this will contain the list of images
-    files = directory.entryList(QStringList(fileName), QDir::Files | QDir::NoSymLinks);
+void MainWindow::timerEvent(QTimerEvent *)
+{
 
-    // display for debug purposes
-    for (int i=0; i<files.size(); i++) {
-        QString temp = files.value(i);
-        trace(temp);
-    }
+    trace("timer event");
 
-    // set the scroll bar to the number of images
-    ui->imageScrollBar->setMaximum(files.size());
+} // end timerEvent
 
-} // end listFiles
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// trace
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::trace(QString str)
+{
+
+    ui->plainTextEditTrace->appendPlainText(str);
+
+} // end trace
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -521,19 +347,234 @@ void MainWindow::toggleHistogramEqualization()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// getDisplayOption
+// toggleNegative
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-void MainWindow::getDisplayOption(int value)
+void MainWindow::toggleNegative()
 {
-    char msg[128];
-    sprintf(msg, "The value is %d\n", value);
-    trace(msg);
+    if (gltNegative == 0) {
+        gltNegative = 1;
+        trace("gltNegative is TRUE");
+    } else {
+        gltNegative = 0;
+        trace("gltNegative is FALSE");
+        resetDisplay();
+    }
 
-    displayOption = value;
-
-} // end getDisplayOption
+} // end toggleNegative
 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// updateImageNumber
+//
+///////////////////////////////////////////////////////////////////////////////
 
+void MainWindow::updateImageNumber(int value)
+{
+    QString t = files.value(value);
+    char t2[64];
+    sprintf(t2, "%s", qPrintable(t));
+    QString msg2 = t2;
+    trace(msg2);
+
+    char fileName[256];
+
+    printf("%s\n", dPath.c_str());
+
+    sprintf(fileName, "%s/%s", dPath.c_str(), t2);
+    printf("%s\n", fileName);
+    QString t3 = fileName;
+    trace(fileName);
+
+    // load the current frame
+    IplImage *frame = cvLoadImage(fileName);
+
+    // allocate room for the processed image
+    //IplImage *processed = cvCreateImage(cvGetSize(frame), frame->depth, frame->nChannels);
+    IplImage *processed;
+
+    bool freeProcessedImage = false;
+\
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // apply any requested image processing
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // histogram equalization
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (histogramEqualization == true) {
+
+        // histogram equalization
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        temp = runHistogramEqualization(array);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran histogram...,\n");
+
+        freeProcessedImage = true;
+
+    } // end histogram equalization
+
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // grey level transformation :: negative
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (gltNegative == true) {
+
+        // grey level transformation :: negative
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        temp = negative(array);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran negative...\n");
+
+        freeProcessedImage = true;
+
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // edge detection
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (edgeFilter == 1) {
+
+        runCannyEdge(frame, processed);
+
+        freeProcessedImage = true;
+
+    } else if (edgeFilter == 2) {
+
+        runSobelEdge(frame, processed);
+
+        freeProcessedImage = true;
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // handle the second display
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (displayOption == SECOND_DISPLAY_PROCESSED) {
+
+        if (processed != NULL && fitImageToWindow == 0) {
+
+            printf("trying to do the second display, no fitting\n");
+
+            // update the display
+            uchar *cv = (uchar*)(processed->imageData);
+            QImage img(cv, processed->width, processed->height, QImage::Format_RGB888);
+
+            scene2->clear();
+            scene2->setSceneRect(0, 0, processed->width, processed->height);
+            scene2->addPixmap(QPixmap::fromImage(img));
+            scene2->update();
+            QApplication::processEvents();
+
+            printf("here3\n");
+
+        } else if  (processed != NULL && fitImageToWindow == 1) {
+
+            printf("trying to do the second display, fitting\n");
+
+            IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), processed->depth, processed->nChannels);
+
+            trace("hist .... fitting to window....");
+            cvResize(processed, resized, CV_INTER_LINEAR);
+
+            // update the display
+            uchar *cv = (uchar*)(resized->imageData);
+            QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
+
+            scene2->clear();
+            scene2->setSceneRect(0, 0, resized->width, resized->height);
+            scene2->addPixmap(QPixmap::fromImage(img));
+            scene2->update();
+            QApplication::processEvents();
+
+            cvReleaseImage(&resized);
+
+        }
+
+    }
+
+    // release the processing frame?
+    if (freeProcessedImage == true) {
+        cvReleaseImage(&processed);
+        freeProcessedImage = false;
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // main display image
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (frame != NULL && fitImageToWindow == 0) {
+
+        // swap red and blue
+        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
+
+        // update the display
+        uchar *cv = (uchar*)(frame->imageData);
+        QImage img(cv, frame->width, frame->height, QImage::Format_RGB888);
+
+        scene->clear();
+        scene->setSceneRect(0, 0, frame->width, frame->height);
+        scene->addPixmap(QPixmap::fromImage(img));
+        scene->update();
+        QApplication::processEvents();
+
+    } else if (frame != NULL && fitImageToWindow == 1) {
+
+        // swap red and blue
+        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
+
+        IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), frame->depth, frame->nChannels);
+
+        trace("fitting to window....");
+        cvResize(frame, resized, CV_INTER_LINEAR);
+
+        // update the display
+        uchar *cv = (uchar*)(resized->imageData);
+        QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
+
+        scene->clear();
+        scene->setSceneRect(0, 0, resized->width, resized->height);
+        scene->addPixmap(QPixmap::fromImage(img));
+        scene->update();
+        QApplication::processEvents();
+
+        cvReleaseImage(&resized);
+
+    }
+
+    // update the status bar
+    QString msg3 = fileName;
+    ui->statusBar->showMessage(msg3);
+
+    // release the current frame
+    cvReleaseImage(&frame);
+
+} // end updateImageNumber

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Wed May 4 13:10:30 2011
+** Created: Thu May 5 12:40:57 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,22 +32,25 @@ static const uint qt_meta_data_MainWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x09,
-      30,   11,   11,   11, 0x09,
-      60,   11,   11,   11, 0x09,
-      80,   11,   11,   11, 0x09,
-     101,   11,   11,   11, 0x09,
-     124,   11,   11,   11, 0x09,
-     146,   11,   11,   11, 0x08,
-     171,   11,   11,   11, 0x08,
+      34,   11,   11,   11, 0x09,
+      53,   11,   11,   11, 0x09,
+      71,   11,   11,   11, 0x09,
+      92,   11,   11,   11, 0x09,
+     112,   11,   11,   11, 0x09,
+     142,   11,   11,   11, 0x09,
+     159,   11,   11,   11, 0x09,
+     182,   11,   11,   11, 0x08,
+     207,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
-    "MainWindow\0\0exitApplication()\0"
+    "MainWindow\0\0getDisplayOption(int)\0"
+    "getEdgeFilter(int)\0exitApplication()\0"
+    "openImageDirectory()\0toggleFitToWindow()\0"
     "toggleHistogramEqualization()\0"
-    "toggleFitToWindow()\0openImageDirectory()\0"
-    "updateImageNumber(int)\0getDisplayOption(int)\0"
+    "toggleNegative()\0updateImageNumber(int)\0"
     "timerEvent(QTimerEvent*)\0"
     "on_pushButtonTrack_clicked()\0"
 };
@@ -81,17 +84,19 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: exitApplication(); break;
-        case 1: toggleHistogramEqualization(); break;
-        case 2: toggleFitToWindow(); break;
+        case 0: getDisplayOption((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: getEdgeFilter((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: exitApplication(); break;
         case 3: openImageDirectory(); break;
-        case 4: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: getDisplayOption((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 6: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
-        case 7: on_pushButtonTrack_clicked(); break;
+        case 4: toggleFitToWindow(); break;
+        case 5: toggleHistogramEqualization(); break;
+        case 6: toggleNegative(); break;
+        case 7: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
+        case 9: on_pushButtonTrack_clicked(); break;
         default: ;
         }
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }

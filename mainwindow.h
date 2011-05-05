@@ -53,9 +53,13 @@ public:
     KLT *klt;
 
 private:
+
     Ui::MainWindow *ui;
+
     void createActions();
     void listFiles(QString);
+    void resetDisplay();
+
     string itos(int i);
 
     QGraphicsScene *scene;
@@ -78,8 +82,10 @@ private:
     string dPath;
 
     int displayOption;
+    int edgeFilter;
 
     bool histogramEqualization;
+    bool gltNegative;
 
 protected:
 
@@ -87,13 +93,14 @@ protected:
 
 protected Q_SLOTS:
 
-    void exitApplication();
-    void toggleHistogramEqualization();
-    void toggleFitToWindow();
-    void openImageDirectory();
-    void updateImageNumber(int);
-
     void getDisplayOption(int);
+    void getEdgeFilter(int);
+    void exitApplication();
+    void openImageDirectory();
+    void toggleFitToWindow();
+    void toggleHistogramEqualization();
+    void toggleNegative();
+    void updateImageNumber(int);
 
 private slots:
 

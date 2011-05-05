@@ -1,7 +1,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2009 Shawn T. Hunt
+// Copyright (c) 2011 Shawn T. Hunt
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
