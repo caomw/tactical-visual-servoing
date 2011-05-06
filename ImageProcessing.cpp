@@ -1819,3 +1819,98 @@ void runSobelEdge(IplImage *imageIn, IplImage *imageOut)
     }
 
 } // end runCannyEdge
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// contrastStretching
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> contrastStretching(TNT::Array2D <double> array, TNT::Array1D <int> lut)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = (int)lut[(int)(array[i][j])&0xff];
+        }
+    }
+
+    return a;
+
+} // end contrastStretching
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// powerLaw
+//
+///////////////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> powerLaw(TNT::Array2D <double> array, float constant, float gamma)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    float s=0, temp=0;
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    for (int i=0; i<height;i++) {
+        for (int j=0; j<width;j++) {
+            temp = array[i][j];
+            s = pow((float)temp/255, gamma) * 255;
+            s = s * constant;
+
+            if (s > 255) {
+                s = 255;
+            }
+
+            if (s < 0) {
+                s = 0;
+            }
+
+            a[i][j] = s;
+
+        }
+    }
+
+    return a;
+
+} // end powerLaw
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// bitPlaneSlicing
+//
+// This function implements bit plane slicing
+//
+// array	- input image (2d array)
+// plane	- plane to slice at
+//
+///////////////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> bitPlaneSlicing(TNT::Array2D <double> array, int plane)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int mask = (int)(pow(2, plane));
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            if ((int)(array[i][j])&(mask)) {
+                a[i][j] = 255;
+            } else {
+                a[i][j] = 0;
+            }
+        }
+    }
+
+    return a;
+
+} // end bitPlaneSlicing

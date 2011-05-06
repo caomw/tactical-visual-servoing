@@ -6,7 +6,6 @@
 
 #define SECOND_DISPLAY_BLANK 0
 #define SECOND_DISPLAY_PROCESSED 1
-#define SECOND_DISPLAY_PREVIOUS 2
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -28,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     utilities = new Utilities();
     klt = new KLT();
     imageFunctions = new ImageFunctions();
+
+    avi = new AVILibrary();
 
     // turingTracking = new TuringTracking();
 
@@ -51,8 +52,20 @@ MainWindow::MainWindow(QWidget *parent)
     displayOption = 0;
     edgeFilter = 0;
 
+    r1 = s1 = r2 = s2 = 0;
+
+    bitPlane = 7;
+
     histogramEqualization = false;
+    gltBitPlane = false;
+    gltContrastStretching = false;
+    gltLogarithm = false;
     gltNegative = false;
+    gltPowerLaw = false;
+
+    gltLogarithmConstant = 0.0;
+
+    processingAVI1Files2 = 0;
 
 } // end contrsuctor
 
@@ -70,6 +83,7 @@ MainWindow::~MainWindow()
     delete utilities;
     delete imageFunctions;
     delete klt;
+    delete avi;
     //delete turingTracking;
 
 } // end destructor
@@ -121,6 +135,23 @@ void MainWindow::createActions()
     // glt negative
     connect(ui->checkBoxNegative, SIGNAL(clicked()), this, SLOT(toggleNegative()));
 
+    // glt logarithm
+    connect(ui->checkBoxLogarithm, SIGNAL(clicked()), this, SLOT(toggleLogarithm()));
+    connect(ui->doubleSpinBoxLogarithmConstant, SIGNAL(valueChanged(double)), this, SLOT(getLogarithmConstant(double)));
+
+    // glt contrast stretching
+    connect(ui->checkBoxContrastStretching, SIGNAL(clicked()), this, SLOT(toggleContrastStretching()));
+    connect(ui->horizontalSliderR1, SIGNAL(valueChanged(int)), this, SLOT(getR1(int)));
+
+    // glt power law
+    connect(ui->checkBoxPowerLaw, SIGNAL(clicked()), this, SLOT(togglePowerLaw()));
+    connect(ui->doubleSpinBoxPowerLawConstant, SIGNAL(valueChanged(double)), this, SLOT(getPowerLawConstant(double)));
+    connect(ui->doubleSpinBoxPowerLawGamma, SIGNAL(valueChanged(double)), this, SLOT(getPowerLawGamma(double)));
+
+    // glt bit plane slicing
+    connect(ui->checkBoxBitPlaneSlicing, SIGNAL(clicked()), this, SLOT(toggleBitPlaneSlicing()));
+    connect(ui->comboBoxBitPlane, SIGNAL(currentIndexChanged(int)), this, SLOT(getBitPlane(int)));
+
     // edge filters
     connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
 
@@ -142,6 +173,37 @@ void MainWindow::exitApplication()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// getBitPlane
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getBitPlane(int value)
+{
+    char msg[128];
+    sprintf(msg, "getBitPlane :: The value is %d\n", value);
+    trace(msg);
+
+    if (value == 0) {
+        bitPlane = 7;
+    } else if (value == 1) {
+        bitPlane = 6;
+    } else if (value == 2) {
+        bitPlane = 5;
+    } else if (value == 3) {
+        bitPlane = 4;
+    } else if (value == 4) {
+        bitPlane = 3;
+    } else if (value == 5) {
+        bitPlane = 2;
+    } else if (value == 6) {
+        bitPlane = 1;
+    }
+
+} // end getBitPlane
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // getDisplayOption
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,6 +217,23 @@ void MainWindow::getDisplayOption(int value)
     displayOption = value;
 
 } // end getDisplayOption
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getLogarithmConstant
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getLogarithmConstant(double value)
+{
+    char msg[128];
+    sprintf(msg, "getLogarithmConstant :: The value is %lf\n", value);
+    trace(msg);
+
+    gltLogarithmConstant = value;
+
+} // end getLogarithmConstant
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,6 +255,57 @@ void MainWindow::getEdgeFilter(int value)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// getPowerLawConstant
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getPowerLawConstant(double value)
+{
+    char msg[128];
+    sprintf(msg, "getPowerLawConstant :: The value is %lf\n", value);
+    trace(msg);
+
+    gltPowerLawConstant = value;
+
+} // end getPowerLawConstant
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getPowerLawGamma
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getPowerLawGamma(double value)
+{
+    char msg[128];
+    sprintf(msg, "getPowerLawGamma :: The value is %lf\n", value);
+    trace(msg);
+
+    gltPowerLawGamma = value;
+
+} // end getPowerLawGamma
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getR1
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getR1(int value)
+{
+    char msg[128];
+    sprintf(msg, "getR1 :: The value is %d\n", value);
+    trace(msg);
+
+    r1 = value;
+
+} // end getEdgeFilter
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // listFiles
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,7 +313,10 @@ void MainWindow::getEdgeFilter(int value)
 void MainWindow::listFiles(QString directoryName)
 {
     QDir directory = QDir(directoryName);
+
+    //QString fileName = "*.bmp; *.png; *.ppm";
     QString fileName = "*.bmp";
+
 
     t = directoryName.toStdString();
     datasetPath = t.c_str();
@@ -220,7 +353,6 @@ void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
     trace("mouse pressed");
     printf("Mouse pressed...\n");
 
-
 } // end mousePressEvent
 
 
@@ -234,28 +366,57 @@ void MainWindow::openImageDirectory()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select the first image or a movie file"));
 
+    // first look and see if we have an avi file
     string t = fileName.toStdString();
-    string toFind = "/";
-    int  found = 0;
-    found = t.find_last_of(toFind);
 
-    string path;
+    string toFind = ".avi";
+    int found = 0;
+    found = t.find(toFind);
+
     if (found > 0) {
-        path = t.substr(0, found);
+
+        // go ahead and try to open it
+        avi->aviInitialize(t);
+
+        // if this is > 0, then we can read it
+        if (avi->captureAVIFrames > 0) {
+
+            // set the flag
+            processingAVI1Files2 = 1;
+
+            // and set the boundaries of the user interface bar
+            ui->imageScrollBar->setMaximum(avi->captureAVIFrames);
+
+        }
+
+    } else {
+
+        string toFind = "/";
+        int  found = 0;
+        found = t.find_last_of(toFind);
+
+        string path;
+        if (found > 0) {
+            path = t.substr(0, found);
+        }
+
+        QString path2 = QString::fromStdString(path);
+        trace(path2);
+
+        dPath = path2.toStdString();
+
+        char msg[128];
+        sprintf(msg, "Found at %d", found);
+        trace(msg);
+
+        trace(fileName);
+
+        listFiles(path2);
+
+        // set the flag
+        processingAVI1Files2 = 2;
+
     }
-
-    QString path2 = QString::fromStdString(path);
-    trace(path2);
-
-    dPath = path2.toStdString();
-
-    char msg[128];
-    sprintf(msg, "Found at %d", found);
-    trace(msg);
-
-    trace(fileName);
-
-    listFiles(path2);
 
 } // end openImageDirectory
 
@@ -309,6 +470,25 @@ void MainWindow::trace(QString str)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// toggleBitPlaneSlicing
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleBitPlaneSlicing()
+{
+    if (gltBitPlane == 0) {
+        gltBitPlane = 1;
+        trace("bitPlaneSlicing is TRUE");
+    } else {
+        gltBitPlane = 0;
+        trace("bitPlaneSlicing is FALSE");
+    }
+
+} // end toggleBitPlaneSlicing
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // toggleFitToWindow
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -324,6 +504,25 @@ void MainWindow::toggleFitToWindow()
     }
 
 } // end toggleFitToWindow
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleContrastStretching
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleContrastStretching()
+{
+    if (gltContrastStretching == 0) {
+        gltContrastStretching = 1;
+        trace("contrastStretching is TRUE");
+    } else {
+        gltContrastStretching = 0;
+        trace("contrastStretching is FALSE");
+    }
+
+} // end toggleContrastStretching
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -347,6 +546,26 @@ void MainWindow::toggleHistogramEqualization()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// toggleLogarithm
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleLogarithm()
+{
+    if (gltLogarithm == 0) {
+        gltLogarithm = 1;
+        trace("gltLogarithm is TRUE");
+    } else {
+        gltNegative = 0;
+        trace("gltLogarithm is FALSE");
+        resetDisplay();
+    }
+
+} // end toggleLogarithm
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // toggleNegative
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -363,6 +582,25 @@ void MainWindow::toggleNegative()
     }
 
 } // end toggleNegative
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// togglePowerLaw
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::togglePowerLaw()
+{
+    if (gltPowerLaw == 0) {
+        gltPowerLaw = 1;
+        trace("powerLaw is TRUE");
+    } else {
+        gltPowerLaw = 0;
+        trace("powerLaw is FALSE");
+    }
+
+} // end togglePowerLaw
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,7 +627,15 @@ void MainWindow::updateImageNumber(int value)
     trace(fileName);
 
     // load the current frame
-    IplImage *frame = cvLoadImage(fileName);
+    IplImage *frame;
+    if (processingAVI1Files2 == 1) {
+
+        frame = avi->aviGrabFrame(ui->imageScrollBar->value());
+
+    } else if (processingAVI1Files2 == 2) {
+
+        frame = cvLoadImage(fileName);
+    }
 
     // allocate room for the processed image
     //IplImage *processed = cvCreateImage(cvGetSize(frame), frame->depth, frame->nChannels);
@@ -444,6 +690,98 @@ void MainWindow::updateImageNumber(int value)
         processed = getIplImageFromArray2(temp);
 
         printf("ran negative...\n");
+
+        freeProcessedImage = true;
+
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // grey level transformation :: logarithm
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (gltLogarithm == true) {
+
+        // grey level transformation :: logarithm
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        temp = logarithm(array, gltLogarithmConstant);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran negative...\n");
+
+        freeProcessedImage = true;
+
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // grey level transformation :: contrast stretching
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (gltContrastStretching == true) {
+
+        // grey level transformation :: piecewise linear
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        TNT::Array1D<int> lut;
+
+        lut = findLUT(array, r1, s1, r2, s2);
+
+        temp = contrastStretching(array, lut);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran contrast stretching...\n");
+
+        freeProcessedImage = true;
+
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // grey level transformation :: power law
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (gltPowerLaw == true) {
+
+        // grey level transformation :: power law
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        temp = powerLaw(array, gltPowerLawConstant, gltPowerLawGamma);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran power law...\n");
+
+        freeProcessedImage = true;
+
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // grey level transformation :: bit plane slicing
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (gltBitPlane == true) {
+
+        // grey level transformation :: bit plane slicing
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+        temp = bitPlaneSlicing(array, bitPlane);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran bit plane slicing...\n");
 
         freeProcessedImage = true;
 
@@ -574,7 +912,9 @@ void MainWindow::updateImageNumber(int value)
     QString msg3 = fileName;
     ui->statusBar->showMessage(msg3);
 
-    // release the current frame
-    cvReleaseImage(&frame);
+    // release the current frame if we are loading from files
+    if (processingAVI1Files2 == 1) {
+        cvReleaseImage(&frame);
+    }
 
 } // end updateImageNumber

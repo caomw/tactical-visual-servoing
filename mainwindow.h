@@ -19,6 +19,9 @@
 
 #include "tracking_algorithms/Optical_Flow/KLT/KLT.h"
 
+// avi functions
+#include "avi/AVILibrary.h"
+
 #ifdef linux
 #include "SimpleIni.h"
 #endif
@@ -52,6 +55,8 @@ public:
 
     KLT *klt;
 
+    AVILibrary *avi;
+
 private:
 
     Ui::MainWindow *ui;
@@ -84,8 +89,26 @@ private:
     int displayOption;
     int edgeFilter;
 
+    int r1;
+    int s1;
+    int r2;
+    int s2;
+
+    int bitPlane;
+
     bool histogramEqualization;
+
+    bool gltBitPlane;
+    bool gltContrastStretching;
+    bool gltLogarithm;
     bool gltNegative;
+    bool gltPowerLaw;
+
+    double gltLogarithmConstant;
+    double gltPowerLawConstant;
+    double gltPowerLawGamma;
+
+    int processingAVI1Files2;
 
 protected:
 
@@ -93,13 +116,22 @@ protected:
 
 protected Q_SLOTS:
 
+    void getBitPlane(int);
     void getDisplayOption(int);
+    void getLogarithmConstant(double value);
+    void getPowerLawConstant(double value);
+    void getPowerLawGamma(double value);
+    void getR1(int);
     void getEdgeFilter(int);
     void exitApplication();
     void openImageDirectory();
+    void toggleBitPlaneSlicing();
+    void toggleContrastStretching();
     void toggleFitToWindow();
     void toggleHistogramEqualization();
+    void toggleLogarithm();
     void toggleNegative();
+    void togglePowerLaw();
     void updateImageNumber(int);
 
 private slots:

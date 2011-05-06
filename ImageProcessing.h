@@ -110,6 +110,9 @@ TNT::Array1D <double> getCol(TNT::Array2D <double> array, int col);
 void putCol2(TNT::Array2D <double> *array, int width, int height, TNT::Array1D <double> colIn, int col);
 TNT::Array1D <double> antiSymmetricFirMirrorOnBounds(TNT::Array1D <double> h, TNT::Array1D <double> c);
 TNT::Array2D <double> convert1DTo2D(TNT::Array1D <double> arrayIn, int width, int height);
+TNT::Array2D <double> contrastStretching(TNT::Array2D <double> array, TNT::Array1D <int> lut);
+TNT::Array2D <double> powerLaw(TNT::Array2D <double> array, float constant, float gamma);
+TNT::Array2D <double> bitPlaneSlicing(TNT::Array2D <double> array, int plane);
 
 void runCannyEdge(IplImage *imageIn, IplImage *imageOut);
 void runSobelEdge(IplImage *imageIn, IplImage *imageOut);

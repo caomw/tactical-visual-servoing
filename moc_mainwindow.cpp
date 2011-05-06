@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Thu May 5 12:40:57 2011
+** Created: Fri May 6 13:05:23 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,25 +32,40 @@ static const uint qt_meta_data_MainWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x09,
-      34,   11,   11,   11, 0x09,
-      53,   11,   11,   11, 0x09,
-      71,   11,   11,   11, 0x09,
-      92,   11,   11,   11, 0x09,
-     112,   11,   11,   11, 0x09,
-     142,   11,   11,   11, 0x09,
-     159,   11,   11,   11, 0x09,
-     182,   11,   11,   11, 0x08,
-     207,   11,   11,   11, 0x08,
+      29,   11,   11,   11, 0x09,
+      57,   51,   11,   11, 0x09,
+      86,   51,   11,   11, 0x09,
+     114,   51,   11,   11, 0x09,
+     139,   11,   11,   11, 0x09,
+     150,   11,   11,   11, 0x09,
+     169,   11,   11,   11, 0x09,
+     187,   11,   11,   11, 0x09,
+     208,   11,   11,   11, 0x09,
+     232,   11,   11,   11, 0x09,
+     259,   11,   11,   11, 0x09,
+     279,   11,   11,   11, 0x09,
+     309,   11,   11,   11, 0x09,
+     327,   11,   11,   11, 0x09,
+     344,   11,   11,   11, 0x09,
+     361,   11,   11,   11, 0x09,
+     384,   11,   11,   11, 0x08,
+     409,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
-    "MainWindow\0\0getDisplayOption(int)\0"
+    "MainWindow\0\0getBitPlane(int)\0"
+    "getDisplayOption(int)\0value\0"
+    "getLogarithmConstant(double)\0"
+    "getPowerLawConstant(double)\0"
+    "getPowerLawGamma(double)\0getR1(int)\0"
     "getEdgeFilter(int)\0exitApplication()\0"
-    "openImageDirectory()\0toggleFitToWindow()\0"
-    "toggleHistogramEqualization()\0"
-    "toggleNegative()\0updateImageNumber(int)\0"
+    "openImageDirectory()\0toggleBitPlaneSlicing()\0"
+    "toggleContrastStretching()\0"
+    "toggleFitToWindow()\0toggleHistogramEqualization()\0"
+    "toggleLogarithm()\0toggleNegative()\0"
+    "togglePowerLaw()\0updateImageNumber(int)\0"
     "timerEvent(QTimerEvent*)\0"
     "on_pushButtonTrack_clicked()\0"
 };
@@ -84,19 +99,28 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: getDisplayOption((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: getEdgeFilter((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: exitApplication(); break;
-        case 3: openImageDirectory(); break;
-        case 4: toggleFitToWindow(); break;
-        case 5: toggleHistogramEqualization(); break;
-        case 6: toggleNegative(); break;
-        case 7: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 8: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
-        case 9: on_pushButtonTrack_clicked(); break;
+        case 0: getBitPlane((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: getDisplayOption((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: getLogarithmConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 3: getPowerLawConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 4: getPowerLawGamma((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 5: getR1((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: getEdgeFilter((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: exitApplication(); break;
+        case 8: openImageDirectory(); break;
+        case 9: toggleBitPlaneSlicing(); break;
+        case 10: toggleContrastStretching(); break;
+        case 11: toggleFitToWindow(); break;
+        case 12: toggleHistogramEqualization(); break;
+        case 13: toggleLogarithm(); break;
+        case 14: toggleNegative(); break;
+        case 15: togglePowerLaw(); break;
+        case 16: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 17: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
+        case 18: on_pushButtonTrack_clicked(); break;
         default: ;
         }
-        _id -= 10;
+        _id -= 19;
     }
     return _id;
 }
