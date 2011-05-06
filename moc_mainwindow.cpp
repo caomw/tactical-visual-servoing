@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Fri May 6 13:05:23 2011
+** Created: Fri May 6 13:28:27 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -48,8 +48,9 @@ static const uint qt_meta_data_MainWindow[] = {
      327,   11,   11,   11, 0x09,
      344,   11,   11,   11, 0x09,
      361,   11,   11,   11, 0x09,
-     384,   11,   11,   11, 0x08,
-     409,   11,   11,   11, 0x08,
+     381,   11,   11,   11, 0x09,
+     404,   11,   11,   11, 0x08,
+     429,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -65,8 +66,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "toggleContrastStretching()\0"
     "toggleFitToWindow()\0toggleHistogramEqualization()\0"
     "toggleLogarithm()\0toggleNegative()\0"
-    "togglePowerLaw()\0updateImageNumber(int)\0"
-    "timerEvent(QTimerEvent*)\0"
+    "togglePowerLaw()\0toggleSwapRedBlue()\0"
+    "updateImageNumber(int)\0timerEvent(QTimerEvent*)\0"
     "on_pushButtonTrack_clicked()\0"
 };
 
@@ -115,12 +116,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 13: toggleLogarithm(); break;
         case 14: toggleNegative(); break;
         case 15: togglePowerLaw(); break;
-        case 16: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 17: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
-        case 18: on_pushButtonTrack_clicked(); break;
+        case 16: toggleSwapRedBlue(); break;
+        case 17: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 18: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
+        case 19: on_pushButtonTrack_clicked(); break;
         default: ;
         }
-        _id -= 19;
+        _id -= 20;
     }
     return _id;
 }

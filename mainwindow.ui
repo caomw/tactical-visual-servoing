@@ -1361,14 +1361,14 @@
    </property>
    <widget class="QMenu" name="menu_File">
     <property name="title">
-     <string>&amp;File</string>
+     <string>File</string>
     </property>
     <addaction name="action_Open_Sequence"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
-     <string>&amp;Help</string>
+     <string>Help</string>
     </property>
     <addaction name="action_About"/>
    </widget>
@@ -1377,7 +1377,6 @@
      <string>Dataset Actions</string>
     </property>
     <addaction name="actionApply_to_Entire_Dataset"/>
-    <addaction name="actionExport_Dataset"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuDataset_Actions"/>
@@ -1394,12 +1393,12 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_Open_Sequence">
    <property name="text">
-    <string>&amp;Open Sequence or Movie</string>
+    <string>Open Sequence or Movie</string>
    </property>
   </action>
   <action name="action_About">
    <property name="text">
-    <string>&amp;About</string>
+    <string>About</string>
    </property>
   </action>
   <action name="actionEvaluation">
@@ -1422,7 +1421,7 @@
   </action>
   <action name="actionApply_to_Entire_Dataset">
    <property name="text">
-    <string>Apply to Entire Dataset</string>
+    <string>Apply to Entire Dataset and Export</string>
    </property>
   </action>
   <action name="actionExport_Dataset">

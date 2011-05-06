@@ -83,6 +83,8 @@ private:
     bool windowHeight;
     bool windowWidth;
 
+    bool swapRedBlue;
+
     string iniFile;
     string dPath;
 
@@ -132,6 +134,7 @@ protected Q_SLOTS:
     void toggleLogarithm();
     void toggleNegative();
     void togglePowerLaw();
+    void toggleSwapRedBlue();
     void updateImageNumber(int);
 
 private slots:

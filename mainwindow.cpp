@@ -67,6 +67,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     processingAVI1Files2 = 0;
 
+    swapRedBlue = false;
+
 } // end contrsuctor
 
 
@@ -125,6 +127,9 @@ void MainWindow::createActions()
 
     // display option
     connect(ui->comboBoxSecondWindow, SIGNAL(currentIndexChanged(int)), this, SLOT(getDisplayOption(int)));
+
+    // swap red and blue?
+    connect(ui->checkBoxSwapRedBlue, SIGNAL(clicked()), this, SLOT(toggleSwapRedBlue()));
 
     // mouse events
     connect(ui->graphicsView, SIGNAL(mousePressEvent(QGraphicsSceneMouseEvent *)), this, SLOT(mousePressEvent(QGraphicsSceneMouseEvent *)));
@@ -605,6 +610,25 @@ void MainWindow::togglePowerLaw()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// toggleSwapRedBlue
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleSwapRedBlue()
+{
+    if (swapRedBlue == 0) {
+        swapRedBlue = 1;
+        trace("swapRedBlue is TRUE");
+    } else {
+        swapRedBlue = 0;
+        trace("swapRedBlue is FALSE");
+    }
+
+} // end toggleSwapRedBlue
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // updateImageNumber
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -630,11 +654,16 @@ void MainWindow::updateImageNumber(int value)
     IplImage *frame;
     if (processingAVI1Files2 == 1) {
 
-        frame = avi->aviGrabFrame(ui->imageScrollBar->value());
+        frame = avi->aviGrabFrame(ui->imageScrollBar->value()-1);
 
     } else if (processingAVI1Files2 == 2) {
 
         frame = cvLoadImage(fileName);
+    }
+
+    // swap red and blue
+    if (swapRedBlue == true) {
+        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
     }
 
     // allocate room for the processed image
@@ -870,9 +899,6 @@ void MainWindow::updateImageNumber(int value)
     ///////////////////////////////////////////////////////////////////////////
 
     if (frame != NULL && fitImageToWindow == 0) {
-
-        // swap red and blue
-        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
 
         // update the display
         uchar *cv = (uchar*)(frame->imageData);

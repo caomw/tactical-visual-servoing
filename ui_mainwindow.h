@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri May 6 10:37:11 2011
+** Created: Fri May 6 13:35:26 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -506,7 +506,6 @@ public:
         menu_File->addAction(actionExit);
         menu_Help->addAction(action_About);
         menuDataset_Actions->addAction(actionApply_to_Entire_Dataset);
-        menuDataset_Actions->addAction(actionExport_Dataset);
 
         retranslateUi(MainWindow);
 
@@ -519,12 +518,12 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Computer Vision Toolkit", 0, QApplication::UnicodeUTF8));
-        action_Open_Sequence->setText(QApplication::translate("MainWindow", "&Open Sequence or Movie", 0, QApplication::UnicodeUTF8));
-        action_About->setText(QApplication::translate("MainWindow", "&About", 0, QApplication::UnicodeUTF8));
+        action_Open_Sequence->setText(QApplication::translate("MainWindow", "Open Sequence or Movie", 0, QApplication::UnicodeUTF8));
+        action_About->setText(QApplication::translate("MainWindow", "About", 0, QApplication::UnicodeUTF8));
         actionEvaluation->setText(QApplication::translate("MainWindow", "Evaluation", 0, QApplication::UnicodeUTF8));
         actionNavigation->setText(QApplication::translate("MainWindow", "Navigation", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
-        actionApply_to_Entire_Dataset->setText(QApplication::translate("MainWindow", "Apply to Entire Dataset", 0, QApplication::UnicodeUTF8));
+        actionApply_to_Entire_Dataset->setText(QApplication::translate("MainWindow", "Apply to Entire Dataset and Export", 0, QApplication::UnicodeUTF8));
         actionExport_Dataset->setText(QApplication::translate("MainWindow", "Export Dataset", 0, QApplication::UnicodeUTF8));
         checkBoxFitToWindow->setText(QApplication::translate("MainWindow", "Fit to window", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("MainWindow", "Filter", 0, QApplication::UnicodeUTF8));
@@ -657,8 +656,8 @@ public:
         );
         label_2->setText(QApplication::translate("MainWindow", "Second Window", 0, QApplication::UnicodeUTF8));
         checkBoxSwapRedBlue->setText(QApplication::translate("MainWindow", "Swap red and blue?", 0, QApplication::UnicodeUTF8));
-        menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
-        menu_Help->setTitle(QApplication::translate("MainWindow", "&Help", 0, QApplication::UnicodeUTF8));
+        menu_File->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
+        menu_Help->setTitle(QApplication::translate("MainWindow", "Help", 0, QApplication::UnicodeUTF8));
         menuDataset_Actions->setTitle(QApplication::translate("MainWindow", "Dataset Actions", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
