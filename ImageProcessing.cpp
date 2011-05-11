@@ -1914,3 +1914,641 @@ TNT::Array2D <double> bitPlaneSlicing(TNT::Array2D <double> array, int plane)
     return a;
 
 } // end bitPlaneSlicing
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyAdaptiveFilter
+//
+// Takes an image and applies the adaptive filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyAdaptiveFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    double meanL=0, varianceL=0, varNoise=1000;
+    int value=0;
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+
+            meanL = meanLocal(array, k, width, height, j, i);
+            varianceL = varianceLocal(array, k, width, height, j, i, meanL);
+
+            double ratio=0;
+
+            if (varNoise > varianceL) {
+                ratio = 1;
+            } else {
+                ratio = varNoise/varianceL;
+            }
+
+            value = array[i][j] - (int)(ratio * (array[i][j] - meanL));
+
+            if (value < 0) {
+                value = 0;
+            }
+
+            if (value > 255) {
+                value = 255;
+            }
+
+            a[i][j] = value;
+
+        }
+
+    }
+
+    return a;
+
+} // end applyAdaptiveFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyAdaptiveMedianFilter
+//
+// Takes an image and applies the adaptive median filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+// sMax is hardcoded
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyAdaptiveMedianFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    int zMin=0, zMax=0, zMed=0, z=0, sMax=11;
+    bool supp=false;
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+
+            int dim=k;
+            int value=0;
+
+            while (dim < sMax+1) {
+                zMin = min(array, dim, width, height, j, i);
+                zMax = max(array, dim, width, height, j, i);
+                zMed = median(array, dim, width, height, j, i);
+
+                z = array[i][j];
+
+                int a1 = zMed - zMin;
+                int a2 = zMed - zMax;
+
+                if ((a1>0) && (a2<0)) {
+
+                    int b1 = z - zMin;
+                    int b2 = z - zMax;
+
+                    if ((b1>0) && (b2<0)) {
+                        value = z;
+                    } else {
+                        value = zMed;
+                    }
+
+                    break;
+
+                } else {
+
+                    dim = dim+2;
+
+                    if (dim <= sMax) {
+                        continue;
+                    } else {
+                        value = z;
+                        break;
+                    }
+
+                }
+
+            }
+
+            if (value < 0) {
+                value = 0;
+            }
+
+            if (value > 255) {
+                value = 255;
+            }
+
+
+            a[i][j] = value;
+
+        }
+
+    }
+
+    return a;
+
+} // end applyAdaptiveMedianFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyAlphaTrimmed
+//
+// Takes an image and applies the alpha trimmed filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyAlphaTrimmed(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = alphaTrimmed(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyContraharmonicFilter
+//
+// Takes an image and applies the contraharmonic filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyContraharmonicFilter(TNT::Array2D <double> array, int size, float q)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = meanContraharmonic(array, k, width, height, j, i, q);
+        }
+    }
+
+    return a;
+
+} // end applyContraharmonicFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyGeometricFilter
+//
+// Takes an image and applies the geometric filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyGeometricFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+                a[i][j] = meanGeometric(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+
+} // end applyGeometricFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyHarmonicFilter
+//
+// Takes an image and applies the harmonic filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyHarmonicFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = meanHarmonic(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+
+} // end applyHarmonicFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyMaxFilter
+//
+// Takes an image and applies the max filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyMaxFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = max(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+
+} // end applyMaxFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyMeanFilter
+//
+// Takes an image and applies the mean filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyMeanFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = meanArithmetic(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+
+} // end applyMeanFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyMedianFilter
+//
+// Takes an image and applies the median filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyMedianFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = median(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+
+} // end applyMedianFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyMidpointFilter
+//
+// Takes an image and applies the midpoint filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyMidpointFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+    int t1=0, t2=0;
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            t1 = min(array, k, width, height, j, i);
+            t2 = max(array, k, width, height, j, i);
+            a[j][i] = (t1+t2)/2;
+        }
+    }
+
+    return a;
+
+} // end applyMidPointFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// applyMinFilter
+//
+// Takes an image and applies the min filter with the
+//	specified dimension of the kernel
+//
+// array	- input image (2d array)
+// size		- dimension of the kernel (0=1x1, 1=3x3, 2=5x5, 3=7x7)
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> applyMinFilter(TNT::Array2D <double> array, int size)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int k=0, sum=0;
+
+    if (size == 0) {
+        k=1;
+    } else if (size == 1) {
+        k=3;
+    } else if (size == 2) {
+        k=5;
+    } else if (size == 3) {
+        k=7;
+    }
+
+    for (int i=0;i<height;i++) {
+        for (int j=0;j<width;j++) {
+            a[i][j] = min(array, k, width, height, j, i);
+        }
+    }
+
+    return a;
+
+} // end applyMinFilter
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// alphaTrimmed
+//
+// Adds impulse (salt and pepper) noise to an image
+//
+// array	- input image (2d array)
+// k		- dimension of the kernel
+// width	- width of the image
+// height	- height of the image
+// x		- x coordinate of the center pixel of the array
+// y		- y coordinate of the center pixel of the array
+//
+/////////////////////////////////////////////////////////////////////
+
+int alphaTrimmed (TNT::Array2D <double> array, int k, int width, int height, int x, int y)
+{
+    int t=0, sum=0, number=0;
+    int *supp = new int [k*k];
+
+    int atAlpha=3;
+
+    for (int i=0;i<k;i++) {
+        for (int j=0;j<k;j++) {
+
+            if(((x-1+j)>=0) && ((y-1+i)>=0) && ((x-1+j)<width) && ((y-1+i)<height)) {
+                supp[t] = array[y-1+i][x-1+j];
+                t++;
+                number++;
+            }
+        }
+    }
+
+    if (number == 0) {
+        delete [] supp;
+        return 0;
+    }
+
+    sortArray(supp, k*k);
+
+    for (int u=0; u<(atAlpha/2); u++) {
+        supp[u] = -1;
+    }
+
+    for (int v=number-1; v>number-1-(atAlpha/2); v--) {
+        supp[v] = -1;
+    }
+
+    for (int w=0; w<number; w++) {
+        if (supp[w] != -1) {
+            sum = sum+supp[w];
+        }
+    }
+
+    delete [] supp;
+
+    if (sum == 0) {
+        return 0;
+    } else {
+        return (sum/(number-atAlpha));
+    }
+
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// varianceLocal
+//
+// This function calculates the variance of a kxk pixel
+//	neighborhood (including center pixel)
+//
+/////////////////////////////////////////////////////////////////////
+
+int varianceLocal (TNT::Array2D <double> array, int k, int width, int height, int x, int y, double m)
+{
+    double sum=0, number=0;
+
+    for (int i=0;i<k;i++) {
+        for (int j=0;j<k;j++) {
+            if(((x-1+j)>=0) && ((y-1+i)>=0) && ((x-1+j)<width) && ((y-1+i)<height)) {
+                sum = sum + pow((array[y-1+i][x-1+j]-m), 2);
+                number++;
+            }
+        }
+    }
+
+    if (number == 0) {
+        return 0;
+    }
+
+    return sum/number;
+
+}
+
+
+

@@ -7,6 +7,21 @@
 #define SECOND_DISPLAY_BLANK 0
 #define SECOND_DISPLAY_PROCESSED 1
 
+#define SHARPENING_LAPLACIAN 0
+#define SHARPENING_GRADIENT 1
+
+#define SMOOTHING_MF_ARITHMETIC 0
+#define SMOOTHING_MF_GEOMETRIC 1
+#define SMOOTHING_MF_CONTRAHARMONIC 2
+#define SMOOTHING_MF_HARMONIC 3
+#define SMOOTHING_OS_MEDIAN 4
+#define SMOOTHING_OS_MAX 5
+#define SMOOTHING_OS_MIN 6
+#define SMOOTHING_OS_MID 7
+#define SMOOTHING_OS_ALPHA 8
+#define SMOOTHING_ADAPT_LOCAL_NOISE 9
+#define SMOOTHING_ADAPT_MED_FILTER 10
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // MainWindow constructor
@@ -63,9 +78,16 @@ MainWindow::MainWindow(QWidget *parent)
     gltNegative = false;
     gltPowerLaw = false;
 
+    sharpening = false;
+    smoothing = false;
+
     gltLogarithmConstant = 0.0;
 
     processingAVI1Files2 = 0;
+
+    sharpeningAlgorithm = 0;
+    smoothingFilter = 0;
+    smoothingMask = 0;
 
     swapRedBlue = false;
 
@@ -136,6 +158,15 @@ void MainWindow::createActions()
 
     // histogram equalization
     connect(ui->checkBoxHistogramEqualization, SIGNAL(clicked()), this, SLOT(toggleHistogramEqualization()));
+
+    // sharpening algorithm
+    connect(ui->checkBoxSharpening, SIGNAL(clicked()), this, SLOT(toggleSharpeningAlgorithm()));
+    connect(ui->comboBoxSharpeningAlgorithm, SIGNAL(currentIndexChanged(int)), this, SLOT(getSharpeningAlgorithm(int)));
+
+    // smoothing filter
+    connect(ui->checkBoxSmoothing, SIGNAL(clicked()), this, SLOT(toggleSmoothing()));
+    connect(ui->comboBoxSmoothingFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getSmoothingFilter(int)));
+    connect(ui->comboBoxSmoothingMask, SIGNAL(currentIndexChanged(int)), this, SLOT(getSmoothingMask(int)));
 
     // glt negative
     connect(ui->checkBoxNegative, SIGNAL(clicked()), this, SLOT(toggleNegative()));
@@ -260,6 +291,40 @@ void MainWindow::getEdgeFilter(int value)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// getSmoothingFilter
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getSmoothingFilter(int value)
+{
+    char msg[128];
+    sprintf(msg, "getSmoothingFilter :: The value is %d\n", value);
+    trace(msg);
+
+    edgeFilter = value;
+
+} // end getSmoothingFilter
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getSmoothingMask
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getSmoothingMask(int value)
+{
+    char msg[128];
+    sprintf(msg, "getSmoothingMask :: The value is %d\n", value);
+    trace(msg);
+
+    edgeFilter = value;
+
+} // end getSmoothingMask
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // getPowerLawConstant
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -290,6 +355,23 @@ void MainWindow::getPowerLawGamma(double value)
     gltPowerLawGamma = value;
 
 } // end getPowerLawGamma
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getSharpeningAlgorithm
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getSharpeningAlgorithm(int value)
+{
+    char msg[128];
+    sprintf(msg, "getSharpeningAlgorithm :: The value is %d\n", value);
+    trace(msg);
+
+    sharpeningAlgorithm = value;
+
+} // end getSharpeningAlgorithm
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -610,6 +692,44 @@ void MainWindow::togglePowerLaw()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// toggleSharpeningAlgorithm
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleSharpeningAlgorithm()
+{
+    if (sharpening == 0) {
+        sharpening = 1;
+        trace("sharpening is TRUE");
+    } else {
+        sharpening = 0;
+        trace("sharpening is FALSE");
+    }
+
+} // end toggleSharpeningAlgorithm
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleSmoothing
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleSmoothing()
+{
+    if (smoothing == 0) {
+        smoothing = 1;
+        trace("smoothing is TRUE");
+    } else {
+        smoothing = 0;
+        trace("smoothing is FALSE");
+    }
+
+} // end toggleSmoothing
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // toggleSwapRedBlue
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -701,6 +821,50 @@ void MainWindow::updateImageNumber(int value)
 
     } // end histogram equalization
 
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // sharpening algorithms
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (sharpening == true) {
+
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+
+        if (sharpeningAlgorithm == SHARPENING_LAPLACIAN) {
+
+            temp = laplacian(array);
+
+        } else if (sharpeningAlgorithm == SHARPENING_GRADIENT) {
+
+            temp = gradient(array);
+        }
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran sharpening...\n");
+
+        freeProcessedImage = true;
+
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // smoothing algorithms
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (smoothing == true) {
+
+ //       TNT::Array2D<double> array = getArrayFromIplImage(frame);
+ //       TNT::Array2D<double> temp;
+
+        // TODO
+
+    }
 
     /////////////////////////////////////////////////////////////////
     //

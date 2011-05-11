@@ -106,11 +106,18 @@ private:
     bool gltNegative;
     bool gltPowerLaw;
 
+    bool sharpening;
+    bool smoothing;
+
     double gltLogarithmConstant;
     double gltPowerLawConstant;
     double gltPowerLawGamma;
 
     int processingAVI1Files2;
+
+    int sharpeningAlgorithm;
+    int smoothingFilter;
+    int smoothingMask;
 
 protected:
 
@@ -125,6 +132,9 @@ protected Q_SLOTS:
     void getPowerLawGamma(double value);
     void getR1(int);
     void getEdgeFilter(int);
+    void getSharpeningAlgorithm(int);
+    void getSmoothingFilter(int);
+    void getSmoothingMask(int);
     void exitApplication();
     void openImageDirectory();
     void toggleBitPlaneSlicing();
@@ -134,6 +144,8 @@ protected Q_SLOTS:
     void toggleLogarithm();
     void toggleNegative();
     void togglePowerLaw();
+    void toggleSharpeningAlgorithm();
+    void toggleSmoothing();
     void toggleSwapRedBlue();
     void updateImageNumber(int);
 

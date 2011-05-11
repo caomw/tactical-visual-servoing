@@ -116,3 +116,17 @@ TNT::Array2D <double> bitPlaneSlicing(TNT::Array2D <double> array, int plane);
 
 void runCannyEdge(IplImage *imageIn, IplImage *imageOut);
 void runSobelEdge(IplImage *imageIn, IplImage *imageOut);
+
+TNT::Array2D <double> applyAdaptiveFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyAdaptiveMedianFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyAlphaTrimmed(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyContraharmonicFilter(TNT::Array2D <double> array, int size, float q);
+TNT::Array2D <double> applyGeometricFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyHarmonicFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyMeanFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyMedianFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyMidpointFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyMinFilter(TNT::Array2D <double> array, int size);
+int alphaTrimmed (TNT::Array2D <double> array, int k, int width, int height, int x, int y);
+int varianceLocal (TNT::Array2D <double> array, int k, int width, int height, int x, int y, double m);
+
