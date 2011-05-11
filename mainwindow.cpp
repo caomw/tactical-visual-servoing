@@ -81,6 +81,10 @@ MainWindow::MainWindow(QWidget *parent)
     sharpening = false;
     smoothing = false;
 
+    addGaussianNoise = false;
+    addGammaNoise = false;
+    addImpulseNoise = false;
+
     gltLogarithmConstant = 0.0;
 
     processingAVI1Files2 = 0;
@@ -91,7 +95,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     swapRedBlue = false;
 
-} // end contrsuctor
+    impulseNoise = 0;
+
+} // end constructor
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,6 +196,14 @@ void MainWindow::createActions()
 
     // edge filters
     connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
+
+    // noise
+    connect(ui->checkBoxAddGaussianNoise, SIGNAL(clicked()), this, SLOT(toggleGaussianNoise()));
+
+    connect(ui->checkBoxAddGammaNoise, SIGNAL(clicked()), this, SLOT(toggleGammaNoise()));
+
+    connect(ui->checkBoxAddImpulseNoise, SIGNAL(clicked()), this, SLOT(toggleAddImpulseNoise()));
+    connect(ui->spinBoxImpulseNoise, SIGNAL(valueChanged(int)), this, SLOT(getImpulseNoise(int)));
 
 } // end createActions
 
@@ -291,6 +305,24 @@ void MainWindow::getEdgeFilter(int value)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// getImpulseNoise
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getImpulseNoise(int value)
+{
+    char msg[128];
+    sprintf(msg, "getImpulseNoise :: The value is %d\n", value);
+    trace(msg);
+
+    impulseNoise = value;
+
+} // end getEdgeFilter
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // getSmoothingFilter
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -301,7 +333,7 @@ void MainWindow::getSmoothingFilter(int value)
     sprintf(msg, "getSmoothingFilter :: The value is %d\n", value);
     trace(msg);
 
-    edgeFilter = value;
+    smoothingFilter = value;
 
 } // end getSmoothingFilter
 
@@ -318,7 +350,15 @@ void MainWindow::getSmoothingMask(int value)
     sprintf(msg, "getSmoothingMask :: The value is %d\n", value);
     trace(msg);
 
-    edgeFilter = value;
+    if (value == 0) {
+        smoothingMask = 1;
+    } else if (value == 1) {
+        smoothingMask = 3;
+    } else if (value == 2) {
+        smoothingMask = 5;
+    } else if (value == 3) {
+        smoothingMask = 7;
+    }
 
 } // end getSmoothingMask
 
@@ -553,6 +593,63 @@ void MainWindow::trace(QString str)
     ui->plainTextEditTrace->appendPlainText(str);
 
 } // end trace
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleAddGaussianNoise
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleAddGaussianNoise()
+{
+    if (addGaussianNoise == 0) {
+        addGaussianNoise = 1;
+        trace("addGaussianNoise is TRUE");
+    } else {
+        addGaussianNoise = 0;
+        trace("addGaussianNoise is FALSE");
+    }
+
+} // end toggleAddGaussianNoise
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleAddGammaNoise
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleAddGammaNoise()
+{
+    if (addGammaNoise == 0) {
+        addGammaNoise = 1;
+        trace("addGammaNoise is TRUE");
+    } else {
+        addGammaNoise = 0;
+        trace("addGammaNoise is FALSE");
+    }
+
+} // end toggleAddGammaNoise
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleAddImpulseNoise
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleAddImpulseNoise()
+{
+    if (addImpulseNoise == 0) {
+        addImpulseNoise = 1;
+        trace("addImpulseNoise is TRUE");
+    } else {
+        addImpulseNoise = 0;
+        trace("addImpulseNoise is FALSE");
+    }
+
+} // end toggleAddImpulseNoise
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -859,11 +956,42 @@ void MainWindow::updateImageNumber(int value)
 
     if (smoothing == true) {
 
- //       TNT::Array2D<double> array = getArrayFromIplImage(frame);
- //       TNT::Array2D<double> temp;
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
 
-        // TODO
+        // ???
+        float q = 1.0;
 
+        if (smoothingFilter == SMOOTHING_MF_ARITHMETIC) {
+            temp = applyMeanFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_MF_GEOMETRIC) {
+            temp = applyGeometricFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_MF_CONTRAHARMONIC) {
+            temp = applyContraharmonicFilter(array, smoothingMask, q);
+        } else if (smoothingFilter == SMOOTHING_MF_HARMONIC) {
+            temp = applyHarmonicFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_OS_MEDIAN) {
+            temp = applyMedianFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_OS_MAX) {
+            temp = applyMaxFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_OS_MIN) {
+            temp = applyMinFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_OS_MID) {
+            temp = applyMidpointFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_OS_ALPHA) {
+            temp = applyAlphaTrimmed(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_ADAPT_LOCAL_NOISE) {
+            temp = applyAdaptiveFilter(array, smoothingMask);
+        } else if (smoothingFilter == SMOOTHING_ADAPT_MED_FILTER) {
+            temp = applyAdaptiveMedianFilter(array, smoothingMask);
+        }
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran smoothing...\n");
+
+        freeProcessedImage = true;
     }
 
     /////////////////////////////////////////////////////////////////
@@ -999,6 +1127,34 @@ void MainWindow::updateImageNumber(int value)
         freeProcessedImage = true;
 
     }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // add noise
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (addGaussianNoise == 1) {
+
+    } else if (addGammaNoise == 1) {
+
+    } else if (addImpulseNoise == 1) {
+
+        TNT::Array2D<double> array = getArrayFromIplImage(frame);
+        TNT::Array2D<double> temp;
+
+        float percent = (float)impulseNoise * 0.01;
+        temp = addNoiseImpulse(array, percent);
+
+        //getIplImageFromArray2(temp, processed);
+        processed = getIplImageFromArray2(temp);
+
+        printf("ran impulse noise...\n");
+
+        freeProcessedImage = true;
+
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     //

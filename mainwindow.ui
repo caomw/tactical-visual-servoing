@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tabSmoothing">
      <attribute name="title">
@@ -699,6 +699,142 @@
      <attribute name="title">
       <string>Noise</string>
      </attribute>
+     <widget class="QCheckBox" name="checkBoxAddGaussianNoise">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>78</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gaussian noise?</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBoxImpulseNoise">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>175</y>
+        <width>59</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBoxGammaVar">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>126</y>
+        <width>59</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>100</number>
+      </property>
+      <property name="maximum">
+       <number>400</number>
+      </property>
+      <property name="singleStep">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_21">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>130</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Variance</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_22">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>130</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Alpha</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBoxGammaAlpha">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>126</y>
+        <width>59</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>6</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_23">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>80</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mean</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_24">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>80</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Variance</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxAddGammaNoise">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>130</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gamma noise?</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxAddImpulseNoise">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>180</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Impulse noise?</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tabEdgeFilters">
      <attribute name="title">

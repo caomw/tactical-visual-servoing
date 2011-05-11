@@ -2551,4 +2551,179 @@ int varianceLocal (TNT::Array2D <double> array, int k, int width, int height, in
 }
 
 
+/////////////////////////////////////////////////////////////////////
+//
+// addNoiseGamma
+//
+// Adds Gamma noise to an image
+//
+/////////////////////////////////////////////////////////////////////
 
+TNT::Array2D <double> addNoiseGamma(TNT::Array2D <double> array, float variance, float alpha)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    double A =sqrt((double)variance/(double)alpha)/2;
+    double noise=0, theta=0, rx=0, ry=0, temp=0;
+
+    TNT::Array2D <double> ret(height, width, 0.0);
+
+    for (int i=0; i<height; i++) {
+        for (int j=0; j<width; j++) {
+            for (int a=0; a<alpha; a++) {
+
+                noise = sqrt(-2*A*log(1.0-drand48()));
+                theta = (drand48() * 6.28318530718 - 3.14159265359);
+
+                rx = noise*cos(theta);
+                ry = noise*sin(theta);
+                noise = rx*rx+ry*ry;
+
+                temp = array[i][j];
+                temp = temp + noise;
+
+                if (temp < 0) {
+                    temp = 0;
+                }
+
+                if (temp > 255) {
+                    temp = 255;
+                }
+
+                ret[i][j] = temp;
+
+            }
+
+        }
+
+    }
+
+    return ret;
+
+} // end addNoiseGamma
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// addNoiseGaussian
+//
+// Adds Gaussian noise to an image
+//
+// array	- input image (2d array)
+// mean		- mean
+// variance	- variance
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> addNoiseGaussian(TNT::Array2D <double> array, float mean, float variance)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    double temp=0, pixel=0;
+
+    // randomize the seed
+    srand(time(NULL));
+
+    for (int i=0; i<height; i++) {
+        for (int j=0; j<width; j++) {
+
+            pixel = array[i][j];
+            temp = pixel + mean + sqrt(variance)*gaussianRandom();
+
+            if (temp < 0) {
+                temp = 0;
+            }
+
+            if (temp > 255) {
+                temp = 255;
+            }
+
+            a[i][j] = temp;
+
+        }
+
+    }
+
+    return a;
+
+} // end addNoiseGaussian
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// addNoiseImpulse
+//
+// Adds impulse (random white pixels) noise to an image
+//
+// array	- input image (2d array)
+// percent	- percentage of image to add noise to
+//
+/////////////////////////////////////////////////////////////////////
+
+TNT::Array2D <double> addNoiseImpulse(TNT::Array2D <double> array, float percent)
+{
+    int height = array.dim1(), width = array.dim2();
+
+    TNT::Array2D <double> a(height, width, 0.0);
+
+    int n = (int)((percent/100) * width * height);
+
+    int rx=0, ry=0;
+    int xMin=0, yMin=0, xMax=width, yMax=height;
+
+    // copy the original image
+    for (int i=0; i<height; i++) {
+        for (int j=0; j<width; j++) {
+            a[i][j] = array[i][j];
+        }
+    }
+
+    // add the noise
+    for (int i=0; i<n; i++) {
+        rx = rand() % xMax + xMin;
+        ry = rand() % yMax + yMin;
+        a[ry][rx] = 0;
+    }
+
+    return a;
+
+} // end addNoiseImpulse
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// gaussianRandom()
+//
+/////////////////////////////////////////////////////////////////////
+
+double gaussianRandom()
+{
+    static double V1, V2, S;
+    static int phase = 0;
+    double X;
+
+    if (phase == 0) {
+
+        do {
+            double U1 = (double)rand() / RAND_MAX;
+            double U2 = (double)rand() / RAND_MAX;
+            V1 = 2 * U1 - 1;
+            V2 = 2 * U2 - 1;
+            S = V1 * V1 + V2 * V2;
+        } while(S >= 1 || S == 0);
+
+            X = V1 * sqrt(-2 * log(S) / S);
+
+    } else {
+
+        X = V2 * sqrt(-2 * log(S) / S);
+
+    }
+
+    phase = 1 - phase;
+
+    return X;
+
+}

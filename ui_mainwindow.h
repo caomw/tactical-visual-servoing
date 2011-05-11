@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 11 08:04:41 2011
+** Created: Wed May 11 09:30:10 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -89,6 +89,16 @@ public:
     QWidget *tabHistogram;
     QCheckBox *checkBoxHistogramEqualization;
     QWidget *tabNoise;
+    QCheckBox *checkBoxAddGaussianNoise;
+    QSpinBox *spinBoxImpulseNoise;
+    QSpinBox *spinBoxGammaVar;
+    QLabel *label_21;
+    QLabel *label_22;
+    QSpinBox *spinBoxGammaAlpha;
+    QLabel *label_23;
+    QLabel *label_24;
+    QCheckBox *checkBoxAddGammaNoise;
+    QCheckBox *checkBoxAddImpulseNoise;
     QWidget *tabEdgeFilters;
     QComboBox *comboBoxEdgeFilter;
     QLabel *label_16;
@@ -323,6 +333,41 @@ public:
         tabWidget->addTab(tabHistogram, QString());
         tabNoise = new QWidget();
         tabNoise->setObjectName(QString::fromUtf8("tabNoise"));
+        checkBoxAddGaussianNoise = new QCheckBox(tabNoise);
+        checkBoxAddGaussianNoise->setObjectName(QString::fromUtf8("checkBoxAddGaussianNoise"));
+        checkBoxAddGaussianNoise->setGeometry(QRect(20, 78, 141, 22));
+        spinBoxImpulseNoise = new QSpinBox(tabNoise);
+        spinBoxImpulseNoise->setObjectName(QString::fromUtf8("spinBoxImpulseNoise"));
+        spinBoxImpulseNoise->setGeometry(QRect(170, 175, 59, 27));
+        spinBoxGammaVar = new QSpinBox(tabNoise);
+        spinBoxGammaVar->setObjectName(QString::fromUtf8("spinBoxGammaVar"));
+        spinBoxGammaVar->setGeometry(QRect(250, 126, 59, 27));
+        spinBoxGammaVar->setMinimum(100);
+        spinBoxGammaVar->setMaximum(400);
+        spinBoxGammaVar->setSingleStep(10);
+        label_21 = new QLabel(tabNoise);
+        label_21->setObjectName(QString::fromUtf8("label_21"));
+        label_21->setGeometry(QRect(170, 130, 67, 17));
+        label_22 = new QLabel(tabNoise);
+        label_22->setObjectName(QString::fromUtf8("label_22"));
+        label_22->setGeometry(QRect(360, 130, 67, 17));
+        spinBoxGammaAlpha = new QSpinBox(tabNoise);
+        spinBoxGammaAlpha->setObjectName(QString::fromUtf8("spinBoxGammaAlpha"));
+        spinBoxGammaAlpha->setGeometry(QRect(420, 126, 59, 27));
+        spinBoxGammaAlpha->setMinimum(1);
+        spinBoxGammaAlpha->setMaximum(6);
+        label_23 = new QLabel(tabNoise);
+        label_23->setObjectName(QString::fromUtf8("label_23"));
+        label_23->setGeometry(QRect(170, 80, 67, 17));
+        label_24 = new QLabel(tabNoise);
+        label_24->setObjectName(QString::fromUtf8("label_24"));
+        label_24->setGeometry(QRect(330, 80, 67, 17));
+        checkBoxAddGammaNoise = new QCheckBox(tabNoise);
+        checkBoxAddGammaNoise->setObjectName(QString::fromUtf8("checkBoxAddGammaNoise"));
+        checkBoxAddGammaNoise->setGeometry(QRect(20, 130, 141, 22));
+        checkBoxAddImpulseNoise = new QCheckBox(tabNoise);
+        checkBoxAddImpulseNoise->setObjectName(QString::fromUtf8("checkBoxAddImpulseNoise"));
+        checkBoxAddImpulseNoise->setGeometry(QRect(20, 180, 141, 22));
         tabWidget->addTab(tabNoise, QString());
         tabEdgeFilters = new QWidget();
         tabEdgeFilters->setObjectName(QString::fromUtf8("tabEdgeFilters"));
@@ -517,7 +562,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(5);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -605,6 +650,13 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabReduceGraylevels), QApplication::translate("MainWindow", "Reduce Graylevels", 0, QApplication::UnicodeUTF8));
         checkBoxHistogramEqualization->setText(QApplication::translate("MainWindow", "Apply histogram equalization?", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabHistogram), QApplication::translate("MainWindow", "Histogram Equalization", 0, QApplication::UnicodeUTF8));
+        checkBoxAddGaussianNoise->setText(QApplication::translate("MainWindow", "Gaussian noise?", 0, QApplication::UnicodeUTF8));
+        label_21->setText(QApplication::translate("MainWindow", "Variance", 0, QApplication::UnicodeUTF8));
+        label_22->setText(QApplication::translate("MainWindow", "Alpha", 0, QApplication::UnicodeUTF8));
+        label_23->setText(QApplication::translate("MainWindow", "Mean", 0, QApplication::UnicodeUTF8));
+        label_24->setText(QApplication::translate("MainWindow", "Variance", 0, QApplication::UnicodeUTF8));
+        checkBoxAddGammaNoise->setText(QApplication::translate("MainWindow", "Gamma noise?", 0, QApplication::UnicodeUTF8));
+        checkBoxAddImpulseNoise->setText(QApplication::translate("MainWindow", "Impulse noise?", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabNoise), QApplication::translate("MainWindow", "Noise", 0, QApplication::UnicodeUTF8));
         comboBoxEdgeFilter->clear();
         comboBoxEdgeFilter->insertItems(0, QStringList()

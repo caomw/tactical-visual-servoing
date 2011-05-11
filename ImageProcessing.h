@@ -126,7 +126,13 @@ TNT::Array2D <double> applyHarmonicFilter(TNT::Array2D <double> array, int size)
 TNT::Array2D <double> applyMeanFilter(TNT::Array2D <double> array, int size);
 TNT::Array2D <double> applyMedianFilter(TNT::Array2D <double> array, int size);
 TNT::Array2D <double> applyMidpointFilter(TNT::Array2D <double> array, int size);
+TNT::Array2D <double> applyMaxFilter(TNT::Array2D <double> array, int size);
 TNT::Array2D <double> applyMinFilter(TNT::Array2D <double> array, int size);
 int alphaTrimmed (TNT::Array2D <double> array, int k, int width, int height, int x, int y);
 int varianceLocal (TNT::Array2D <double> array, int k, int width, int height, int x, int y, double m);
 
+
+TNT::Array2D <double> addNoiseGamma(TNT::Array2D <double> array, float variance, float alpha);
+TNT::Array2D <double> addNoiseGaussian(TNT::Array2D <double> array, float mean, float variance);
+TNT::Array2D <double> addNoiseImpulse(TNT::Array2D <double> array, float percent);
+double gaussianRandom();

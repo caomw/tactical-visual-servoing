@@ -109,6 +109,10 @@ private:
     bool sharpening;
     bool smoothing;
 
+    bool addGaussianNoise;
+    bool addGammaNoise;
+    bool addImpulseNoise;
+
     double gltLogarithmConstant;
     double gltPowerLawConstant;
     double gltPowerLawGamma;
@@ -119,6 +123,8 @@ private:
     int smoothingFilter;
     int smoothingMask;
 
+    int impulseNoise;
+
 protected:
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -127,6 +133,7 @@ protected Q_SLOTS:
 
     void getBitPlane(int);
     void getDisplayOption(int);
+    void getImpulseNoise(int);
     void getLogarithmConstant(double value);
     void getPowerLawConstant(double value);
     void getPowerLawGamma(double value);
@@ -137,6 +144,9 @@ protected Q_SLOTS:
     void getSmoothingMask(int);
     void exitApplication();
     void openImageDirectory();
+    void toggleAddGaussianNoise();
+    void toggleAddGammaNoise();
+    void toggleAddImpulseNoise();
     void toggleBitPlaneSlicing();
     void toggleContrastStretching();
     void toggleFitToWindow();
