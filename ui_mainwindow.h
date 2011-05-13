@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri May 13 08:48:59 2011
+** Created: Fri May 13 12:24:21 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -162,6 +162,8 @@ public:
     QComboBox *comboBoxSecondWindow;
     QLabel *label_2;
     QCheckBox *checkBoxSwapRedBlue;
+    QLabel *label_25;
+    QComboBox *comboBoxGrayscaleAlgorithm;
     QMenuBar *menuBar;
     QMenu *menu_File;
     QMenu *menu_Help;
@@ -574,6 +576,12 @@ public:
         checkBoxSwapRedBlue = new QCheckBox(centralWidget);
         checkBoxSwapRedBlue->setObjectName(QString::fromUtf8("checkBoxSwapRedBlue"));
         checkBoxSwapRedBlue->setGeometry(QRect(170, 530, 161, 20));
+        label_25 = new QLabel(centralWidget);
+        label_25->setObjectName(QString::fromUtf8("label_25"));
+        label_25->setGeometry(QRect(360, 530, 141, 17));
+        comboBoxGrayscaleAlgorithm = new QComboBox(centralWidget);
+        comboBoxGrayscaleAlgorithm->setObjectName(QString::fromUtf8("comboBoxGrayscaleAlgorithm"));
+        comboBoxGrayscaleAlgorithm->setGeometry(QRect(510, 526, 301, 27));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -763,6 +771,15 @@ public:
         );
         label_2->setText(QApplication::translate("MainWindow", "Second Window", 0, QApplication::UnicodeUTF8));
         checkBoxSwapRedBlue->setText(QApplication::translate("MainWindow", "Swap red and blue?", 0, QApplication::UnicodeUTF8));
+        label_25->setText(QApplication::translate("MainWindow", "Grayscale Algorithm", 0, QApplication::UnicodeUTF8));
+        comboBoxGrayscaleAlgorithm->clear();
+        comboBoxGrayscaleAlgorithm->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "OpenCV default", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Grab single plane", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Lightness (max(R,G,B) + min(R,G,B))/2", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Average (R+B+G)/3", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Luminosity (0.21R + 0.71G + 0.07B)", 0, QApplication::UnicodeUTF8)
+        );
         menu_File->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menu_Help->setTitle(QApplication::translate("MainWindow", "Help", 0, QApplication::UnicodeUTF8));
         menuDataset_Actions->setTitle(QApplication::translate("MainWindow", "Dataset Actions", 0, QApplication::UnicodeUTF8));

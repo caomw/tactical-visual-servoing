@@ -136,3 +136,5 @@ TNT::Array2D <double> addNoiseGamma(TNT::Array2D <double> array, float variance,
 TNT::Array2D <double> addNoiseGaussian(TNT::Array2D <double> array, float mean, float variance);
 TNT::Array2D <double> addNoiseImpulse(TNT::Array2D <double> array, float percent);
 double gaussianRandom();
+
+int **IplImageToOnePlane2D (IplImage *imageIn, int algorithm, int plane);

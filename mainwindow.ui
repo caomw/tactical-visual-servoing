@@ -1622,6 +1622,54 @@
      <string>Swap red and blue?</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_25">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>530</y>
+      <width>141</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Grayscale Algorithm</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxGrayscaleAlgorithm">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>526</y>
+      <width>301</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>OpenCV default</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Grab single plane</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Lightness (max(R,G,B) + min(R,G,B))/2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Average (R+B+G)/3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Luminosity (0.21R + 0.71G + 0.07B)</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

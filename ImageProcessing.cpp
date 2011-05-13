@@ -2727,3 +2727,151 @@ double gaussianRandom()
     return X;
 
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// iplImageTo2DArrayOnePlane
+//
+// This function assumes that the image comes in as RGB
+//
+// algorithm :: determines which method is used for the conversion
+//
+//   0 = grab the green plane
+//   1 = lightness method ->  (max(R,G,B) + min(R,G,B)) / 2
+//   2 = average -> (R+G+B) / 3
+//   3 = luminosity (weighted average) -> 0.21R + 0.71G + 0.07B
+//
+///////////////////////////////////////////////////////////////////////////////
+
+int **IplImageToOnePlane2D (IplImage *imageIn, int algorithm, int plane)
+{
+    int **onePlane2D = make2DArray(imageIn->height,imageIn->width);
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // grab one plane
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (algorithm == 0) {
+
+        // create the 2D array
+        for (int y=0; y<imageIn->height; y++) {
+            for (int x=0; x<imageIn->width; x++) {
+                // plane (1=R, 2=G, 3=B)
+                if (plane == 1) {
+                    onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3];
+                } else if (plane == 2) {
+                    onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+1];
+                } else if (plane == 3) {
+                    onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+2];
+                }
+
+            } // end inner for
+
+        } // end outer for
+
+    } // end-if algorithm
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // lightness method : (max(R,G,B) + min(R,G,B)) / 2
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (algorithm == 1) {
+
+        // create the 2D array
+        for    (int y=0; y<imageIn->height; y++) {
+            for (int x=0; x<imageIn->width; x++) {
+                // grab the pixel values of each
+                int r = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3];
+                int g = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+1];
+                int b = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+2];
+
+                // what is the max?
+                int maxRGB = 0;
+                if (r>maxRGB) maxRGB=r;
+                if (g>maxRGB) maxRGB=g;
+                if (b>maxRGB) maxRGB=b;
+
+                // what is the min?
+                int minRGB = 255;
+                if (r<minRGB) minRGB=r;
+                if (g<minRGB) minRGB=g;
+                if (b<minRGB) minRGB=b;
+
+                int pixValue = (maxRGB + minRGB) / 2;
+                if (pixValue > 255) pixValue = 255;
+                if (pixValue < 0) pixValue = 0;
+                onePlane2D[y][x] = pixValue;
+
+            } // end inner for
+        } // end outer for
+
+    } // end-if algorithm #1
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // average
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (algorithm == 2) {
+
+        // create the 2D array
+        for (int y=0; y<imageIn->height; y++) {
+            for (int x=0; x<imageIn->width; x++) {
+
+                // grab the pixel values of each
+                int r = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3];
+                int g = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+1];
+                int b = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+2];
+
+                // calculate the average
+                int pixValue = (r + g + b) / 2;
+
+                if (pixValue > 255) pixValue = 255;
+                if (pixValue < 0) pixValue = 0;
+                onePlane2D[y][x] = pixValue;
+
+
+            } // end inner for
+        } // end outer for
+
+    } // end-if algorithm #2
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // luminosity -> 0.21R + 0.71G + 0.07B
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (algorithm == 3) {
+
+        // create the 2D array
+        for (int y=0; y<imageIn->height; y++) {
+            for (int x=0; x<imageIn->width; x++) {
+
+                // grab the pixel values of each
+                int r = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3];
+                int g = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+1];
+                int b = onePlane2D[y][x] = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3+2];
+
+                // calculate the luminosity
+                int pixValue = (int)(0.21 * (float)r + 0.5) + (int)(0.71 * (float)g + 0.5) + (int)(0.07 * (float)b + 0.5);
+                if (pixValue > 255) pixValue = 255;
+                if (pixValue < 0) pixValue = 0;
+                onePlane2D[y][x] = pixValue;
+
+            } // end inner for
+
+        } // end outer for
+
+    } // end-if algorithm #3
+
+    return onePlane2D;
+
+} // end IplImageToOnePlane
+
