@@ -138,3 +138,5 @@ TNT::Array2D <double> addNoiseImpulse(TNT::Array2D <double> array, float percent
 double gaussianRandom();
 
 int **IplImageToOnePlane2D (IplImage *imageIn, int algorithm, int plane);
+
+IplImage *convolveWithOpenCV (IplImage *in, int horizontal1Vertical2);

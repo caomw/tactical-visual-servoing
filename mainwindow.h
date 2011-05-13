@@ -119,7 +119,7 @@ private:
     string dPath;
 
     int displayOption;
-    int edgeFilter;
+    //int edgeFilter;
 
     int r1;
     int s1;
@@ -160,6 +160,9 @@ private:
     int k;
     int minSize;
 
+    bool applyFilter;
+    int edgeFilter;
+
 protected:
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -168,12 +171,13 @@ protected Q_SLOTS:
 
     void getBitPlane(int);
     void getDisplayOption(int);
+    void getEdgeFilter(int);
     void getImpulseNoise(int);
     void getLogarithmConstant(double value);
     void getPowerLawConstant(double value);
     void getPowerLawGamma(double value);
     void getR1(int);
-    void getEdgeFilter(int);
+    //void getEdgeFilter(int);
     void getK(int);
     void getMinSize(int);
     void getSharpeningAlgorithm(int);
@@ -188,6 +192,7 @@ protected Q_SLOTS:
     void toggleAddImpulseNoise();
     void toggleBitPlaneSlicing();
     void toggleContrastStretching();
+    void toggleFilter();
     void toggleFitToWindow();
     void toggleHistogramEqualization();
     void toggleLogarithm();

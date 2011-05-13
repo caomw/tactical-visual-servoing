@@ -48,7 +48,7 @@
 #define SMOOTHING_OS_MID 7
 #define SMOOTHING_OS_ALPHA 8
 #define SMOOTHING_ADAPT_LOCAL_NOISE 9
-#define SMOOTHING_ADAPT_MED_FILTER 10
+#define SMOOTHING_ADAPT_MED_ 10
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -93,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent)
     //SI_Error rc = ini.LoadFile(iniFile.c_str());
 
     displayOption = 0;
-    edgeFilter = 0;
+    //edge = 0;
 
     r1 = s1 = r2 = s2 = 0;
 
@@ -118,7 +118,7 @@ MainWindow::MainWindow(QWidget *parent)
     processingAVI1Files2 = 0;
 
     sharpeningAlgorithm = 0;
-    smoothingFilter = 0;
+    smoothing = 0;
     smoothingMask = 0;
 
     swapRedBlue = false;
@@ -129,6 +129,9 @@ MainWindow::MainWindow(QWidget *parent)
     sigma = 0.5;
     k = 500;
     minSize = 50;
+
+    applyFilter = false;
+    edgeFilter = 0;
 
 } // end constructor
 
@@ -227,9 +230,6 @@ void MainWindow::createActions()
     connect(ui->checkBoxBitPlaneSlicing, SIGNAL(clicked()), this, SLOT(toggleBitPlaneSlicing()));
     connect(ui->comboBoxBitPlane, SIGNAL(currentIndexChanged(int)), this, SLOT(getBitPlane(int)));
 
-    // edge filters
-    connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
-
     // noise
     connect(ui->checkBoxAddGaussianNoise, SIGNAL(clicked()), this, SLOT(toggleGaussianNoise()));
 
@@ -243,6 +243,10 @@ void MainWindow::createActions()
     connect(ui->doubleSpinBoxSigma, SIGNAL(valueChanged(double)), this, SLOT(getSigma(double)));
     connect(ui->spinBoxK, SIGNAL(valueChanged(int)), this, SLOT(getK(int)));
     connect(ui->spinBoxMinSize, SIGNAL(valueChanged(int)), this, SLOT(getMinSize(int)));
+
+    // edge filter
+    connect(ui->checkBoxFilter, SIGNAL(clicked()), this, SLOT(toggleFilter()));
+    connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
 
 } // end createActions
 
@@ -705,6 +709,25 @@ void MainWindow::toggleAddGaussianNoise()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// toggleFilter
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleFilter()
+{
+    if (applyFilter == 0) {
+        applyFilter = 1;
+        trace("applyFilter is TRUE");
+    } else {
+        applyFilter = 0;
+        trace("applyFilter is FALSE");
+    }
+
+} // end toggleFilter
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // toggleAddGammaNoise
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -1090,8 +1113,8 @@ void MainWindow::updateImageNumber(int value)
             temp = applyAlphaTrimmed(array, smoothingMask);
         } else if (smoothingFilter == SMOOTHING_ADAPT_LOCAL_NOISE) {
             temp = applyAdaptiveFilter(array, smoothingMask);
-        } else if (smoothingFilter == SMOOTHING_ADAPT_MED_FILTER) {
-            temp = applyAdaptiveMedianFilter(array, smoothingMask);
+//        } else if (smoothingFilter == SMOOTHING_ADAPT_MED_FILTER) {
+//            temp = applyAdaptiveMedianFilter(array, smoothingMask);
         }
 
         //getIplImageFromArray2(temp, processed);
@@ -1222,17 +1245,34 @@ void MainWindow::updateImageNumber(int value)
     //
     /////////////////////////////////////////////////////////////////
 
-    if (edgeFilter == 1) {
+    if (applyFilter == true) {
 
-        runCannyEdge(frame, processed);
+        if (edgeFilter == 0) {
 
-        freeProcessedImage = true;
+            runCannyEdge(frame, processed);
+            freeProcessedImage = true;
 
-    } else if (edgeFilter == 2) {
+        } else if (edgeFilter == 1) {
 
-        runSobelEdge(frame, processed);
+            runSobelEdge(frame, processed);
+            freeProcessedImage = true;
 
-        freeProcessedImage = true;
+        } else if (edgeFilter == 2) {
+
+            processed = convolveWithOpenCV(frame, 1);
+            freeProcessedImage = true;
+
+        } else if (edgeFilter == 3) {
+
+            // convert to grayscale.....
+            IplImage *gray = cvCreateImage(cvGetSize(frame), 8, 1);
+            cvCvtColor(frame, gray, CV_RGB2GRAY);
+            printf("before convolve....");
+            processed = convolveWithOpenCV(frame, 2);
+            printf("after convolve....");
+            cvReleaseImage(&gray);
+            freeProcessedImage = true;
+        }
 
     }
 

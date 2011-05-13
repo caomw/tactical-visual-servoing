@@ -2820,6 +2820,7 @@ int **IplImageToOnePlane2D (IplImage *imageIn, int algorithm, int plane)
 
     if (algorithm == 2) {
 
+
         // create the 2D array
         for (int y=0; y<imageIn->height; y++) {
             for (int x=0; x<imageIn->width; x++) {
@@ -2875,3 +2876,34 @@ int **IplImageToOnePlane2D (IplImage *imageIn, int algorithm, int plane)
 
 } // end IplImageToOnePlane
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// convolveWithOpenCV
+//
+///////////////////////////////////////////////////////////////////////////////
+
+IplImage *convolveWithOpenCV (IplImage *in, int horizontal1Vertical2)
+{
+    IplImage *out = cvCreateImage(cvGetSize(in), 8, 1);
+
+    CvMat *kernel = cvCreateMat(3, 3, CV_64FC1);
+
+    if (horizontal1Vertical2 == 1) {
+
+        cvmSet(kernel, 0, 0, -1.0);  cvmSet(kernel, 0, 1, -1.0);  cvmSet(kernel, 0, 2, -1.0);
+        cvmSet(kernel, 1, 0, 0.0);   cvmSet(kernel, 1, 1, 0.0);   cvmSet(kernel, 1, 2, 0.0);
+        cvmSet(kernel, 2, 0, 1.0);   cvmSet(kernel, 2, 1, 1.0);   cvmSet(kernel, 2, 2, 1.0);
+
+    } else if (horizontal1Vertical2 == 2) {
+
+        cvmSet(kernel, 0, 0, -1.0);  cvmSet(kernel, 0, 1, 0.0);   cvmSet(kernel, 0, 2, 1.0);
+        cvmSet(kernel, 1, 0, -1.0);  cvmSet(kernel, 1, 1, 0.0);   cvmSet(kernel, 1, 2, 1.0);
+        cvmSet(kernel, 2, 0, -1.0);  cvmSet(kernel, 2, 1, 0.0);   cvmSet(kernel, 2, 2, 1.0);
+    }
+
+    cvFilter2D(in, out, kernel);
+
+    return out;
+
+} // end convolveWithOpenCV

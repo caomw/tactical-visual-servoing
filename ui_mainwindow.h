@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri May 13 12:24:21 2011
+** Created: Fri May 13 13:18:02 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -102,6 +102,7 @@ public:
     QWidget *tabEdgeFilters;
     QComboBox *comboBoxEdgeFilter;
     QLabel *label_16;
+    QCheckBox *checkBoxFilter;
     QWidget *tabPS;
     QLabel *label_7;
     QPushButton *pushButtonDrawTripwire;
@@ -383,10 +384,13 @@ public:
         tabEdgeFilters->setObjectName(QString::fromUtf8("tabEdgeFilters"));
         comboBoxEdgeFilter = new QComboBox(tabEdgeFilters);
         comboBoxEdgeFilter->setObjectName(QString::fromUtf8("comboBoxEdgeFilter"));
-        comboBoxEdgeFilter->setGeometry(QRect(110, 26, 121, 27));
+        comboBoxEdgeFilter->setGeometry(QRect(110, 70, 121, 27));
         label_16 = new QLabel(tabEdgeFilters);
         label_16->setObjectName(QString::fromUtf8("label_16"));
-        label_16->setGeometry(QRect(20, 30, 81, 17));
+        label_16->setGeometry(QRect(20, 74, 81, 17));
+        checkBoxFilter = new QCheckBox(tabEdgeFilters);
+        checkBoxFilter->setObjectName(QString::fromUtf8("checkBoxFilter"));
+        checkBoxFilter->setGeometry(QRect(20, 20, 111, 22));
         tabWidget->addTab(tabEdgeFilters, QString());
         tabPS = new QWidget();
         tabPS->setObjectName(QString::fromUtf8("tabPS"));
@@ -610,7 +614,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(11);
+        tabWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -708,13 +712,13 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabNoise), QApplication::translate("MainWindow", "Noise", 0, QApplication::UnicodeUTF8));
         comboBoxEdgeFilter->clear();
         comboBoxEdgeFilter->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "None", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Canny", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Sobel", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Horizontal", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Vertical", 0, QApplication::UnicodeUTF8)
         );
-        label_16->setText(QApplication::translate("MainWindow", "Edge Filter", 0, QApplication::UnicodeUTF8));
+        label_16->setText(QApplication::translate("MainWindow", "Filter", 0, QApplication::UnicodeUTF8));
+        checkBoxFilter->setText(QApplication::translate("MainWindow", "Apply Filter?", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabEdgeFilters), QApplication::translate("MainWindow", "Edge Filters", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("MainWindow", "Ignore pixels smaller than NxN", 0, QApplication::UnicodeUTF8));
         pushButtonDrawTripwire->setText(QApplication::translate("MainWindow", "Draw Tripwire", 0, QApplication::UnicodeUTF8));
