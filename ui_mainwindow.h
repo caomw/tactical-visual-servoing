@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 11 09:30:10 2011
+** Created: Fri May 13 08:48:59 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -149,6 +149,14 @@ public:
     QLabel *label;
     QCheckBox *checkBoxOFShowFeatures;
     QPushButton *pushButtonTrack;
+    QWidget *tabSegmentation;
+    QCheckBox *checkBoxSegmentation;
+    QDoubleSpinBox *doubleSpinBoxSigma;
+    QLabel *label_18;
+    QLabel *label_19;
+    QLabel *label_20;
+    QSpinBox *spinBoxK;
+    QSpinBox *spinBoxMinSize;
     QWidget *tabDebug;
     QPlainTextEdit *plainTextEditTrace;
     QComboBox *comboBoxSecondWindow;
@@ -519,6 +527,38 @@ public:
         pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
         pushButtonTrack->setGeometry(QRect(100, 180, 80, 23));
         tabWidget->addTab(tabOpticalFlow, QString());
+        tabSegmentation = new QWidget();
+        tabSegmentation->setObjectName(QString::fromUtf8("tabSegmentation"));
+        checkBoxSegmentation = new QCheckBox(tabSegmentation);
+        checkBoxSegmentation->setObjectName(QString::fromUtf8("checkBoxSegmentation"));
+        checkBoxSegmentation->setGeometry(QRect(40, 30, 98, 22));
+        doubleSpinBoxSigma = new QDoubleSpinBox(tabSegmentation);
+        doubleSpinBoxSigma->setObjectName(QString::fromUtf8("doubleSpinBoxSigma"));
+        doubleSpinBoxSigma->setGeometry(QRect(160, 76, 62, 27));
+        doubleSpinBoxSigma->setSingleStep(0.1);
+        doubleSpinBoxSigma->setValue(0.5);
+        label_18 = new QLabel(tabSegmentation);
+        label_18->setObjectName(QString::fromUtf8("label_18"));
+        label_18->setGeometry(QRect(50, 80, 67, 17));
+        label_19 = new QLabel(tabSegmentation);
+        label_19->setObjectName(QString::fromUtf8("label_19"));
+        label_19->setGeometry(QRect(50, 120, 67, 17));
+        label_20 = new QLabel(tabSegmentation);
+        label_20->setObjectName(QString::fromUtf8("label_20"));
+        label_20->setGeometry(QRect(50, 160, 67, 17));
+        spinBoxK = new QSpinBox(tabSegmentation);
+        spinBoxK->setObjectName(QString::fromUtf8("spinBoxK"));
+        spinBoxK->setGeometry(QRect(160, 113, 59, 27));
+        spinBoxK->setMaximum(1500);
+        spinBoxK->setSingleStep(10);
+        spinBoxK->setValue(500);
+        spinBoxMinSize = new QSpinBox(tabSegmentation);
+        spinBoxMinSize->setObjectName(QString::fromUtf8("spinBoxMinSize"));
+        spinBoxMinSize->setGeometry(QRect(160, 156, 59, 27));
+        spinBoxMinSize->setMaximum(200);
+        spinBoxMinSize->setSingleStep(5);
+        spinBoxMinSize->setValue(50);
+        tabWidget->addTab(tabSegmentation, QString());
         tabDebug = new QWidget();
         tabDebug->setObjectName(QString::fromUtf8("tabDebug"));
         plainTextEditTrace = new QPlainTextEdit(tabDebug);
@@ -562,7 +602,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(5);
+        tabWidget->setCurrentIndex(11);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -709,6 +749,11 @@ public:
         checkBoxOFShowFeatures->setText(QApplication::translate("MainWindow", "Show Features?", 0, QApplication::UnicodeUTF8));
         pushButtonTrack->setText(QApplication::translate("MainWindow", "Track", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
+        checkBoxSegmentation->setText(QApplication::translate("MainWindow", "Segment?", 0, QApplication::UnicodeUTF8));
+        label_18->setText(QApplication::translate("MainWindow", "sigma", 0, QApplication::UnicodeUTF8));
+        label_19->setText(QApplication::translate("MainWindow", "k", 0, QApplication::UnicodeUTF8));
+        label_20->setText(QApplication::translate("MainWindow", "min size", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tabSegmentation), QApplication::translate("MainWindow", "Segmentation", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabDebug), QApplication::translate("MainWindow", "Debug Messages", 0, QApplication::UnicodeUTF8));
         comboBoxSecondWindow->clear();
         comboBoxSecondWindow->insertItems(0, QStringList()

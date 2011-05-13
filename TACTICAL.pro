@@ -25,6 +25,10 @@ unix {
     #INCLUDEPATH += /home/lab/Development/libmv/src/third_party/eigen
 }
 
+# graph-based segmentation
+INCLUDEPATH += segmentation
+
+
 # correlation tracking
 unix {
     INCLUDEPATH += tracking_algorithms/Correlation/TuringTracking
@@ -98,7 +102,8 @@ SOURCES += main.cpp \
         utilities\utilities.cpp \
         ConvertUTF.c \
         tracking_algorithms/Optical_Flow/KLT/KLT.cpp \
-        avi/AVILibrary.cpp
+        avi/AVILibrary.cpp \
+		segmentation\segment.cpp
 
 HEADERS += mainwindow.h \
         image_functions\Image_Functions.h \
@@ -108,6 +113,7 @@ HEADERS += mainwindow.h \
         SimpleIni.h \
         ConvertUTF.h \
         tracking_algorithms/Optical_Flow/KLT/KLT.h \
-        avi/AVILibrary.h
+        avi/AVILibrary.h \
+    segmentation.h
 
 FORMS += mainwindow.ui

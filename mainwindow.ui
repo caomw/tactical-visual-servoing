@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>11</number>
     </property>
     <widget class="QWidget" name="tabSmoothing">
      <attribute name="title">
@@ -1441,6 +1441,117 @@
       </property>
       <property name="text">
        <string>Track</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabSegmentation">
+     <attribute name="title">
+      <string>Segmentation</string>
+     </attribute>
+     <widget class="QCheckBox" name="checkBoxSegmentation">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>30</y>
+        <width>98</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Segment?</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBoxSigma">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>76</y>
+        <width>62</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="value">
+       <double>0.500000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>80</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>sigma</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>120</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>k</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>160</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>min size</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBoxK">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>113</y>
+        <width>59</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>1500</number>
+      </property>
+      <property name="singleStep">
+       <number>10</number>
+      </property>
+      <property name="value">
+       <number>500</number>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBoxMinSize">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>156</y>
+        <width>59</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>200</number>
+      </property>
+      <property name="singleStep">
+       <number>5</number>
+      </property>
+      <property name="value">
+       <number>50</number>
       </property>
      </widget>
     </widget>

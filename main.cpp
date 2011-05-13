@@ -24,25 +24,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-//
-// Source file: main.cpp
-// Author: Shawn Hunt (shawn.t.hunt@gmail.com)
-//
-// This code has been developed to support my thesis on goal-based
-//  visual servoing.  It is being made publicly available in the hopes
-//  that it is of benefit to others.  If any errors have been found or
-//  if you find it useful, please drop me a note.
-//
-// This is a total hack right now.  The end goal is to have this support
-//  an image sequence or a movie file.  I am having issues with OpenCV
-//  working under Linux that is limiting this right now.  I have it limited
-//  to only look for bitmaps in the specified directory but that can be
-//  easily changed.
-//
-// Due to the limited amount of storage available at Google code, the datasets
-//  that I have been working with are published at:
-//  http://tigrs.eng.wayne.edu/code.html
-//
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <stdlib.h>
