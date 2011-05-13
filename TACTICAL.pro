@@ -91,6 +91,11 @@ unix {
 #    LIBS += -lklt
 }
 
+# fft library
+unix {
+    LIBS += -lfftw3f
+}
+
 
 TARGET = TACTICAL
 TEMPLATE = app
@@ -103,7 +108,8 @@ SOURCES += main.cpp \
         ConvertUTF.c \
         tracking_algorithms/Optical_Flow/KLT/KLT.cpp \
         avi/AVILibrary.cpp \
-		segmentation\segment.cpp
+        segmentation\segment.cpp \
+        FFTLibrary.cpp
 
 HEADERS += mainwindow.h \
         image_functions\Image_Functions.h \
@@ -114,6 +120,7 @@ HEADERS += mainwindow.h \
         ConvertUTF.h \
         tracking_algorithms/Optical_Flow/KLT/KLT.h \
         avi/AVILibrary.h \
-    segmentation.h
+        segmentation.h \
+        FFTLibrary.h
 
 FORMS += mainwindow.ui
