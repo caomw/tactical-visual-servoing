@@ -1765,7 +1765,7 @@ TNT::Array2D <double> convert1DTo2D(TNT::Array1D <double> arrayIn, int width, in
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-void runCannyEdge(IplImage *imageIn, IplImage *imageOut)
+IplImage *runCannyEdge(IplImage *imageIn)
 {
     // do we have a color image?  if so, convert it to grayscale first
     if (imageIn->nChannels == 3) {
@@ -1776,14 +1776,17 @@ void runCannyEdge(IplImage *imageIn, IplImage *imageOut)
         cvCvtColor(imageIn, gray, CV_BGR2GRAY);
         printf("converted to grayscale\n");
 
-        cvCanny(gray, imageOut, 10, 100);
+        IplImage *temp = cvCreateImage(cvGetSize(imageIn), 8, 1);
+        cvCanny(gray, temp, 10, 100);
+        IplImage *out = convert1PlaneIPLImageTo3Plane(temp);
         printf("ran canny\n");
+        return out;
 
         cvReleaseImage(&gray);
 
     } else {
 
-        cvCanny(imageIn, imageOut, 10, 100, 3);
+        //cvCanny(imageIn, imageOut, 10, 100, 3);
 
     }
 
@@ -1796,7 +1799,7 @@ void runCannyEdge(IplImage *imageIn, IplImage *imageOut)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-void runSobelEdge(IplImage *imageIn, IplImage *imageOut)
+IplImage  *runSobelEdge(IplImage *imageIn)
 {
     // do we have a color image?  if so, convert it to grayscale first
     if (imageIn->nChannels == 3) {
@@ -1807,10 +1810,16 @@ void runSobelEdge(IplImage *imageIn, IplImage *imageOut)
         cvCvtColor(imageIn, gray, CV_BGR2GRAY);
         printf("converted to grayscale\n");
 
-        cvSobel(gray, imageOut, 1, 0, 3);
+        IplImage *temp = cvCreateImage(cvGetSize(imageIn), 8, 1);
+
+        cvSobel(gray, temp, 1, 0, 3);
         printf("ran canny\n");
 
+        IplImage *out = convert1PlaneIPLImageTo3Plane(temp);
+
         cvReleaseImage(&gray);
+
+        return out;
 
     } else {
 
@@ -2909,3 +2918,41 @@ IplImage *convolveWithOpenCV (IplImage *in, int horizontal1Vertical2)
     return out;
 
 } // end convolveWithOpenCV
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// convert1PlaneIPLImageTo3Plane
+//
+///////////////////////////////////////////////////////////////////////////////
+
+IplImage *convert1PlaneIPLImageTo3Plane (IplImage *imageIn)
+{
+    IplImage *out = cvCreateImage(cvGetSize(imageIn), 8, 3);
+
+    int counter = 0;
+
+    // create the 2D array
+//    for (int y=0; y<imageIn->height; y++) {
+//        for (int x=0; x<imageIn->width; x++) {
+
+            // grab the pixel value of the grayscale image
+            //int val = ((uchar*)(imageIn->imageData + imageIn->widthStep*y))[x*3];
+
+    for (int i=0; i<imageIn->height*imageIn->width; i++) {
+
+        int val = ((uchar *)imageIn->imageData)[i];
+
+            // populate the same value to the out image
+            ((uchar *)out->imageData)[counter] = (char)val;
+            ((uchar *)out->imageData)[counter+1] = (char)val;
+            ((uchar *)out->imageData)[counter+2] = (char)val;
+            counter +=3;
+    }
+
+//        }
+//    }
+
+    return out;
+
+} // end convert1PlaneIPLImageTo3Plane

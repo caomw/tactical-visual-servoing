@@ -1249,12 +1249,12 @@ void MainWindow::updateImageNumber(int value)
 
         if (edgeFilter == 0) {
 
-            runCannyEdge(frame, processed);
+            processed = runCannyEdge(frame);
             freeProcessedImage = true;
 
         } else if (edgeFilter == 1) {
 
-            runSobelEdge(frame, processed);
+            processed = runSobelEdge(frame);
             freeProcessedImage = true;
 
         } else if (edgeFilter == 2) {

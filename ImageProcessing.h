@@ -118,8 +118,8 @@ TNT::Array2D <double> contrastStretching(TNT::Array2D <double> array, TNT::Array
 TNT::Array2D <double> powerLaw(TNT::Array2D <double> array, float constant, float gamma);
 TNT::Array2D <double> bitPlaneSlicing(TNT::Array2D <double> array, int plane);
 
-void runCannyEdge(IplImage *imageIn, IplImage *imageOut);
-void runSobelEdge(IplImage *imageIn, IplImage *imageOut);
+IplImage *runCannyEdge(IplImage *imageIn);
+IplImage *runSobelEdge(IplImage *imageIn);
 
 TNT::Array2D <double> applyAdaptiveFilter(TNT::Array2D <double> array, int size);
 TNT::Array2D <double> applyAdaptiveMedianFilter(TNT::Array2D <double> array, int size);
@@ -144,3 +144,4 @@ double gaussianRandom();
 int **IplImageToOnePlane2D (IplImage *imageIn, int algorithm, int plane);
 
 IplImage *convolveWithOpenCV (IplImage *in, int horizontal1Vertical2);
+IplImage *convert1PlaneIPLImageTo3Plane (IplImage *imageIn);
