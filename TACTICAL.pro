@@ -95,6 +95,10 @@ unix {
 unix {
     LIBS += -lfftw3f
 }
+win32 {
+    INCLUDEPATH += C:\TACTICAL\fftw3
+    LIBS += C:\TACTICAL\fftw3\fftw3.lib
+}
 
 
 TARGET = TACTICAL

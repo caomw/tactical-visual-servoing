@@ -2572,8 +2572,10 @@ TNT::Array2D <double> addNoiseGamma(TNT::Array2D <double> array, float variance,
         for (int j=0; j<width; j++) {
             for (int a=0; a<alpha; a++) {
 
-                noise = sqrt(-2*A*log(1.0-drand48()));
-                theta = (drand48() * 6.28318530718 - 3.14159265359);
+                //noise = sqrt(-2*A*log(1.0-drand48()));
+                //theta = (drand48() * 6.28318530718 - 3.14159265359);
+                noise = sqrt(-2*A*log(1.0-rand()));
+                theta = (rand() * 6.28318530718 - 3.14159265359);
 
                 rx = noise*cos(theta);
                 ry = noise*sin(theta);

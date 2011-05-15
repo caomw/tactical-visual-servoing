@@ -43,6 +43,10 @@
 #include <stdlib.h>
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
 
 // template libary
 #include "third_party/tnt/tnt.h"

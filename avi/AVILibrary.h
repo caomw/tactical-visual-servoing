@@ -4,6 +4,9 @@
 #include "cv.h"
 #include "highgui.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <string>
 #include <iostream>
 

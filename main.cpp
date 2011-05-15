@@ -166,6 +166,10 @@ int main (int argc, char *argv[])
         MainWindow w;
         w.show();
         return a.exec();
+
+        // this is *VERY* important for this to exit properly under Windows, otherwise
+        //  the process hangs
+        exit(0);
     }
 
     int dirChoice=0;
