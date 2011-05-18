@@ -113,7 +113,8 @@ SOURCES += main.cpp \
         tracking_algorithms/Optical_Flow/KLT/KLT.cpp \
         avi/AVILibrary.cpp \
         segmentation\segment.cpp \
-        FFTLibrary.cpp
+        FFTLibrary.cpp \
+        VideoDisplay.cpp
 
 HEADERS += mainwindow.h \
         image_functions\Image_Functions.h \
@@ -125,6 +126,7 @@ HEADERS += mainwindow.h \
         tracking_algorithms/Optical_Flow/KLT/KLT.h \
         avi/AVILibrary.h \
         segmentation.h \
-        FFTLibrary.h
+        FFTLibrary.h \
+        VideoDisplay.h
 
 FORMS += mainwindow.ui

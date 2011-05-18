@@ -37,6 +37,8 @@
 #include <QDir>
 #include <QtCore/QStringList>
 
+#include "VideoDisplay.h"
+
 // move these
 #include "cv.h"
 #include "highgui.h"
@@ -99,6 +101,8 @@ private:
 
     QGraphicsScene *scene;
     QGraphicsScene *scene2;
+
+    VideoDisplay *video;
 
     bool datasetLoaded;
     QString datasetName;

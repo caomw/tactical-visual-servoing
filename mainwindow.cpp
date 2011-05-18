@@ -71,6 +71,9 @@ MainWindow::MainWindow(QWidget *parent)
     klt = new KLT();
     imageFunctions = new ImageFunctions();
 
+    video = new VideoDisplay;
+    video->setEnabled(true);
+
     avi = new AVILibrary();
 
     // turingTracking = new TuringTracking();
@@ -247,6 +250,8 @@ void MainWindow::createActions()
     // edge filter
     connect(ui->checkBoxFilter, SIGNAL(clicked()), this, SLOT(toggleFilter()));
     connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
+
+
 
 } // end createActions
 
