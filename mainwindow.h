@@ -167,6 +167,8 @@ private:
     bool applyFilter;
     int edgeFilter;
 
+    bool opticalFlow;
+
 protected:
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -201,6 +203,7 @@ protected Q_SLOTS:
     void toggleHistogramEqualization();
     void toggleLogarithm();
     void toggleNegative();
+    void toggleOpticalFlow();
     void togglePowerLaw();
     void toggleSegmentation();
     void toggleSharpeningAlgorithm();

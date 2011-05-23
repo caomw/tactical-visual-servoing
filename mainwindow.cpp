@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     video = new VideoDisplay;
     video->setEnabled(true);
+    //video->set
 
     avi = new AVILibrary();
 
@@ -251,7 +252,8 @@ void MainWindow::createActions()
     connect(ui->checkBoxFilter, SIGNAL(clicked()), this, SLOT(toggleFilter()));
     connect(ui->comboBoxEdgeFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(getEdgeFilter(int)));
 
-
+    // optical flow
+    connect(ui->checkBoxOpticalFlow, SIGNAL(clicked()), this, SLOT(toggleOpticalFlow()));
 
 } // end createActions
 
@@ -883,6 +885,25 @@ void MainWindow::toggleNegative()
     }
 
 } // end toggleNegative
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleOpticalFlow
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleOpticalFlow()
+{
+    if (opticalFlow == 0) {
+        opticalFlow = 1;
+        trace("opticalFlow is TRUE");
+    } else {
+        opticalFlow = 0;
+        trace("opticalFlow is FALSE");
+    }
+
+} // end toggleOpticalFlow
 
 
 ///////////////////////////////////////////////////////////////////////////////

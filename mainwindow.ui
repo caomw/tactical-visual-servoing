@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>7</number>
     </property>
     <widget class="QWidget" name="tabSmoothing">
      <attribute name="title">
@@ -927,7 +927,7 @@
        <string>Draw Tripwire</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="checkBoxPSPeople">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -953,7 +953,7 @@
        <string>Classification:</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="checkBoxPSVehicles">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -1391,7 +1391,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>20</y>
+        <y>60</y>
         <width>85</width>
         <height>27</height>
        </rect>
@@ -1412,11 +1412,11 @@
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="labelOFAlgorithm">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>22</y>
+        <y>62</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -1449,6 +1449,19 @@
       </property>
       <property name="text">
        <string>Track</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBoxOpticalFlow">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Run optical flow?</string>
       </property>
      </widget>
     </widget>

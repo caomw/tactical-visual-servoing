@@ -88,7 +88,7 @@
 #include "ImageProcessing.h"
 #include "image_functions/Image_Functions.h"
 
-// this is a hack until I can get sdl events recognized from within qt
+// this is a hack used in my dissertation to get mouse clicks
 #define USEQT_0_USESDL_1 0
 
 // sift defines

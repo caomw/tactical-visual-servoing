@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri May 13 13:18:02 2011
+** Created: Mon May 23 08:43:58 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -106,9 +106,9 @@ public:
     QWidget *tabPS;
     QLabel *label_7;
     QPushButton *pushButtonDrawTripwire;
-    QCheckBox *checkBox_2;
+    QCheckBox *checkBoxPSPeople;
     QLabel *label_15;
-    QCheckBox *checkBox;
+    QCheckBox *checkBoxPSVehicles;
     QSpinBox *spinBox;
     QWidget *tabStabilization;
     QWidget *tabCorr;
@@ -147,9 +147,10 @@ public:
     QLabel *labelSearchRadius;
     QWidget *tabOpticalFlow;
     QComboBox *comboBoxOFAlgorithm;
-    QLabel *label;
+    QLabel *labelOFAlgorithm;
     QCheckBox *checkBoxOFShowFeatures;
     QPushButton *pushButtonTrack;
+    QCheckBox *checkBoxOpticalFlow;
     QWidget *tabSegmentation;
     QCheckBox *checkBoxSegmentation;
     QDoubleSpinBox *doubleSpinBoxSigma;
@@ -400,15 +401,15 @@ public:
         pushButtonDrawTripwire = new QPushButton(tabPS);
         pushButtonDrawTripwire->setObjectName(QString::fromUtf8("pushButtonDrawTripwire"));
         pushButtonDrawTripwire->setGeometry(QRect(20, 163, 111, 27));
-        checkBox_2 = new QCheckBox(tabPS);
-        checkBox_2->setObjectName(QString::fromUtf8("checkBox_2"));
-        checkBox_2->setGeometry(QRect(150, 113, 98, 22));
+        checkBoxPSPeople = new QCheckBox(tabPS);
+        checkBoxPSPeople->setObjectName(QString::fromUtf8("checkBoxPSPeople"));
+        checkBoxPSPeople->setGeometry(QRect(150, 113, 98, 22));
         label_15 = new QLabel(tabPS);
         label_15->setObjectName(QString::fromUtf8("label_15"));
         label_15->setGeometry(QRect(20, 83, 101, 17));
-        checkBox = new QCheckBox(tabPS);
-        checkBox->setObjectName(QString::fromUtf8("checkBox"));
-        checkBox->setGeometry(QRect(150, 83, 98, 22));
+        checkBoxPSVehicles = new QCheckBox(tabPS);
+        checkBoxPSVehicles->setObjectName(QString::fromUtf8("checkBoxPSVehicles"));
+        checkBoxPSVehicles->setGeometry(QRect(150, 83, 98, 22));
         spinBox = new QSpinBox(tabPS);
         spinBox->setObjectName(QString::fromUtf8("spinBox"));
         spinBox->setGeometry(QRect(240, 20, 59, 27));
@@ -522,16 +523,19 @@ public:
         tabOpticalFlow->setObjectName(QString::fromUtf8("tabOpticalFlow"));
         comboBoxOFAlgorithm = new QComboBox(tabOpticalFlow);
         comboBoxOFAlgorithm->setObjectName(QString::fromUtf8("comboBoxOFAlgorithm"));
-        comboBoxOFAlgorithm->setGeometry(QRect(100, 20, 85, 27));
-        label = new QLabel(tabOpticalFlow);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(10, 22, 81, 21));
+        comboBoxOFAlgorithm->setGeometry(QRect(100, 60, 85, 27));
+        labelOFAlgorithm = new QLabel(tabOpticalFlow);
+        labelOFAlgorithm->setObjectName(QString::fromUtf8("labelOFAlgorithm"));
+        labelOFAlgorithm->setGeometry(QRect(10, 62, 81, 21));
         checkBoxOFShowFeatures = new QCheckBox(tabOpticalFlow);
         checkBoxOFShowFeatures->setObjectName(QString::fromUtf8("checkBoxOFShowFeatures"));
         checkBoxOFShowFeatures->setGeometry(QRect(10, 242, 141, 22));
         pushButtonTrack = new QPushButton(tabOpticalFlow);
         pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
         pushButtonTrack->setGeometry(QRect(100, 180, 80, 23));
+        checkBoxOpticalFlow = new QCheckBox(tabOpticalFlow);
+        checkBoxOpticalFlow->setObjectName(QString::fromUtf8("checkBoxOpticalFlow"));
+        checkBoxOpticalFlow->setGeometry(QRect(10, 20, 151, 22));
         tabWidget->addTab(tabOpticalFlow, QString());
         tabSegmentation = new QWidget();
         tabSegmentation->setObjectName(QString::fromUtf8("tabSegmentation"));
@@ -614,7 +618,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(6);
+        tabWidget->setCurrentIndex(7);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -722,9 +726,9 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabEdgeFilters), QApplication::translate("MainWindow", "Edge Filters", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("MainWindow", "Ignore pixels smaller than NxN", 0, QApplication::UnicodeUTF8));
         pushButtonDrawTripwire->setText(QApplication::translate("MainWindow", "Draw Tripwire", 0, QApplication::UnicodeUTF8));
-        checkBox_2->setText(QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
+        checkBoxPSPeople->setText(QApplication::translate("MainWindow", "People", 0, QApplication::UnicodeUTF8));
         label_15->setText(QApplication::translate("MainWindow", "Classification:", 0, QApplication::UnicodeUTF8));
-        checkBox->setText(QApplication::translate("MainWindow", "Vehicles", 0, QApplication::UnicodeUTF8));
+        checkBoxPSVehicles->setText(QApplication::translate("MainWindow", "Vehicles", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabPS), QApplication::translate("MainWindow", "Persistent Stare", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabStabilization), QApplication::translate("MainWindow", "Stabilization", 0, QApplication::UnicodeUTF8));
         checkBoxDisplayFovealKernel->setText(QApplication::translate("MainWindow", "Display Foveal Kernel", 0, QApplication::UnicodeUTF8));
@@ -757,9 +761,10 @@ public:
          << QApplication::translate("MainWindow", "Horn-Schunck", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Farneback", 0, QApplication::UnicodeUTF8)
         );
-        label->setText(QApplication::translate("MainWindow", "Algorithm", 0, QApplication::UnicodeUTF8));
+        labelOFAlgorithm->setText(QApplication::translate("MainWindow", "Algorithm", 0, QApplication::UnicodeUTF8));
         checkBoxOFShowFeatures->setText(QApplication::translate("MainWindow", "Show Features?", 0, QApplication::UnicodeUTF8));
         pushButtonTrack->setText(QApplication::translate("MainWindow", "Track", 0, QApplication::UnicodeUTF8));
+        checkBoxOpticalFlow->setText(QApplication::translate("MainWindow", "Run optical flow?", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
         checkBoxSegmentation->setText(QApplication::translate("MainWindow", "Segment?", 0, QApplication::UnicodeUTF8));
         label_18->setText(QApplication::translate("MainWindow", "sigma", 0, QApplication::UnicodeUTF8));

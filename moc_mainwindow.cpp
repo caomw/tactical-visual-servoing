@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Sat May 14 15:39:11 2011
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
+** Created: Mon May 23 08:24:35 2011
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -11,7 +11,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.3. It"
+#error "This file was generated using the moc from 4.7.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      34,   14, // methods
+      35,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -58,13 +58,14 @@ static const uint qt_meta_data_MainWindow[] = {
      533,   11,   11,   11, 0x09,
      551,   11,   11,   11, 0x09,
      568,   11,   11,   11, 0x09,
-     585,   11,   11,   11, 0x09,
-     606,   11,   11,   11, 0x09,
-     634,   11,   11,   11, 0x09,
-     652,   11,   11,   11, 0x09,
+     588,   11,   11,   11, 0x09,
+     605,   11,   11,   11, 0x09,
+     626,   11,   11,   11, 0x09,
+     654,   11,   11,   11, 0x09,
      672,   11,   11,   11, 0x09,
-     695,   11,   11,   11, 0x08,
-     720,   11,   11,   11, 0x08,
+     692,   11,   11,   11, 0x09,
+     715,   11,   11,   11, 0x08,
+     740,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -86,8 +87,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "toggleContrastStretching()\0toggleFilter()\0"
     "toggleFitToWindow()\0toggleHistogramEqualization()\0"
     "toggleLogarithm()\0toggleNegative()\0"
-    "togglePowerLaw()\0toggleSegmentation()\0"
-    "toggleSharpeningAlgorithm()\0"
+    "toggleOpticalFlow()\0togglePowerLaw()\0"
+    "toggleSegmentation()\0toggleSharpeningAlgorithm()\0"
     "toggleSmoothing()\0toggleSwapRedBlue()\0"
     "updateImageNumber(int)\0timerEvent(QTimerEvent*)\0"
     "on_pushButtonTrack_clicked()\0"
@@ -148,17 +149,18 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 23: toggleHistogramEqualization(); break;
         case 24: toggleLogarithm(); break;
         case 25: toggleNegative(); break;
-        case 26: togglePowerLaw(); break;
-        case 27: toggleSegmentation(); break;
-        case 28: toggleSharpeningAlgorithm(); break;
-        case 29: toggleSmoothing(); break;
-        case 30: toggleSwapRedBlue(); break;
-        case 31: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 32: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
-        case 33: on_pushButtonTrack_clicked(); break;
+        case 26: toggleOpticalFlow(); break;
+        case 27: togglePowerLaw(); break;
+        case 28: toggleSegmentation(); break;
+        case 29: toggleSharpeningAlgorithm(); break;
+        case 30: toggleSmoothing(); break;
+        case 31: toggleSwapRedBlue(); break;
+        case 32: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 33: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
+        case 34: on_pushButtonTrack_clicked(); break;
         default: ;
         }
-        _id -= 34;
+        _id -= 35;
     }
     return _id;
 }
