@@ -64,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    createActions();
+    //createActions();
 
     // instantiations
     utilities = new Utilities();
@@ -72,8 +72,13 @@ MainWindow::MainWindow(QWidget *parent)
     imageFunctions = new ImageFunctions();
 
     video = new VideoDisplay;
+
     video->setEnabled(true);
-    //video->set
+    video->setObjectName(QString::fromUtf8("video"));
+    video->setGeometry(QRect(660, 0, 642, 482));
+    video->setMouseTracking(true);
+
+    printf("Added video....\n");
 
     avi = new AVILibrary();
 
@@ -83,18 +88,26 @@ MainWindow::MainWindow(QWidget *parent)
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
 
+    // graph vs scene
+    //ui->graphicsView->setScene(video);
+
     // second display
-    scene2 = new QGraphicsScene(ui->graphicsView_2);
-    ui->graphicsView_2->setScene(scene2);
+    //scene2 = new QGraphicsScene(ui->graphicsView_2);
+    //ui->graphicsView_2->setScene(scene2);
+
+    scene3 = new QGraphicsScene(video);
+    ui->graphicsView_2->setScene(scene3);
 
     fitImageToWindow = 0;
 
     ui->statusBar->showMessage("NO DATASET LOADED");
 
     //iniFile = "TACTICAL.ini";
-
     //CSimpleIniA ini(true, true, true);
     //SI_Error rc = ini.LoadFile(iniFile.c_str());
+
+    // temp moved here....
+    createActions();
 
     displayOption = 0;
     //edge = 0;
@@ -255,7 +268,16 @@ void MainWindow::createActions()
     // optical flow
     connect(ui->checkBoxOpticalFlow, SIGNAL(clicked()), this, SLOT(toggleOpticalFlow()));
 
+    //connect(video, SIGNAL(clicked()), this, SLOT(getMouse()));
+
 } // end createActions
+
+
+void MainWindow::getMouse()
+{
+    //video->mousePressEvent();
+    printf("getMouse\n");
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -658,7 +680,10 @@ void MainWindow::resetDisplay ()
 {
     displayOption = SECOND_DISPLAY_BLANK;
     ui->comboBoxSecondWindow->setCurrentIndex(0);
-    scene2->clear();
+//    scene2->clear();
+    scene3->clear();
+
+
     scene->update();
     QApplication::processEvents();
 
@@ -1359,10 +1384,16 @@ void MainWindow::updateImageNumber(int value)
             uchar *cv = (uchar*)(processed->imageData);
             QImage img(cv, processed->width, processed->height, QImage::Format_RGB888);
 
-            scene2->clear();
-            scene2->setSceneRect(0, 0, processed->width, processed->height);
-            scene2->addPixmap(QPixmap::fromImage(img));
-            scene2->update();
+//            scene2->clear();
+//            scene2->setSceneRect(0, 0, processed->width, processed->height);
+//            scene2->addPixmap(QPixmap::fromImage(img));
+//            scene2->update();
+//            QApplication::processEvents();
+
+            scene3->clear();
+            scene3->setSceneRect(0, 0, processed->width, processed->height);
+            scene3->addPixmap(QPixmap::fromImage(img));
+            scene3->update();
             QApplication::processEvents();
 
             printf("here3\n");
@@ -1380,10 +1411,16 @@ void MainWindow::updateImageNumber(int value)
             uchar *cv = (uchar*)(resized->imageData);
             QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
 
-            scene2->clear();
-            scene2->setSceneRect(0, 0, resized->width, resized->height);
-            scene2->addPixmap(QPixmap::fromImage(img));
-            scene2->update();
+//            scene2->clear();
+//            scene2->setSceneRect(0, 0, resized->width, resized->height);
+//            scene2->addPixmap(QPixmap::fromImage(img));
+//            scene2->update();
+//            QApplication::processEvents();
+
+            scene3->clear();
+            scene3->setSceneRect(0, 0, resized->width, resized->height);
+            scene3->addPixmap(QPixmap::fromImage(img));
+            scene3->update();
             QApplication::processEvents();
 
             cvReleaseImage(&resized);

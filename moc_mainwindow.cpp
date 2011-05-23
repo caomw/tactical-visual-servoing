@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Mon May 23 08:24:35 2011
+** Created: Mon May 23 13:28:08 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      35,   14, // methods
+      36,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -64,8 +64,9 @@ static const uint qt_meta_data_MainWindow[] = {
      654,   11,   11,   11, 0x09,
      672,   11,   11,   11, 0x09,
      692,   11,   11,   11, 0x09,
-     715,   11,   11,   11, 0x08,
-     740,   11,   11,   11, 0x08,
+     715,   11,   11,   11, 0x09,
+     726,   11,   11,   11, 0x08,
+     751,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -90,7 +91,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "toggleOpticalFlow()\0togglePowerLaw()\0"
     "toggleSegmentation()\0toggleSharpeningAlgorithm()\0"
     "toggleSmoothing()\0toggleSwapRedBlue()\0"
-    "updateImageNumber(int)\0timerEvent(QTimerEvent*)\0"
+    "updateImageNumber(int)\0getMouse()\0"
+    "timerEvent(QTimerEvent*)\0"
     "on_pushButtonTrack_clicked()\0"
 };
 
@@ -156,11 +158,12 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 30: toggleSmoothing(); break;
         case 31: toggleSwapRedBlue(); break;
         case 32: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 33: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
-        case 34: on_pushButtonTrack_clicked(); break;
+        case 33: getMouse(); break;
+        case 34: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
+        case 35: on_pushButtonTrack_clicked(); break;
         default: ;
         }
-        _id -= 35;
+        _id -= 36;
     }
     return _id;
 }

@@ -100,7 +100,8 @@ private:
     string itos(int i);
 
     QGraphicsScene *scene;
-    QGraphicsScene *scene2;
+    //QGraphicsScene *scene2;
+    QGraphicsScene *scene3;
 
     VideoDisplay *video;
 
@@ -210,6 +211,8 @@ protected Q_SLOTS:
     void toggleSmoothing();
     void toggleSwapRedBlue();
     void updateImageNumber(int);
+
+    void getMouse();
 
 private slots:
 
