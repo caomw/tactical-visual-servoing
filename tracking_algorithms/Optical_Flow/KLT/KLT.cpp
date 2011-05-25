@@ -113,16 +113,10 @@ void KLT::lkOpticalFlow (IplImage *frame)
 
         lkInitialized = true;
 
-        if (DEBUG_KLT) {
-            printf("end lkInitialized == false...\n");
-        }
-
         printf("klt :: here3\n");
         printf("lkCount = %d\n", lkCount);
 
     } else if (lkCount > 0) {
-
-        printf("lkCount is > 0, %d\n", lkCount);
 
         cvCalcOpticalFlowPyrLK(lkPrevGrey, lkGrey, lkPrevPyramid, lkPyramid, lkPoints[0],
             lkPoints[1], lkCount, cvSize(winSize, winSize), 3, lkStatus, 0,
@@ -130,8 +124,6 @@ void KLT::lkOpticalFlow (IplImage *frame)
         lkFlags |= CV_LKFLOW_PYR_A_READY;
 
         lkRanOnce = true;
-
-        printf("KLT :: called optical flow...\n");
 
     }
 
@@ -156,47 +148,20 @@ void KLT::lkResetOpticalFlow ()
 {
     if (lkRanOnce == true) {
         lkInitialized = false;
-        if (lkGrey != NULL) {
-            cvReleaseImage(&lkGrey);
-            if (DEBUG_KLT) {
-                printf("Freed: lkGrey\n");
-            }
-        }
-        if (lkPrevGrey != NULL) {
-            cvReleaseImage(&lkPrevGrey);
-            if (DEBUG_KLT) {
-                printf("Freed: lkPrevGrey\n");
-            }
-        }
-        if (lkPyramid != NULL) {
-            cvReleaseImage(&lkPyramid);
-            if (DEBUG_KLT) {
-                printf("Freed: lkPyramid\n");
-            }
-        }
-        if (lkPrevPyramid != NULL) {
-            cvReleaseImage(&lkPrevPyramid);
-            if (DEBUG_KLT) {
-                printf("Freed: lkPrevPyramid\n");
-            }
-        }
-        if (lkPoints != NULL) {
-            cvFree(&lkPoints[1]);
-            cvFree(&lkPoints[0]);
-            if (DEBUG_KLT) {
-                printf("Freed: lkPoints\n");
-            }
-        }
-        if (lkStatus != NULL) {
-            cvFree(&lkStatus);
-            if (DEBUG_KLT) {
-                printf("Freed: lkStatus\n");
-            }
-        }
+        lkRanOnce = false;
+
+        cvReleaseImage(&lkGrey);
+        cvReleaseImage(&lkPrevGrey);
+        cvReleaseImage(&lkPyramid);
+        cvReleaseImage(&lkPrevPyramid);
+
+        cvFree(&lkPoints[1]);
+        cvFree(&lkPoints[0]);
+        cvFree(&lkStatus);
+
     }
 
 } // end lkResetOpticalFlow
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,67 +172,19 @@ void KLT::lkResetOpticalFlow ()
 
 void KLT::reset (int releaseMemory)
 {
-    lkInitialized = false;
-    lkRanOnce = false;
-    lkFlags = 0;
+    if (lkRanOnce == true) {
+        lkInitialized = false;
+        lkRanOnce = false;
 
-    if (lkImage != NULL) {
-        cvReleaseImage(&lkImage);
-        if (DEBUG_KLT) {
-            printf("Freed: lkImage\n");
-        }
-    }
-    if (lkGrey != NULL) {
         cvReleaseImage(&lkGrey);
-        if (DEBUG_KLT) {
-            printf("Freed: lkGrey\n");
-        }
-    }
-    if (lkPrevGrey != NULL) {
         cvReleaseImage(&lkPrevGrey);
-        if (DEBUG_KLT) {
-            printf("Freed: lkPrevGrey\n");
-        }
-    }
-    if (lkPyramid != NULL) {
         cvReleaseImage(&lkPyramid);
-        if (DEBUG_KLT) {
-            printf("Freed: lkPyramid\n");
-        }
-    }
-    if (lkPrevPyramid != NULL) {
         cvReleaseImage(&lkPrevPyramid);
-        if (DEBUG_KLT) {
-            printf("Freed: lkPrevPyramid\n");
-        }
-    }
-    if (lkPoints[1] != NULL) {
-        cvFree(&lkPoints[1]);
-        if (DEBUG_KLT) {
-            printf("Freed: lkPoints[1]\n");
-        }
-    }
-    if (lkPoints[0] != NULL) {
-        cvFree(&lkPoints[0]);
-        if (DEBUG_KLT) {
-            printf("Freed: lkPoints[0]\n");
-        }
-    }
-    if (lkStatus != NULL) {
-        cvFree(&lkStatus);
-        if (DEBUG_KLT) {
-            printf("Freed: lkStatus\n");
-        }
-    }
-    if (lkFeatureError != NULL) {
-        cvFree(&lkFeatureError);
-        if (DEBUG_KLT) {
-            printf("Freed: lkFeatureError\n");
-        }
-    }
 
-    if (DEBUG_KLT) {
-        printf("Done with the reset...\n");
+        cvFree(&lkPoints[1]);
+        cvFree(&lkPoints[0]);
+        cvFree(&lkStatus);
+
     }
 
 } // end reset

@@ -158,6 +158,11 @@ MainWindow::MainWindow(QWidget *parent)
     opticalFlowAlgorithm = 0;
     opticalFlowShowFeatures = false;
 
+    kltQuality = 0.01;
+    kltMinDist = 10;
+    kltWindowSize = 30;
+    kltNumLevels = 3;
+
 } // end constructor
 
 
@@ -277,6 +282,12 @@ void MainWindow::createActions()
     connect(ui->checkBoxOpticalFlow, SIGNAL(clicked()), this, SLOT(toggleOpticalFlow()));
     connect(ui->comboBoxOFAlgorithm, SIGNAL(currentIndexChanged(int)), this, SLOT(getOFAlgorithm(int)));
 
+    // optical flow :: klt
+    connect(ui->doubleSpinBoxQuality, SIGNAL(valueChanged(double)), this, SLOT(getKLTQuality(double)));
+    connect(ui->spinBoxMinDistance, SIGNAL(valueChanged(int)), this, SLOT(getKLTMinDistance(int)));
+    connect(ui->spinBoxWindowSize, SIGNAL(valueChanged(int)), this, SLOT(getKLTWindowSize(int)));
+    connect(ui->spinBoxNumLevels, SIGNAL(valueChanged(int)), this, SLOT(getKLTMNumLevels(int)));
+
 } // end createActions
 
 
@@ -390,6 +401,74 @@ void MainWindow::getK(int value)
     k = value;
 
 } // end getK
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getKLTQuality
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getKLTQuality(double value)
+{
+    char msg[128];
+    sprintf(msg, "getKLTQuality :: The value is %lf\n", value);
+    trace(msg);
+
+    kltQuality = value;
+
+} // end getKLTQuality
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getKLTMinDist
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getKLTMinDist(int value)
+{
+    char msg[128];
+    sprintf(msg, "getKLTMinDist :: The value is %d\n", value);
+    trace(msg);
+
+    kltMinDist = value;
+
+} // end getKLTMinDist
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getKLTNumLevels
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getKLTNumLevels(int value)
+{
+    char msg[128];
+    sprintf(msg, "getKLTNumLevels :: The value is %d\n", value);
+    trace(msg);
+
+    kltNumLevels = value;
+
+} // end getKLTNumLevels
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getKLTWindowSize
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getKLTWindowSize(int value)
+{
+    char msg[128];
+    sprintf(msg, "getKLTWindowSize :: The value is %d\n", value);
+    trace(msg);
+
+    kltWindowSize = value;
+
+} // end getKLTWindowSize
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1401,11 +1480,13 @@ void MainWindow::updateImageNumber(int value)
             printf("Starting KLT\n");
             printf("frame has %d planes\n", frame->nChannels);
 
-            // try creating a copy of frame
-            IplImage *work = cvCreateImage(cvGetSize(frame), frame->depth, frame->nChannels);
-//            cvCopy(frame, work);
-//            klt->lkOpticalFlow(work);
+            // make sure to update the variables from the GUI that affect KLT (is this the best place???)
+            klt->quality = kltQuality;
+            klt->minDistance = (double)kltMinDist;
+            klt->winSize = kltWindowSize;
+            klt->numLevels = kltNumLevels;
 
+            // call klt
             klt->lkOpticalFlow(frame);
             printf("End KLT\n");
 
@@ -1514,7 +1595,7 @@ void MainWindow::updateImageNumber(int value)
     } else if (frame != NULL && fitImageToWindow == 1) {
 
         // swap red and blue
-        cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
+        // ??? cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
 
         IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), frame->depth, frame->nChannels);
 

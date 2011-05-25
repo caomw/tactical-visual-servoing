@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Wed May 25 10:53:24 2011
+** Created: Wed May 25 11:48:05 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      36,   14, // methods
+      40,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,37 +36,41 @@ static const uint qt_meta_data_MainWindow[] = {
       51,   11,   11,   11, 0x09,
       70,   11,   11,   11, 0x09,
       91,   11,   11,   11, 0x09,
-     120,   11,   11,   11, 0x09,
-     140,   11,   11,   11, 0x09,
-     168,   11,   11,   11, 0x09,
-     193,   11,   11,   11, 0x09,
+     113,   11,   11,   11, 0x09,
+     132,   11,   11,   11, 0x09,
+     154,   11,   11,   11, 0x09,
+     175,   11,   11,   11, 0x09,
      204,   11,   11,   11, 0x09,
-     214,   11,   11,   11, 0x09,
-     230,   11,   11,   11, 0x09,
-     258,   11,   11,   11, 0x09,
-     275,   11,   11,   11, 0x09,
-     299,   11,   11,   11, 0x09,
-     321,   11,   11,   11, 0x09,
-     339,   11,   11,   11, 0x09,
-     360,   11,   11,   11, 0x09,
-     385,   11,   11,   11, 0x09,
-     407,   11,   11,   11, 0x09,
-     431,   11,   11,   11, 0x09,
-     455,   11,   11,   11, 0x09,
-     482,   11,   11,   11, 0x09,
-     497,   11,   11,   11, 0x09,
-     517,   11,   11,   11, 0x09,
-     547,   11,   11,   11, 0x09,
-     565,   11,   11,   11, 0x09,
-     582,   11,   11,   11, 0x09,
-     602,   11,   11,   11, 0x09,
-     619,   11,   11,   11, 0x09,
-     640,   11,   11,   11, 0x09,
-     668,   11,   11,   11, 0x09,
+     224,   11,   11,   11, 0x09,
+     252,   11,   11,   11, 0x09,
+     277,   11,   11,   11, 0x09,
+     288,   11,   11,   11, 0x09,
+     298,   11,   11,   11, 0x09,
+     314,   11,   11,   11, 0x09,
+     342,   11,   11,   11, 0x09,
+     359,   11,   11,   11, 0x09,
+     383,   11,   11,   11, 0x09,
+     405,   11,   11,   11, 0x09,
+     423,   11,   11,   11, 0x09,
+     444,   11,   11,   11, 0x09,
+     469,   11,   11,   11, 0x09,
+     491,   11,   11,   11, 0x09,
+     515,   11,   11,   11, 0x09,
+     539,   11,   11,   11, 0x09,
+     566,   11,   11,   11, 0x09,
+     581,   11,   11,   11, 0x09,
+     601,   11,   11,   11, 0x09,
+     631,   11,   11,   11, 0x09,
+     649,   11,   11,   11, 0x09,
+     666,   11,   11,   11, 0x09,
      686,   11,   11,   11, 0x09,
-     706,   11,   11,   11, 0x09,
-     729,   11,   11,   11, 0x08,
-     754,   11,   11,   11, 0x08,
+     703,   11,   11,   11, 0x09,
+     724,   11,   11,   11, 0x09,
+     752,   11,   11,   11, 0x09,
+     770,   11,   11,   11, 0x09,
+     790,   11,   11,   11, 0x09,
+     813,   11,   11,   11, 0x08,
+     838,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -74,7 +78,9 @@ static const uint qt_meta_data_MainWindow[] = {
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0getBitPlane(int)\0"
     "getDisplayOption(int)\0getEdgeFilter(int)\0"
-    "getImpulseNoise(int)\0getLogarithmConstant(double)\0"
+    "getImpulseNoise(int)\0getKLTQuality(double)\0"
+    "getKLTMinDist(int)\0getKLTWindowSize(int)\0"
+    "getKLTNumLevels(int)\0getLogarithmConstant(double)\0"
     "getOFAlgorithm(int)\0getPowerLawConstant(double)\0"
     "getPowerLawGamma(double)\0getR1(int)\0"
     "getK(int)\0getMinSize(int)\0"
@@ -127,41 +133,45 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 1: getDisplayOption((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: getEdgeFilter((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 3: getImpulseNoise((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: getLogarithmConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 5: getOFAlgorithm((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 6: getPowerLawConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 7: getPowerLawGamma((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 8: getR1((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 9: getK((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 10: getMinSize((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 11: getSharpeningAlgorithm((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 12: getSigma((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 13: getSmoothingFilter((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 14: getSmoothingMask((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 15: exitApplication(); break;
-        case 16: openImageDirectory(); break;
-        case 17: toggleAddGaussianNoise(); break;
-        case 18: toggleAddGammaNoise(); break;
-        case 19: toggleAddImpulseNoise(); break;
-        case 20: toggleBitPlaneSlicing(); break;
-        case 21: toggleContrastStretching(); break;
-        case 22: toggleFilter(); break;
-        case 23: toggleFitToWindow(); break;
-        case 24: toggleHistogramEqualization(); break;
-        case 25: toggleLogarithm(); break;
-        case 26: toggleNegative(); break;
-        case 27: toggleOpticalFlow(); break;
-        case 28: togglePowerLaw(); break;
-        case 29: toggleSegmentation(); break;
-        case 30: toggleSharpeningAlgorithm(); break;
-        case 31: toggleSmoothing(); break;
-        case 32: toggleSwapRedBlue(); break;
-        case 33: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 34: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
-        case 35: on_pushButtonTrack_clicked(); break;
+        case 4: getKLTQuality((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 5: getKLTMinDist((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: getKLTWindowSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: getKLTNumLevels((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: getLogarithmConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 9: getOFAlgorithm((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 10: getPowerLawConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 11: getPowerLawGamma((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 12: getR1((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 13: getK((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 14: getMinSize((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 15: getSharpeningAlgorithm((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 16: getSigma((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 17: getSmoothingFilter((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 18: getSmoothingMask((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 19: exitApplication(); break;
+        case 20: openImageDirectory(); break;
+        case 21: toggleAddGaussianNoise(); break;
+        case 22: toggleAddGammaNoise(); break;
+        case 23: toggleAddImpulseNoise(); break;
+        case 24: toggleBitPlaneSlicing(); break;
+        case 25: toggleContrastStretching(); break;
+        case 26: toggleFilter(); break;
+        case 27: toggleFitToWindow(); break;
+        case 28: toggleHistogramEqualization(); break;
+        case 29: toggleLogarithm(); break;
+        case 30: toggleNegative(); break;
+        case 31: toggleOpticalFlow(); break;
+        case 32: togglePowerLaw(); break;
+        case 33: toggleSegmentation(); break;
+        case 34: toggleSharpeningAlgorithm(); break;
+        case 35: toggleSmoothing(); break;
+        case 36: toggleSwapRedBlue(); break;
+        case 37: updateImageNumber((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 38: timerEvent((*reinterpret_cast< QTimerEvent*(*)>(_a[1]))); break;
+        case 39: on_pushButtonTrack_clicked(); break;
         default: ;
         }
-        _id -= 36;
+        _id -= 40;
     }
     return _id;
 }

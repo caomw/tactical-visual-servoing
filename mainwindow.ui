@@ -1577,6 +1577,19 @@
        <number>10</number>
       </property>
      </widget>
+     <widget class="QPushButton" name="pushButtonOpticalFlowRun">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>170</y>
+        <width>98</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">

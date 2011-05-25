@@ -172,6 +172,11 @@ private:
     bool opticalFlowShowFeatures;
     int opticalFlowAlgorithm;
 
+    double kltQuality;
+    int kltMinDist;
+    int kltWindowSize;
+    int kltNumLevels;
+
 protected:
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -182,6 +187,10 @@ protected Q_SLOTS:
     void getDisplayOption(int);
     void getEdgeFilter(int);
     void getImpulseNoise(int);
+    void getKLTQuality(double);
+    void getKLTMinDist(int);
+    void getKLTWindowSize(int);
+    void getKLTNumLevels(int);
     void getLogarithmConstant(double);
     void getOFAlgorithm(int);
     void getPowerLawConstant(double);

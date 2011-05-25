@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed May 25 10:53:20 2011
+** Created: Wed May 25 11:45:04 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -159,6 +159,7 @@ public:
     QDoubleSpinBox *doubleSpinBoxQuality;
     QLabel *label_29;
     QSpinBox *spinBoxMinDistance;
+    QPushButton *pushButtonOpticalFlowRun;
     QWidget *tab;
     QWidget *tabSegmentation;
     QCheckBox *checkBoxSegmentation;
@@ -576,6 +577,9 @@ public:
         spinBoxMinDistance->setObjectName(QString::fromUtf8("spinBoxMinDistance"));
         spinBoxMinDistance->setGeometry(QRect(330, 86, 59, 27));
         spinBoxMinDistance->setValue(10);
+        pushButtonOpticalFlowRun = new QPushButton(tabOpticalFlow);
+        pushButtonOpticalFlowRun->setObjectName(QString::fromUtf8("pushButtonOpticalFlowRun"));
+        pushButtonOpticalFlowRun->setGeometry(QRect(40, 170, 98, 27));
         tabWidget->addTab(tabOpticalFlow, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
@@ -812,6 +816,7 @@ public:
         label_27->setText(QApplication::translate("MainWindow", "Num levels", 0, QApplication::UnicodeUTF8));
         label_28->setText(QApplication::translate("MainWindow", "Quality", 0, QApplication::UnicodeUTF8));
         label_29->setText(QApplication::translate("MainWindow", "Min distance", 0, QApplication::UnicodeUTF8));
+        pushButtonOpticalFlowRun->setText(QApplication::translate("MainWindow", "Run", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Visual Odometry", 0, QApplication::UnicodeUTF8));
         checkBoxSegmentation->setText(QApplication::translate("MainWindow", "Segment?", 0, QApplication::UnicodeUTF8));
