@@ -19,16 +19,27 @@
 
 KLT::KLT()
 {
-    winSize = 0;
-    numLevels = 0;
+    printf("KLT :: in constructor\n");
 
+    quality = 0.01;
+    minDistance = 10;
     winSize = 30;
     numLevels = 5;
 
     lkInitialized = false;
     lkFlags = 0;
     lkRanOnce = false;
-}
+
+    count = 0;
+
+    printf("KLT :: out constructor\n");
+
+    if (lkInitialized == false) printf("init is FALSE\n");
+    if (lkInitialized == true)  printf("init is TRUE\n");
+    printf("quality = %lf, minDistance = %lf, winSize = %d, numLevels = %d\n", quality, minDistance, winSize, numLevels);
+
+} // end constructor
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -38,17 +49,23 @@ KLT::KLT()
 
 KLT::~KLT()
 {
-}
+
+} // end destructor
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // lkOpticalFlow
 //
+// This function takes in an RGB image.  This needs to be changed to take in
+//  the grayscale image instead.
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 void KLT::lkOpticalFlow (IplImage *frame)
 {
-    printf("KLT is starting....\n");
+    printf("KLT is starting....%d\n", count);
+    printf("frame is [%d,%d] and %d channels\n", frame->height, frame->width, frame->nChannels);
 
     // initialize our buffers
     if (lkInitialized == false) {
@@ -71,50 +88,50 @@ void KLT::lkOpticalFlow (IplImage *frame)
         printf("end copy and convert color...\n");
     }
 
+    if (lkInitialized == false) printf("init is FALSE\n");
+    if (lkInitialized == true)  printf("init is TRUE\n");
+
     if (lkInitialized == false) {
 
-        if (lkGrey != NULL) {
+        printf("klt :: here1\n");
 
-            IplImage *eig  = cvCreateImage(cvGetSize(lkGrey), 32, 1);
-            IplImage *temp = cvCreateImage(cvGetSize(lkGrey), 32, 1);
+        IplImage *eig  = cvCreateImage(cvGetSize(lkGrey), 32, 1);
+        IplImage *temp = cvCreateImage(cvGetSize(lkGrey), 32, 1);
 
-            lkCount = MAX_COUNT;
+        lkCount = MAX_COUNT;
 
-            cvGoodFeaturesToTrack(lkGrey, eig, temp, lkPoints[1], &lkCount, quality, minDistance, 0, 3, 0, 0.04);
+        cvGoodFeaturesToTrack(lkGrey, eig, temp, lkPoints[1], &lkCount, quality, minDistance, 0, 3, 0, 0.04);
 
-            cvFindCornerSubPix(lkGrey, lkPoints[1], lkCount, cvSize(winSize, winSize), cvSize(-1,-1),
-                cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 20, 0.03));
+        cvFindCornerSubPix(lkGrey, lkPoints[1], lkCount, cvSize(winSize, winSize), cvSize(-1,-1),
+            cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 20, 0.03));
 
-            if (eig != NULL) {
-                cvReleaseImage(&eig);
-            }
+        printf("klt :: here2\n");
+        printf("lkCount = %d\n", lkCount);
 
-            if (temp != NULL) {
-                cvReleaseImage(&temp);
-            }
+        cvReleaseImage(&eig);
+        cvReleaseImage(&temp);
 
-            lkInitialized = true;
-
-            if (DEBUG_KLT) {
-                printf("end lkInitialized == false...\n");
-            }
-
-        }
-
-    } else if(lkCount > 0) {
-
-//        cvCalcOpticalFlowPyrLK(lkPrevGrey, lkGrey, lkPrevPyramid, lkPyramid, lkPoints[0],
-//            lkPoints[1], lkCount, cvSize(winSize, winSize), 3, lkStatus, 0,
-//            cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 20, 0.03), lkFlags);
-//        lkFlags |= CV_LKFLOW_PYR_A_READY;
-
-        cvCalcOpticalFlowPyrLK(lkPrevGrey, lkGrey, lkPrevPyramid, lkPyramid, lkPoints[0],
-            lkPoints[1], lkCount, cvSize(winSize, winSize), numLevels, lkStatus, lkFeatureError,
-            cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 20, 0.3), 0);
+        lkInitialized = true;
 
         if (DEBUG_KLT) {
-            printf("Made OpenCV OF call...\n");
+            printf("end lkInitialized == false...\n");
         }
+
+        printf("klt :: here3\n");
+        printf("lkCount = %d\n", lkCount);
+
+    } else if (lkCount > 0) {
+
+        printf("lkCount is > 0, %d\n", lkCount);
+
+        cvCalcOpticalFlowPyrLK(lkPrevGrey, lkGrey, lkPrevPyramid, lkPyramid, lkPoints[0],
+            lkPoints[1], lkCount, cvSize(winSize, winSize), 3, lkStatus, 0,
+            cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 20, 0.03), lkFlags);
+        lkFlags |= CV_LKFLOW_PYR_A_READY;
+
+        lkRanOnce = true;
+
+        printf("KLT :: called optical flow...\n");
 
     }
 
@@ -122,10 +139,9 @@ void KLT::lkOpticalFlow (IplImage *frame)
     CV_SWAP(lkPrevPyramid, lkPyramid, lkSwapTemp);
     CV_SWAP(lkPoints[0], lkPoints[1], lkSwapPoints);
 
-    if (DEBUG_KLT) {
-        printf("Done swapping...\n");
-    }
+    printf("Done swapping...\n");
 
+    count++;
 
 } // end lkOpticalFlow
 
@@ -255,3 +271,23 @@ void KLT::reset (int releaseMemory)
     }
 
 } // end reset
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// drawFeatures
+//
+// This function will draw all of the current features on an IplImage
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void KLT::drawFeatures (IplImage *draw)
+{
+    printf("KLT :: drawing %d features...\n", lkCount);
+    int i=0, k=0;
+    for (k=i=0; i<lkCount; i++) {
+        lkPoints[1][k++] = lkPoints[1][i];
+        cvCircle(draw, cvPointFrom32f(lkPoints[1][i]), 3, CV_RGB(0,0,255), -1, 8, 0);
+    }
+
+} // end drawFeatures

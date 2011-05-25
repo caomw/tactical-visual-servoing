@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon May 23 08:43:58 2011
+** Created: Wed May 25 08:24:13 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -149,8 +149,17 @@ public:
     QComboBox *comboBoxOFAlgorithm;
     QLabel *labelOFAlgorithm;
     QCheckBox *checkBoxOFShowFeatures;
-    QPushButton *pushButtonTrack;
     QCheckBox *checkBoxOpticalFlow;
+    QLabel *label;
+    QSpinBox *spinBoxWindowSize;
+    QLabel *label_26;
+    QLabel *label_27;
+    QSpinBox *spinBoxNumLevels;
+    QLabel *label_28;
+    QDoubleSpinBox *doubleSpinBoxQuality;
+    QLabel *label_29;
+    QSpinBox *spinBoxMinDistance;
+    QWidget *tab;
     QWidget *tabSegmentation;
     QCheckBox *checkBoxSegmentation;
     QDoubleSpinBox *doubleSpinBoxSigma;
@@ -523,20 +532,54 @@ public:
         tabOpticalFlow->setObjectName(QString::fromUtf8("tabOpticalFlow"));
         comboBoxOFAlgorithm = new QComboBox(tabOpticalFlow);
         comboBoxOFAlgorithm->setObjectName(QString::fromUtf8("comboBoxOFAlgorithm"));
-        comboBoxOFAlgorithm->setGeometry(QRect(100, 60, 85, 27));
+        comboBoxOFAlgorithm->setGeometry(QRect(100, 108, 85, 27));
         labelOFAlgorithm = new QLabel(tabOpticalFlow);
         labelOFAlgorithm->setObjectName(QString::fromUtf8("labelOFAlgorithm"));
-        labelOFAlgorithm->setGeometry(QRect(10, 62, 81, 21));
+        labelOFAlgorithm->setGeometry(QRect(10, 110, 81, 21));
         checkBoxOFShowFeatures = new QCheckBox(tabOpticalFlow);
         checkBoxOFShowFeatures->setObjectName(QString::fromUtf8("checkBoxOFShowFeatures"));
-        checkBoxOFShowFeatures->setGeometry(QRect(10, 242, 141, 22));
-        pushButtonTrack = new QPushButton(tabOpticalFlow);
-        pushButtonTrack->setObjectName(QString::fromUtf8("pushButtonTrack"));
-        pushButtonTrack->setGeometry(QRect(100, 180, 80, 23));
+        checkBoxOFShowFeatures->setGeometry(QRect(10, 65, 141, 22));
         checkBoxOpticalFlow = new QCheckBox(tabOpticalFlow);
         checkBoxOpticalFlow->setObjectName(QString::fromUtf8("checkBoxOpticalFlow"));
         checkBoxOpticalFlow->setGeometry(QRect(10, 20, 151, 22));
+        label = new QLabel(tabOpticalFlow);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setGeometry(QRect(280, 20, 67, 17));
+        spinBoxWindowSize = new QSpinBox(tabOpticalFlow);
+        spinBoxWindowSize->setObjectName(QString::fromUtf8("spinBoxWindowSize"));
+        spinBoxWindowSize->setGeometry(QRect(330, 124, 59, 27));
+        spinBoxWindowSize->setMinimum(1);
+        spinBoxWindowSize->setValue(30);
+        label_26 = new QLabel(tabOpticalFlow);
+        label_26->setObjectName(QString::fromUtf8("label_26"));
+        label_26->setGeometry(QRect(220, 128, 91, 17));
+        label_27 = new QLabel(tabOpticalFlow);
+        label_27->setObjectName(QString::fromUtf8("label_27"));
+        label_27->setGeometry(QRect(222, 171, 81, 17));
+        spinBoxNumLevels = new QSpinBox(tabOpticalFlow);
+        spinBoxNumLevels->setObjectName(QString::fromUtf8("spinBoxNumLevels"));
+        spinBoxNumLevels->setGeometry(QRect(330, 168, 59, 27));
+        spinBoxNumLevels->setMaximum(10);
+        spinBoxNumLevels->setValue(3);
+        label_28 = new QLabel(tabOpticalFlow);
+        label_28->setObjectName(QString::fromUtf8("label_28"));
+        label_28->setGeometry(QRect(220, 50, 67, 17));
+        doubleSpinBoxQuality = new QDoubleSpinBox(tabOpticalFlow);
+        doubleSpinBoxQuality->setObjectName(QString::fromUtf8("doubleSpinBoxQuality"));
+        doubleSpinBoxQuality->setGeometry(QRect(330, 46, 62, 27));
+        doubleSpinBoxQuality->setSingleStep(0.01);
+        doubleSpinBoxQuality->setValue(0.01);
+        label_29 = new QLabel(tabOpticalFlow);
+        label_29->setObjectName(QString::fromUtf8("label_29"));
+        label_29->setGeometry(QRect(220, 90, 91, 17));
+        spinBoxMinDistance = new QSpinBox(tabOpticalFlow);
+        spinBoxMinDistance->setObjectName(QString::fromUtf8("spinBoxMinDistance"));
+        spinBoxMinDistance->setGeometry(QRect(330, 86, 59, 27));
+        spinBoxMinDistance->setValue(10);
         tabWidget->addTab(tabOpticalFlow, QString());
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        tabWidget->addTab(tab, QString());
         tabSegmentation = new QWidget();
         tabSegmentation->setObjectName(QString::fromUtf8("tabSegmentation"));
         checkBoxSegmentation = new QCheckBox(tabSegmentation);
@@ -618,7 +661,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(7);
+        tabWidget->setCurrentIndex(10);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -762,10 +805,15 @@ public:
          << QApplication::translate("MainWindow", "Farneback", 0, QApplication::UnicodeUTF8)
         );
         labelOFAlgorithm->setText(QApplication::translate("MainWindow", "Algorithm", 0, QApplication::UnicodeUTF8));
-        checkBoxOFShowFeatures->setText(QApplication::translate("MainWindow", "Show Features?", 0, QApplication::UnicodeUTF8));
-        pushButtonTrack->setText(QApplication::translate("MainWindow", "Track", 0, QApplication::UnicodeUTF8));
+        checkBoxOFShowFeatures->setText(QApplication::translate("MainWindow", "Show features?", 0, QApplication::UnicodeUTF8));
         checkBoxOpticalFlow->setText(QApplication::translate("MainWindow", "Run optical flow?", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("MainWindow", "KLT", 0, QApplication::UnicodeUTF8));
+        label_26->setText(QApplication::translate("MainWindow", "Window size", 0, QApplication::UnicodeUTF8));
+        label_27->setText(QApplication::translate("MainWindow", "Num levels", 0, QApplication::UnicodeUTF8));
+        label_28->setText(QApplication::translate("MainWindow", "Quality", 0, QApplication::UnicodeUTF8));
+        label_29->setText(QApplication::translate("MainWindow", "Min distance", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabOpticalFlow), QApplication::translate("MainWindow", "Optical Flow", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Visual Odometry", 0, QApplication::UnicodeUTF8));
         checkBoxSegmentation->setText(QApplication::translate("MainWindow", "Segment?", 0, QApplication::UnicodeUTF8));
         label_18->setText(QApplication::translate("MainWindow", "sigma", 0, QApplication::UnicodeUTF8));
         label_19->setText(QApplication::translate("MainWindow", "k", 0, QApplication::UnicodeUTF8));

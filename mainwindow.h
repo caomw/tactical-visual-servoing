@@ -169,6 +169,7 @@ private:
     int edgeFilter;
 
     bool opticalFlow;
+    int opticalFlowAlgorithm;
 
 protected:
 
@@ -180,9 +181,10 @@ protected Q_SLOTS:
     void getDisplayOption(int);
     void getEdgeFilter(int);
     void getImpulseNoise(int);
-    void getLogarithmConstant(double value);
-    void getPowerLawConstant(double value);
-    void getPowerLawGamma(double value);
+    void getLogarithmConstant(double);
+    void getOFAlgorithm(int);
+    void getPowerLawConstant(double);
+    void getPowerLawGamma(double);
     void getR1(int);
     //void getEdgeFilter(int);
     void getK(int);
@@ -211,8 +213,6 @@ protected Q_SLOTS:
     void toggleSmoothing();
     void toggleSwapRedBlue();
     void updateImageNumber(int);
-
-    void getMouse();
 
 private slots:
 

@@ -41,22 +41,18 @@ class KLT
         double quality;
         double minDistance;
 
-        void reset(int releaseMemory);
+        int count;
 
         KLT();
         ~KLT();
 
-        ///////////////////////////////////////////////////////////////////////
-        //
-        // forward declarations
-        //
-        ///////////////////////////////////////////////////////////////////////
-
         int numberGoodFeatures;
 
-        int findGoodFeatures (IplImage *frame);
-        void lkOpticalFlow (IplImage *frame);
+        int findGoodFeatures (IplImage *);
+        void lkOpticalFlow (IplImage *);
         void lkResetOpticalFlow();
+        void drawFeatures(IplImage *);
+        void reset(int releaseMemory);
 
     private:
 

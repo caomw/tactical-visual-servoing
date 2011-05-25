@@ -50,6 +50,10 @@
 #define SMOOTHING_ADAPT_LOCAL_NOISE 9
 #define SMOOTHING_ADAPT_MED_ 10
 
+#define OPTICAL_FLOW_KLT 0
+#define OPTICAL_FLOW_HS 1
+#define OPTICAL_FLOW_FB 2
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // MainWindow constructor
@@ -62,14 +66,14 @@ MainWindow::MainWindow(QWidget *parent)
     windowWidth = COLS;
     windowHeight = ROWS;
 
-    ui->setupUi(this);
-
-    //createActions();
-
     // instantiations
     utilities = new Utilities();
     klt = new KLT();
     imageFunctions = new ImageFunctions();
+
+    ui->setupUi(this);
+
+    //createActions();
 
     video = new VideoDisplay;
 
@@ -149,6 +153,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     applyFilter = false;
     edgeFilter = 0;
+
+    opticalFlow = false;
+    opticalFlowAlgorithm = 0;
 
 } // end constructor
 
@@ -267,17 +274,9 @@ void MainWindow::createActions()
 
     // optical flow
     connect(ui->checkBoxOpticalFlow, SIGNAL(clicked()), this, SLOT(toggleOpticalFlow()));
-
-    //connect(video, SIGNAL(clicked()), this, SLOT(getMouse()));
+    connect(ui->comboBoxOFAlgorithm, SIGNAL(currentIndexChanged(int)), this, SLOT(getOFAlgorithm(int)));
 
 } // end createActions
-
-
-void MainWindow::getMouse()
-{
-    //video->mousePressEvent();
-    printf("getMouse\n");
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -343,23 +342,6 @@ void MainWindow::getDisplayOption(int value)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// getLogarithmConstant
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void MainWindow::getLogarithmConstant(double value)
-{
-    char msg[128];
-    sprintf(msg, "getLogarithmConstant :: The value is %lf\n", value);
-    trace(msg);
-
-    gltLogarithmConstant = value;
-
-} // end getLogarithmConstant
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // getEdgeFilter
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -411,6 +393,23 @@ void MainWindow::getK(int value)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// getLogarithmConstant
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getLogarithmConstant(double value)
+{
+    char msg[128];
+    sprintf(msg, "getLogarithmConstant :: The value is %lf\n", value);
+    trace(msg);
+
+    gltLogarithmConstant = value;
+
+} // end getLogarithmConstant
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // getMinSize
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -424,6 +423,23 @@ void MainWindow::getMinSize(int value)
     minSize = value;
 
 } // end getMinSize
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// getOFAlgorithm
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::getOFAlgorithm(int value)
+{
+    char msg[128];
+    sprintf(msg, "getOFAlgorithm :: The value is %d\n", value);
+    trace(msg);
+
+    opticalFlowAlgorithm = value;
+
+} // end getLogarithmConstant
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -591,6 +607,7 @@ void MainWindow::listFiles(QString directoryName)
 } // end listFiles
 
 
+/**
 ///////////////////////////////////////////////////////////////////////////////
 //
 // mousePressEvent
@@ -603,6 +620,7 @@ void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *event)
     printf("Mouse pressed...\n");
 
 } // end mousePressEvent
+**/
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -741,25 +759,6 @@ void MainWindow::toggleAddGaussianNoise()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// toggleFilter
-//
-///////////////////////////////////////////////////////////////////////////////
-
-void MainWindow::toggleFilter()
-{
-    if (applyFilter == 0) {
-        applyFilter = 1;
-        trace("applyFilter is TRUE");
-    } else {
-        applyFilter = 0;
-        trace("applyFilter is FALSE");
-    }
-
-} // end toggleFilter
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // toggleAddGammaNoise
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -851,6 +850,25 @@ void MainWindow::toggleContrastStretching()
     }
 
 } // end toggleContrastStretching
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// toggleFilter
+//
+///////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::toggleFilter()
+{
+    if (applyFilter == 0) {
+        applyFilter = 1;
+        trace("applyFilter is TRUE");
+    } else {
+        applyFilter = 0;
+        trace("applyFilter is FALSE");
+    }
+
+} // end toggleFilter
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1042,7 +1060,7 @@ void MainWindow::updateImageNumber(int value)
 
     char fileName[256];
 
-    printf("%s\n", dPath.c_str());
+    //printf("%s\n", dPath.c_str());
 
     sprintf(fileName, "%s/%s", dPath.c_str(), t2);
     printf("%s\n", fileName);
@@ -1368,6 +1386,45 @@ void MainWindow::updateImageNumber(int value)
 
     }
 
+    /////////////////////////////////////////////////////////////////
+    //
+    // optical flow
+    //
+    /////////////////////////////////////////////////////////////////
+
+    if (opticalFlow == true) {
+
+        // klt
+        if (opticalFlowAlgorithm == OPTICAL_FLOW_KLT) {
+
+            printf("Starting KLT\n");
+            printf("frame has %d planes\n", frame->nChannels);
+
+            // try creating a copy of frame
+            IplImage *work = cvCreateImage(cvGetSize(frame), frame->depth, frame->nChannels);
+//            cvCopy(frame, work);
+//            klt->lkOpticalFlow(work);
+
+            klt->lkOpticalFlow(frame);
+            printf("End KLT\n");
+
+            if (klt->lkInitialized) {
+                klt->drawFeatures(frame);
+            }
+
+            // try setting the processed image flag to false
+            freeProcessedImage = false;
+
+        // horn-schunck
+        } else if (opticalFlowAlgorithm == OPTICAL_FLOW_HS) {
+
+        // farneback
+        } else if (opticalFlowAlgorithm == OPTICAL_FLOW_FB) {
+
+        }
+
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     //
     // handle the second display
@@ -1424,17 +1481,22 @@ void MainWindow::updateImageNumber(int value)
             QApplication::processEvents();
 
             cvReleaseImage(&resized);
+            printf("Released resized...\n");
 
         }
 
     }
 
+    printf("I am here...\n");
+
     // release the processing frame?
     if (freeProcessedImage == true) {
         cvReleaseImage(&processed);
         freeProcessedImage = false;
+        printf("Released processed...\n");
     }
 
+    printf("I am here2...\n");
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -1444,9 +1506,13 @@ void MainWindow::updateImageNumber(int value)
 
     if (frame != NULL && fitImageToWindow == 0) {
 
+        printf("here 2a\n");
+
         // update the display
         uchar *cv = (uchar*)(frame->imageData);
         QImage img(cv, frame->width, frame->height, QImage::Format_RGB888);
+
+        printf("here 2b\n");
 
         scene->clear();
         scene->setSceneRect(0, 0, frame->width, frame->height);
@@ -1454,19 +1520,32 @@ void MainWindow::updateImageNumber(int value)
         scene->update();
         QApplication::processEvents();
 
+        printf("here 2c\n");
+
     } else if (frame != NULL && fitImageToWindow == 1) {
+
+        printf("here 2d\n");
 
         // swap red and blue
         cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
 
+        printf("here 2e\n");
+        printf("frame has depth of %d and %d channels\n", frame->depth, frame->nChannels);
+
         IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), frame->depth, frame->nChannels);
 
-        trace("fitting to window....");
+        printf("here 2e1\n");
+
+        printf("fitting to window....\n");
         cvResize(frame, resized, CV_INTER_LINEAR);
+
+        printf("here 2f\n");
 
         // update the display
         uchar *cv = (uchar*)(resized->imageData);
         QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
+
+        printf("here 2g\n");
 
         scene->clear();
         scene->setSceneRect(0, 0, resized->width, resized->height);
@@ -1474,9 +1553,15 @@ void MainWindow::updateImageNumber(int value)
         scene->update();
         QApplication::processEvents();
 
-        cvReleaseImage(&resized);
+        printf("here 2h\n");
 
+        cvReleaseImage(&resized);
+        printf("Released resized...\n");
+
+        printf("here 2i\n");
     }
+
+    printf("I am here3...\n");
 
     // update the status bar
     QString msg3 = fileName;
@@ -1484,7 +1569,11 @@ void MainWindow::updateImageNumber(int value)
 
     // release the current frame if we are loading from files
     if (processingAVI1Files2 == 1) {
+        printf("Trying to release frame...\n");
         cvReleaseImage(&frame);
+        printf("Released frame...\n");
     }
+
+    printf("I am here4...\n");
 
 } // end updateImageNumber
