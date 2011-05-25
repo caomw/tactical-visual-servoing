@@ -156,6 +156,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     opticalFlow = false;
     opticalFlowAlgorithm = 0;
+    opticalFlowShowFeatures = false;
 
 } // end constructor
 
@@ -1453,8 +1454,6 @@ void MainWindow::updateImageNumber(int value)
             scene3->update();
             QApplication::processEvents();
 
-            printf("here3\n");
-
         } else if  (processed != NULL && fitImageToWindow == 1) {
 
             printf("trying to do the second display, fitting\n");
@@ -1487,16 +1486,12 @@ void MainWindow::updateImageNumber(int value)
 
     }
 
-    printf("I am here...\n");
-
     // release the processing frame?
     if (freeProcessedImage == true) {
         cvReleaseImage(&processed);
         freeProcessedImage = false;
         printf("Released processed...\n");
     }
-
-    printf("I am here2...\n");
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -1506,13 +1501,9 @@ void MainWindow::updateImageNumber(int value)
 
     if (frame != NULL && fitImageToWindow == 0) {
 
-        printf("here 2a\n");
-
         // update the display
         uchar *cv = (uchar*)(frame->imageData);
         QImage img(cv, frame->width, frame->height, QImage::Format_RGB888);
-
-        printf("here 2b\n");
 
         scene->clear();
         scene->setSceneRect(0, 0, frame->width, frame->height);
@@ -1520,32 +1511,18 @@ void MainWindow::updateImageNumber(int value)
         scene->update();
         QApplication::processEvents();
 
-        printf("here 2c\n");
-
     } else if (frame != NULL && fitImageToWindow == 1) {
-
-        printf("here 2d\n");
 
         // swap red and blue
         cvConvertImage(frame, frame, CV_CVTIMG_SWAP_RB);
 
-        printf("here 2e\n");
-        printf("frame has depth of %d and %d channels\n", frame->depth, frame->nChannels);
-
         IplImage *resized = cvCreateImage(cvSize(COLS, ROWS), frame->depth, frame->nChannels);
 
-        printf("here 2e1\n");
-
-        printf("fitting to window....\n");
         cvResize(frame, resized, CV_INTER_LINEAR);
-
-        printf("here 2f\n");
 
         // update the display
         uchar *cv = (uchar*)(resized->imageData);
         QImage img(cv, resized->width, resized->height, QImage::Format_RGB888);
-
-        printf("here 2g\n");
 
         scene->clear();
         scene->setSceneRect(0, 0, resized->width, resized->height);
@@ -1553,15 +1530,10 @@ void MainWindow::updateImageNumber(int value)
         scene->update();
         QApplication::processEvents();
 
-        printf("here 2h\n");
-
         cvReleaseImage(&resized);
         printf("Released resized...\n");
 
-        printf("here 2i\n");
     }
-
-    printf("I am here3...\n");
 
     // update the status bar
     QString msg3 = fileName;
@@ -1573,7 +1545,5 @@ void MainWindow::updateImageNumber(int value)
         cvReleaseImage(&frame);
         printf("Released frame...\n");
     }
-
-    printf("I am here4...\n");
 
 } // end updateImageNumber

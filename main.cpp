@@ -172,90 +172,6 @@ int main (int argc, char *argv[])
         exit(0);
     }
 
-    int dirChoice=0;
-    string dirIn;
-    cout << "What is the dataset to run? (/home/lab/Development/NavigationData/...)? \n\n";
-    cout << "1. Sign\n";
-    cout << "2. Silver car\n";
-    cout << "3. SUV\n";
-    cout << "4. Wood pile\n";
-    cout << "5. Sun (PackBot)\n";
-    cout << "6. Other (manually specify)\n";
-    cout << "\n===> ";
-    cin >> dirChoice;
-
-    if (dirChoice == 1) {
-        path = path + "Sign";
-    } else if (dirChoice == 2) {
-        path = path + "SilverCar";
-    } else if (dirChoice == 3) {
-        path = path + "SUV";
-    } else if (dirChoice == 4) {
-        path = path + "WoodPile";
-    } else if (dirChoice == 5) {
-        path = path + "Sun";
-    } else if (dirChoice == 6) {
-        cout << "\n===> ";
-        cin  >> dirChoice;
-        path = path + dirIn;
-    }
-
-    printf("Path is set to: %s\n", path.c_str());
-
-    // get the contents of our directory
-    listDirectoryContents(path);
-
-    bool running = true;
-    while (running) {
-
-        int choice=0;
-
-        cout << "\n\n\n";
-
-        cout << "TACTICAL\n";
-        cout << "--------\n\n";
-
-        cout << "Algorithms:\n\n";
-
-        cout << "Optical Flow:\n";
-        cout << "1. Horn-Schnuck (Dense)\n";
-        cout << "2. Farneback's Polynomial Expansion (Dense) LINUX ONLY\n";
-        cout << "3. Birchfield's KLT Tracker (Sparse)\n";
-        cout << "4. OpenCV's KLT Tracker (Sparse)\n\n";
-
-        cout << "Blob Tracking:\n";
-        cout << "5. SIFT (Hess's Implementation)\n";
-        cout << "6. SURF\n\n";
-
-        cout << "Correlation:\n";
-        cout << "7. Turing's Multi-Resolution Progressive Alignment Tracker\n\n";
-
-        cout << "9. End program\n";
-        cout << "\n===> ";
-        cin >> choice;
-/**
-        if (choice == 1) {
-            runOpticalFlowHornSchunck();
-        } else if (choice == 2) {
-            #ifdef unix
-                runOpticalFlowFarneback();
-            #endif
-        } else if (choice == 3) {
-            runOpticalFlowBirchfieldKLT();
-        } else if (choice == 4) {
-            runOpticalFlowLKOpenCV();
-        } else if (choice == 5) {
-            runBlobSIFT();
-        } else if (choice == 6) {
-            runBlobSURF();
-        } else if (choice == 7) {
-            runCorrelationTuringMultiResolutionProgressiveAlignmentSearch();
-        } else if (choice == 9) {
-            running = false;
-        }
-**/
-    }
-
     // exit nicely
     SDL_Quit();
     exit(0);
@@ -290,9 +206,6 @@ bool handleSDLEvents()
                 break;
             case SDLK_q:
                 trackingActivated = false;
-  //              foundClosestFeature = false;
-                //tracking->trackingActivated = false;
-                //tracking->reset();
                 break;
             case SDLK_f:
                 SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_FULLSCREEN);
@@ -315,11 +228,6 @@ bool handleSDLEvents()
             printf("Button %i at (%i, %i)\n", event.button.button, event.button.x, event.button.y);
 
             trackEvent = true;
-
-            // we received a new point to track
-//            if (tracking->trackingActivated == true) {
-//                tracking->reset();
-//            }
 
             trackingActivated = true;
 

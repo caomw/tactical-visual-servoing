@@ -169,6 +169,7 @@ private:
     int edgeFilter;
 
     bool opticalFlow;
+    bool opticalFlowShowFeatures;
     int opticalFlowAlgorithm;
 
 protected:
