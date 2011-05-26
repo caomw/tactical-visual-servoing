@@ -1102,6 +1102,8 @@ void MainWindow::toggleSmoothing()
         trace("smoothing is FALSE");
     }
 
+
+
 } // end toggleSmoothing
 
 
@@ -1132,6 +1134,16 @@ void MainWindow::toggleSwapRedBlue()
 
 void MainWindow::updateImageNumber(int value)
 {
+
+#if (defined(WIN32))
+    printf("I am win32\n");
+#endif
+
+#if (defined(unix))
+    printf("I am linux\n");
+#endif
+
+
     QString t = files.value(value);
     char t2[64];
     sprintf(t2, "%s", qPrintable(t));
