@@ -1,21 +1,45 @@
 #ifndef VIDEODISPLAY_H
 #define VIDEODISPLAY_H
 
+/**
 #include <QGraphicsItem>
-#include <QGraphicsScene>
+//#include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QMouseEvent>
+#include <QMessageBox>
+**/
+
+#include <QWidget>
+#include <QMessageBox>
+#include <QtGui>
+
+//#include <QGraphicsSceneMouseEvent>
+
+/**
+#include <QGraphicsItem>
+#include <QGraphicsRectItem>
+#include <QGraphicsTextItem>
+#include <QGraphicsSceneHoverEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QColor>
+#include <QPainter>
+#include <QPen>
+#include <QPointF>
+**/
 
 #include <stdio.h>
 #include <stdlib.h>
 
-class VideoDisplay : public QGraphicsView
+//class VideoDisplay : public QGraphicsView
+class VideoDisplay : public QWidget
+//class VideoDisplay : public QGraphicsItem
 //class VideoDisplay : public QGraphicsScene
 {
     Q_OBJECT
 
     public:
 
-        VideoDisplay();
+        VideoDisplay(QWidget *parent = 0);
         ~VideoDisplay();
 
         //QGraphicsView _display;

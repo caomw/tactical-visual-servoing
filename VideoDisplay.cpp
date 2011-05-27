@@ -1,8 +1,11 @@
 
 #include "VideoDisplay.h"
 
-VideoDisplay::VideoDisplay()
+//VideoDisplay::VideoDisplay(QWidget *parent) : QGraphicsView(parent)
+VideoDisplay::VideoDisplay(QWidget *parent) : QWidget(parent)
 {
+    setMouseTracking(true);
+    printf("VideoDisplay constructor....\n");
 
 }
 
@@ -10,7 +13,6 @@ VideoDisplay::~VideoDisplay()
 {
 
 }
-
 
 
 /**
@@ -28,40 +30,20 @@ void VideoDisplay::mousePressEvent(QMouseEvent *event)
 }
 **/
 
-/**
-
-//void VideoDisplay::mousePressEvent(QGraphicsSceneMouseEvent *event)
-void VideoDisplay::mousePressEvent(QMouseEvent *event)
-{
-
-    printf("Clicked...");
-}
-**/
-
-/**
-void VideoDisplay::mousePressEvent(QGraphicsSceneMouseEvent *event)
-
-{
- //   QGraphicsSceneMouseEvent::mousePressEvent(event);
-//    QGraphicsScene::mousePressEvent(event);
-//    if (event->isAccepted())
-//        return;
-
-    //m_mouseEventTime = m_time.elapsed();
-    //m_angularMomentum = m_accumulatedMomentum = Point3d();
-//    event->accept();
-    printf("clicked...\n");
-}
-**/
-
 
 void VideoDisplay::mousePressEvent(QMouseEvent *event)
 {
+    QMessageBox msgBox;
+    msgBox.setText("Test OK!!");
+    msgBox.exec();
+
+    printf("yay...\n");
+    event->setAccepted(true);
     //QGraphicsView::mousePressEvent(event);
 
     //QGraphicsScene::mousePressEvent(event);
     //if (event->isAccepted())
     //    return;
     //event->accept();
-    printf("yay...\n");
+    //emit clicked(event->pos());
 }

@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     video = new VideoDisplay;
 
+    // set the properties
     video->setEnabled(true);
     video->setObjectName(QString::fromUtf8("video"));
     video->setGeometry(QRect(660, 0, 642, 482));
@@ -100,6 +101,7 @@ MainWindow::MainWindow(QWidget *parent)
     //ui->graphicsView_2->setScene(scene2);
 
     scene3 = new QGraphicsScene(video);
+    ui->graphicsView_2->setMouseTracking(true);
     ui->graphicsView_2->setScene(scene3);
 
     fitImageToWindow = 0;
@@ -205,7 +207,7 @@ void MainWindow::on_pushButtonTrack_clicked()
 
 void MainWindow::createActions()
 {
-    connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    //connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 
     // file open
     connect(ui->action_Open_Sequence, SIGNAL(triggered()), this, SLOT(openImageDirectory()) );
@@ -226,7 +228,7 @@ void MainWindow::createActions()
     connect(ui->checkBoxSwapRedBlue, SIGNAL(clicked()), this, SLOT(toggleSwapRedBlue()));
 
     // mouse events
-    connect(ui->graphicsView, SIGNAL(mousePressEvent(QGraphicsSceneMouseEvent *)), this, SLOT(mousePressEvent(QGraphicsSceneMouseEvent *)));
+    //connect(ui->graphicsView, SIGNAL(mousePressEvent(QGraphicsSceneMouseEvent *)), this, SLOT(mousePressEvent(QGraphicsSceneMouseEvent *)));
 
     // histogram equalization
     connect(ui->checkBoxHistogramEqualization, SIGNAL(clicked()), this, SLOT(toggleHistogramEqualization()));
@@ -261,9 +263,9 @@ void MainWindow::createActions()
     connect(ui->comboBoxBitPlane, SIGNAL(currentIndexChanged(int)), this, SLOT(getBitPlane(int)));
 
     // noise
-    connect(ui->checkBoxAddGaussianNoise, SIGNAL(clicked()), this, SLOT(toggleGaussianNoise()));
+    //connect(ui->checkBoxAddGaussianNoise, SIGNAL(clicked()), this, SLOT(toggleGaussianNoise()));
 
-    connect(ui->checkBoxAddGammaNoise, SIGNAL(clicked()), this, SLOT(toggleGammaNoise()));
+    //connect(ui->checkBoxAddGammaNoise, SIGNAL(clicked()), this, SLOT(toggleGammaNoise()));
 
     connect(ui->checkBoxAddImpulseNoise, SIGNAL(clicked()), this, SLOT(toggleAddImpulseNoise()));
     connect(ui->spinBoxImpulseNoise, SIGNAL(valueChanged(int)), this, SLOT(getImpulseNoise(int)));
@@ -283,10 +285,10 @@ void MainWindow::createActions()
     connect(ui->comboBoxOFAlgorithm, SIGNAL(currentIndexChanged(int)), this, SLOT(getOFAlgorithm(int)));
 
     // optical flow :: klt
-    connect(ui->doubleSpinBoxQuality, SIGNAL(valueChanged(double)), this, SLOT(getKLTQuality(double)));
-    connect(ui->spinBoxMinDistance, SIGNAL(valueChanged(int)), this, SLOT(getKLTMinDistance(int)));
-    connect(ui->spinBoxWindowSize, SIGNAL(valueChanged(int)), this, SLOT(getKLTWindowSize(int)));
-    connect(ui->spinBoxNumLevels, SIGNAL(valueChanged(int)), this, SLOT(getKLTMNumLevels(int)));
+    //connect(ui->doubleSpinBoxQuality, SIGNAL(valueChanged(double)), this, SLOT(getKLTQuality(double)));
+    //connect(ui->spinBoxMinDistance, SIGNAL(valueChanged(int)), this, SLOT(getKLTMinDistance(int)));
+    //connect(ui->spinBoxWindowSize, SIGNAL(valueChanged(int)), this, SLOT(getKLTWindowSize(int)));
+    //connect(ui->spinBoxNumLevels, SIGNAL(valueChanged(int)), this, SLOT(getKLTMNumLevels(int)));
 
 } // end createActions
 
@@ -1134,6 +1136,7 @@ void MainWindow::toggleSwapRedBlue()
 
 void MainWindow::updateImageNumber(int value)
 {
+    //video->setMouseTracking(true);
 
 #if (defined(WIN32))
     printf("I am win32\n");
