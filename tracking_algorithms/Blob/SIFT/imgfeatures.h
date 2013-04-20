@@ -9,7 +9,13 @@ Copyright (C) 2006  Rob Hess <hess@eecs.oregonstate.edu>
 #ifndef IMGFEATURES_H
 #define IMGFEATURES_H
 
-#include "cxcore.h"
+//#include "cxcore.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/legacy/legacy.hpp>
 
 /** FEATURE_OXFD <BR> FEATURE_LOWE */
 enum feature_type

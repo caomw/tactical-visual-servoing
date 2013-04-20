@@ -118,11 +118,12 @@ void KLT::lkOpticalFlow (IplImage *frame)
 
     } else if (lkCount > 0) {
 
+        /**sth
         cvCalcOpticalFlowPyrLK(lkPrevGrey, lkGrey, lkPrevPyramid, lkPyramid, lkPoints[0],
             lkPoints[1], lkCount, cvSize(winSize, winSize), 3, lkStatus, 0,
             cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 20, 0.03), lkFlags);
         lkFlags |= CV_LKFLOW_PYR_A_READY;
-
+        **/
         lkRanOnce = true;
 
     }

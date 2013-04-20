@@ -29,7 +29,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+// qt4
+//#include <QtGui/QMainWindow>
+
+// qt5
+#include <QtWidgets/QMainWindow>>
 
 #include <QTimer>
 #include <QGraphicsScene>
@@ -40,8 +44,15 @@
 #include "VideoDisplay.h"
 
 // move these
-#include "cv.h"
-#include "highgui.h"
+//#include "cv.h"
+//#include "highgui.h"
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/legacy/legacy.hpp>
 
 #include "image_functions/Image_Functions.h"
 #include "utilities/utilities.h"

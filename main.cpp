@@ -45,12 +45,15 @@
     #include "SDL_image.h"
 #endif
 
-#include <QtGui/QApplication>
+// qt 4 vs 5
+//#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
+
 #include "mainwindow.h"
 
 // OpenGL
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 
 // tracking
 #include "tracking_algorithms/Correlation/TuringTracking/TuringTracking.h"
@@ -135,7 +138,7 @@ string commandsList;
 
 string path = "/home/lab/Development/NavigationData/";
 
-SDL_Rect rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom;
+//SDL_Rect rectangleCenter, rectangleLeft, rectangleRight, rectangleTop, rectangleBottom;
 int xClick=0, yClick=0;
 
 // SDL events
@@ -173,7 +176,7 @@ int main (int argc, char *argv[])
     }
 
     // exit nicely
-    SDL_Quit();
+//    SDL_Quit();
     exit(0);
 
 } // end main
@@ -186,7 +189,7 @@ int main (int argc, char *argv[])
 ///////////////////////////////////////////////////////////////////////////////
 
 bool handleSDLEvents()
-{
+{/**
     commandsList.clear();
     SDL_Event event;
 
@@ -237,7 +240,7 @@ bool handleSDLEvents()
             break;
         }
     }
-
+**/
     return false;
 
 } // end handleSDLEvents
@@ -1052,6 +1055,7 @@ void runBlobSURF ()
 
 int initializeSDL()
 {
+    /**
     if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)) {
         cout << "Could not initialize SDL: " << SDL_GetError() << endl;
         return 1;
@@ -1079,5 +1083,7 @@ int initializeSDL()
     glOrtho(0.0f, 640, 480, 0.0f, -1.0f, 1.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    **/
 
 } // end initializeSDL

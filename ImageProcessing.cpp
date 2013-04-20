@@ -99,7 +99,7 @@ double mean2 (int **imageIn, int rows, int cols, int numberPlanes)
 // SDLImageTo2DArrayOnePlane
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
 int **SDLImageTo2DArrayOnePlane (SDL_Surface *image, int rows, int cols, int plane) 
 {
     SDL_PixelFormat *fmt;
@@ -247,7 +247,7 @@ int *SDLImageTo1DArrayOnePlane (SDL_Surface *image, int rows, int cols, int plan
         return onePlane1D;
 
 } // end SDLImageTo1DArrayOnePlane
-
+**/
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -386,7 +386,7 @@ IplImage *ImageArray2DToIplImageThreePlanes (int **imageIn, int rows, int cols)
 // SDLImageTo2DArrayOnePlane2
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
 int **SDLImageTo2DArrayOnePlane2 (SDL_Surface *image, int rows, int cols, int plane) 
 {
     SDL_PixelFormat *fmt;
@@ -412,14 +412,14 @@ int **SDLImageTo2DArrayOnePlane2 (SDL_Surface *image, int rows, int cols, int pl
     return onePlane2D;
 
 } // end SDLImageTo2DArrayOnePlane
-
+**/
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // getpixel
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+/**
 Uint32 getpixel(SDL_Surface *surface, int x, int y)
 {
 
@@ -452,7 +452,7 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
     }
 
 } // end getpixel
-
+**/
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -1908,7 +1908,7 @@ TNT::Array2D <double> bitPlaneSlicing(TNT::Array2D <double> array, int plane)
 
     TNT::Array2D <double> a(height, width, 0.0);
 
-    int mask = (int)(pow(2, plane));
+    int mask = (int)(pow(2.0, plane));
 
     for (int i=0;i<height;i++) {
         for (int j=0;j<width;j++) {

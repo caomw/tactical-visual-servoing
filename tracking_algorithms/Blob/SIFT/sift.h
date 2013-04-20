@@ -19,7 +19,15 @@ that accompanied this distribution.
 #ifndef SIFT_H
 #define SIFT_H
 
-#include "cxcore.h"
+//#include "cxcore.h"
+
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/legacy/legacy.hpp>
 
 /******************************** Structures *********************************/
 

@@ -2,12 +2,20 @@
 #ifndef _KLT
 #define _KLT
 
-#include "cv.h"
-#include "highgui.h"
+//#include "cv.h"
+//#include "highgui.h"
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/legacy/legacy.hpp>
+
 
 // gsl includes
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
+//#include <gsl/gsl_matrix.h>
+//#include <gsl/gsl_blas.h>
 
 #define MAX_COUNT 500
 
