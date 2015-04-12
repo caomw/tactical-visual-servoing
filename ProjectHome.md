@@ -1,0 +1,1 @@
+This was initially a cross-platform environment used in my dissertation on an improved tracking algorithm for goal-based visual servoing, but is evolving into a collection of image processing and computer vision algorithms.
